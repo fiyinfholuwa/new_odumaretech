@@ -35,7 +35,7 @@
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
-        <a href="index.html" class="logo d-flex align-items-center me-auto me-lg-0">
+        <a href="{{route('home')}}" class="logo d-flex align-items-center me-auto me-lg-0">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <img style="border-radius:10px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
             <!-- <h1 class="sitename">GP</h1>
@@ -44,11 +44,11 @@
 
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="#hero" class="active">Home<br></a></li>
-                <li><a href="#about">Courses</a></li>
+                <li><a href="{{route('home')}}" class="active">Home<br></a></li>
+                <li><a href="{{route('courses')}}">Courses</a></li>
                 <li><a href="#services">MarketPlace</a></li>
-                <li><a href="#team">Blog</a></li>
-                <li><a href="#team">About</a></li>
+                <li><a href="{{route('blog')}}">Blog</a></li>
+                <li><a href="{{route('about')}}">About</a></li>
                 <li><a href="#team">Contact Us</a></li>
                 <li><a href="#team">Career</a></li>
 
@@ -91,7 +91,7 @@
             <div class="row gy-4">
                 <div class="col-lg-6 col-md-6 footer-about">
 
-                    <a href="index.html" class="logo d-flex align-items-center">
+                    <a href="{{route('home')}}" class="logo d-flex align-items-center">
                         <img style="border-radius:10px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
                     </a>
                     <div class="footer-contact pt-3">
