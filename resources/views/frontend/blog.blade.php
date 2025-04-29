@@ -26,13 +26,24 @@
             </p>
         </div>
 
-        <div class="blog-form-section">
-            <div class="blog-form-group">
-                <input type="text" placeholder="Enter Keyword">
-                <select>
-                    <option>Select Category</option>
-                </select>
-                <button>Search Blog</button>
+        <div class="container my-5">
+            <div class="card shadow-sm p-4 rounded-4" style="background: #f8f9fa;">
+                <form class="row g-3 align-items-center justify-content-center">
+                    <div class="col-12 col-md-4">
+                        <input type="text" class="form-control form-control-lg" placeholder="🔍 Enter keyword">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <select class="form-select form-select-lg">
+                            <option selected>Select Category</option>
+                            <option>Tech</option>
+                            <option>Design</option>
+                            <option>Marketing</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Search Blog</button>
+                    </div>
+                </form>
             </div>
         </div>
 

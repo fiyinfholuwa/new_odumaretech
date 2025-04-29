@@ -176,76 +176,6 @@
 }
 
 
-.blog-form-section {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.blog-form-group {
-    background: white;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-    max-width: 600px;
-    width: 100%;
-}
-
-.blog-form-prefix {
-    background: #041845;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    flex: 1 1 80px;
-    text-align: center;
-}
-
-.blog-form-group input,
-.blog-form-group select {
-    background: #E9ECFF;
-    border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    flex: 1 1 200px;
-    min-width: 150px;
-}
-
-.blog-form-group button {
-    background: #041845;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-    flex: 1 1 150px;
-    min-width: 120px;
-}
-
-.blog-form-group button:hover {
-    background: #06258a;
-}
-
-/* Mobile responsive: Stack all elements */
-@media (max-width: 600px) {
-    .blog-form-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .blog-form-prefix {
-        text-align: center;
-        width: 100%;
-    }
-}
-
 
 .mission-card {
     background-color: #E9ECFF;
@@ -267,3 +197,6 @@
         padding: 2rem 1rem;
     }
 }
+
+
+

@@ -21,4 +21,13 @@ class FrontendController extends Controller
     public function about():View{
         return view('frontend.about');
     }
+    public function faq():View{
+        return view('frontend.faq');
+    }
+    public function contact():View{
+        return view('frontend.contact');
+    }
+    public function career():View{
+        return view('frontend.career');
+    }
 }

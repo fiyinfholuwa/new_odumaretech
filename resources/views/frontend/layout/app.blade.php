@@ -49,8 +49,8 @@
                 <li><a href="#services">MarketPlace</a></li>
                 <li><a href="{{route('blog')}}">Blog</a></li>
                 <li><a href="{{route('about')}}">About</a></li>
-                <li><a href="#team">Contact Us</a></li>
-                <li><a href="#team">Career</a></li>
+                <li><a href="{{route('contact')}}">Contact Us</a></li>
+                <li><a href="{{route('career')}}">Career</a></li>
 
                 <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
