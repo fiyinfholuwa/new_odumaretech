@@ -75,7 +75,7 @@
 
         <a class="btn-getstarted" href="index.html#about">Login</a>
 
-        <a style='background-color:  #0E2293; border:none' class="btn-getstarted" href="index.html#about">Get Started</a>
+        <a style='background-color:  #0E2293; border:none' class="btn-getstarted" href="index.html#about">Register</a>
 
     </div>
 </header>

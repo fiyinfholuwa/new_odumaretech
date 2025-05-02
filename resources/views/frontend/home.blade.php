@@ -14,7 +14,18 @@
             <div style="margin-top:-150px;" class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
                 <div class="col-xl-6 col-lg-8">
                     <span style="background-color: #FFC000; padding: 5px;  border-radius: 10px; font-size:10px;">Led by Professionals</span>
-                    <h2>Break Free With Tech Superpowers<span>.</span></h2>
+                    <h2 style="position: relative;">
+                        <img class="decorative-line" style="position: relative; height: 100px; width: 100px; left: -80px; top: 50px;" src="{{ asset('frontend/assets/img/line.png') }}" alt="line" />
+                        Break Free With Tech Superpowers<span>.</span>
+                    </h2>
+
+                    <style>
+                        @media (max-width: 768px) {
+                            .decorative-line {
+                                display: none !important;
+                            }
+                        }
+                    </style>
                     <p>Embark on a thrilling expedition into the vast realm of technology, where innovation meets possibility and your digital potential awaits.</p>
                 </div>
                 <div style="margin-top: 30px;">
@@ -27,45 +38,46 @@
 
 
     <section style="background-color: #0E2293">
-
         <div style="padding: 10px 75px;" class="row">
             <?php
             $items = [
                 ['icon' => 'fa-laptop', 'number' => 20, 'name' => 'BootCamps'],
                 ['icon' => 'fa-graduation-cap', 'number' => 15, 'name' => 'Student Taught'],
                 ['icon' => 'fa-briefcase', 'number' => 80, 'name' => 'Employability'],
-
-                ['icon' => 'house', 'number' => 20, 'name' => 'Partnered Companies'],
+                ['icon' => 'fa-house', 'number' => 20, 'name' => 'Partnered Companies'],
             ];
+            ?>
 
-            foreach ($items as $item) {
-                ?>
+            <?php foreach ($items as $item): ?>
             <div class="col-lg-3 mt-5">
-                <div class="home-card-box">
-{{--                    <div class="home-arc"></div>--}}
+                <div class="home-card-box" style="position: relative;">
+                    <img src="{{ asset('frontend/assets/img/curve.png') }}"
+                         style="position: absolute; bottom: -20px; left: 0; transform: rotate(-10deg); height: 200px; width: auto;"
+                         alt="curve" />
                     <div class="home-icon-box">
-                        <i class="fa <?php echo $item['icon']; ?> text-white"></i>
+                        <i class="fa <?php echo $item['icon']; ?> text-white" style="font-size: 40px; background-color: #FFC000;  padding: 10px; border-radius: 3px;"></i>
                     </div>
-                    <div class="home-number" data-number="<?php echo $item['number']; ?>">
+                    <div class="home-number"
+                         data-number="<?php echo $item['number']; ?>"
+                         data-suffix="<?php echo ($item['name'] == 'Employability') ? '%' : '+'; ?>">
                         0
                     </div>
-                    <div class="home-name">
-                            <?php echo $item['name']; ?>
+                    <div class="home-name text-white" style="margin-top: 10px;">
+                        {{ $item['name'] }}
                     </div>
                 </div>
             </div>
-                <?php
-            }
-            ?>
+            <?php endforeach; ?>
         </div>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const counters = document.querySelectorAll('.home-number');
-                const duration = 2000; // all counters will finish in 2 seconds (2000ms)
+                const duration = 2000; // 2 seconds
 
                 counters.forEach(counter => {
                     const target = +counter.getAttribute('data-number');
+                    const suffix = counter.getAttribute('data-suffix') || '+';
                     let startTimestamp = null;
 
                     const step = (timestamp) => {
@@ -76,7 +88,7 @@
                         if (progress < 1) {
                             window.requestAnimationFrame(step);
                         } else {
-                            counter.innerText = target + '+'; // Ensure it finishes clean with "+"
+                            counter.innerText = target + suffix; // Add correct suffix
                         }
                     };
 
@@ -84,7 +96,6 @@
                 });
             });
         </script>
-
     </section>
 
 

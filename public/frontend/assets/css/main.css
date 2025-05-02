@@ -362,6 +362,7 @@ h6 {
     transition: 0.3s;
     z-index: 9998;
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1);
+      height: 400px;
   }
 
   .navmenu a,

@@ -23,14 +23,14 @@
 
             <div style="position: relative; height: 100px; margin-top: 30px; display: flex; justify-content: center;">
                 <div style="position: relative; width: 230px;"> <!-- Adjust width depending on how many images and overlap -->
-                    <img src="https://www.cnet.com/a/img/resize/f9c9645440d5d2433578ad9812f04665c150f587/hub/2021/09/21/8d574005-65e4-4a75-8545-410eb48fb042/iphone-13-mini-cnet-review-2021-105.jpg?auto=webp&fit=crop&height=1200&width=1200"
-                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; position: absolute; left: 0;">
-                    <img src="https://www.cnet.com/a/img/resize/f9c9645440d5d2433578ad9812f04665c150f587/hub/2021/09/21/8d574005-65e4-4a75-8545-410eb48fb042/iphone-13-mini-cnet-review-2021-105.jpg?auto=webp&fit=crop&height=1200&width=1200"
-                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; position: absolute; left: 50px;">
-                    <img src="https://www.cnet.com/a/img/resize/f9c9645440d5d2433578ad9812f04665c150f587/hub/2021/09/21/8d574005-65e4-4a75-8545-410eb48fb042/iphone-13-mini-cnet-review-2021-105.jpg?auto=webp&fit=crop&height=1200&width=1200"
-                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; position: absolute; left: 100px;">
-                    <img src="https://www.cnet.com/a/img/resize/f9c9645440d5d2433578ad9812f04665c150f587/hub/2021/09/21/8d574005-65e4-4a75-8545-410eb48fb042/iphone-13-mini-cnet-review-2021-105.jpg?auto=webp&fit=crop&height=1200&width=1200"
-                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; position: absolute; left: 150px;">
+                    <img src="{{asset('frontend/assets/img/Ellipse 121.png')}}"
+                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;  position: absolute; left: 0;">
+                    <img src="{{asset('frontend/assets/img/Ellipse 122.png')}}"
+                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;  position: absolute; left: 50px;">
+                    <img src="{{asset('frontend/assets/img/Ellipse 123.png')}}"
+                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;  position: absolute; left: 100px;">
+                    <img src="{{asset('frontend/assets/img/Ellipse 124.png')}}"
+                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;  position: absolute; left: 150px;">
                 </div>
             </div>
 
@@ -101,7 +101,7 @@
                             <span style="padding: 5px 10px; background-color: white; border-radius: 10px; font-size: 14px;"><?php echo $course['weeks']; ?></span>
                             <span style="background-color: #FFF0DC; color: #FF9500; padding: 5px 10px; border-radius: 10px; font-size: 14px;"><?php echo $course['level']; ?></span>
                         </div>
-                        <a href="#" class="btn btn-primary fw-bold">Start Learning</a>
+                        <a href="#" style="background-color: #0E2293; border: none;" class="btn btn-primary btn-lg fw-bold">Start Learning</a>
                     </div>
                 </div>
                     <?php

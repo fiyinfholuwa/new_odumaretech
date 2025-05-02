@@ -26,14 +26,14 @@
             </p>
         </div>
 
-        <div class="container my-5">
-            <div class="card shadow-sm p-4 rounded-4" style="background: #f8f9fa;">
+        <div style="max-width: 1000px;" class="container my-5">
+            <div class="card shadow-sm p-2 rounded-2" style="background: #f8f9fa;">
                 <form class="row g-3 align-items-center justify-content-center">
-                    <div class="col-12 col-md-4">
-                        <input type="text" class="form-control form-control-lg" placeholder="🔍 Enter keyword">
+                    <div  class="col-12 col-md-4">
+                        <input style="background-color: #E9ECFF;" type="text" class="form-control form-control-lg" placeholder="🔍 Enter keyword">
                     </div>
-                    <div class="col-12 col-md-4">
-                        <select class="form-select form-select-lg">
+                    <div  class="col-12 col-md-4">
+                        <select style="background-color: #E9ECFF;" class="form-select form-select-lg">
                             <option selected>Select Category</option>
                             <option>Tech</option>
                             <option>Design</option>
@@ -41,7 +41,7 @@
                         </select>
                     </div>
                     <div class="col-12 col-md-3">
-                        <button type="submit" class="btn btn-primary btn-lg w-100">Search Blog</button>
+                        <button style="background-color: #0E2293;" type="submit" class="btn btn-primary btn-lg w-100">Search Blog</button>
                     </div>
                 </form>
             </div>
@@ -112,7 +112,7 @@
                             <p class="text-muted"><?php echo $course['description']; ?></p>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mt-3">
-                            <a href="#" class="btn btn-primary fw-bold btn-sm">Read More</a>
+                            <a href="#" style="background-color: #0E2293; border: none;" class="btn btn-primary fw-bold btn-sm">Read More</a>
                             <div class="social-icons d-flex gap-2">
                                 <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                                 <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>

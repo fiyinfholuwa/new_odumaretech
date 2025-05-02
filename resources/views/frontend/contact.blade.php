@@ -41,7 +41,7 @@
 
                 <!-- Right Side: Form + Contact Info -->
                 <div class="col-lg-6">
-                    <div class="p-4 rounded-4 shadow-sm" style="background-color: #F7F7F7;">
+                    <div class="p-5 rounded-4 shadow-sm" style="background-color: #F7F7F7;">
                         <form>
                             <div class="row g-3">
                                 <div class="col-md-6">
