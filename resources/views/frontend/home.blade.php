@@ -57,13 +57,13 @@
                     <div class="home-icon-box">
                         <i class="fa <?php echo $item['icon']; ?> text-white" style="font-size: 40px; background-color: #FFC000;  padding: 10px; border-radius: 3px;"></i>
                     </div>
-                    <div class="home-number"
+                    <div style="color: #0E2293;" class="home-number"
                          data-number="<?php echo $item['number']; ?>"
                          data-suffix="<?php echo ($item['name'] == 'Employability') ? '%' : '+'; ?>">
                         0
                     </div>
-                    <div class="home-name text-white" style="margin-top: 10px;">
-                        {{ $item['name'] }}
+                    <div  class="home-name text-white" style="margin-top: 10px; color: #0E2293; ">
+                        <span style="color: #0E2293; font-weight: bolder;">{{ $item['name'] }} </span>
                     </div>
                 </div>
             </div>
