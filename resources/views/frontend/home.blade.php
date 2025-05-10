@@ -11,7 +11,7 @@
 
         <div class="container">
 
-            <div style="margin-top:-150px;" class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
+            <div style="margin-top:-100px;" class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
                 <div class="col-xl-6 col-lg-8">
                     <span style="background-color: #FFC000; padding: 5px;  border-radius: 10px; font-size:10px;">Led by Professionals</span>
                     <h2 style="position: relative;">
@@ -37,7 +37,7 @@
     </section>
 
 
-    <section style="background-color: #0E2293">
+    <section data-aos="fade-up" data-aos-delay="100" style="background-color: #0E2293">
         <div style="padding: 10px 75px;" class="row">
             <?php
             $items = [
@@ -256,7 +256,7 @@
         </div>
     </section>
 
-    <section style="background-color: #FFC000; padding: 60px 0;" class="why_odumare">
+    <section style="background-color:; padding: 60px 0;" class="why_odumare">
         <div class="container">
             <div class=" mb-5">
                 <span class="badge bg-primary fs-5 mb-2">Why Odumare?</span>
@@ -374,13 +374,13 @@
         </div>
     </section>
 
-    <section style="background-color: #041845; padding: 60px 0;" class="accelerate text-white">
+    <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: white;">Accelerate Your Workforce</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: white; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
-                    <a href="#" class="btn btn-warning btn-lg text-white">Schedule Consultation</a>
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Accelerate Your Workforce</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
+                    <a href="#" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Schedule Consultation</a>
                 </div>
             </div>
             <div class="row">
@@ -392,6 +392,113 @@
             </div>
         </div>
     </section>
+
+    <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Research and Innovation</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
+                        Our cutting-edge research at OdumareTech. Curiosity knows no bounds, and neither do we. Are you passionate about shaping the future? Join us in our pursuit of knowledge.                    </p>
+                    <a href="#" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Learn More</a>
+                </div>
+            </div>
+            <div class="row">
+
+                <?php
+                $cards = [
+                    [
+                        'title' => 'Suicide Model Predictor',
+                        'image' => 'frontend/assets/img/image4.png',
+                    ],
+                    [
+                        'title' => 'AI Health Assistant',
+                        'image' => 'frontend/assets/img/image5.png',
+                    ],
+                    [
+                        'title' => 'Climate Change Analyzer',
+                        'image' => 'frontend/assets/img/image6.png',
+                    ],
+                ];
+
+                ?>
+                @foreach($cards as $card)
+                    <div class="col-lg-4 mb-4">
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; text-align: ; height: 100%;">
+                            <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
+                            <h4 style="color: #333; font-weight: bold; margin-top: 20px;">{{ $card['title'] }}</h4>
+                        </div>
+                    </div>
+
+                @endforeach
+            </div>
+
+        </div>
+    </section>
+
+    <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Intensive BootCamp</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
+                        Let’s partner with you to train and develop your talent in areas of tech that will inturn transform your business                    </p>
+                    <a href="#" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Our Courses</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Free Masterclass</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
+                        Our Exclusive Free Masterclass Series – Your Gateway to Professional Knowledge. Seize the Opportunity to Learn Directly from Industry Experts. Reserve Your Spot Now! </p>
+                        <a href="#" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Join Masterclass</a>
+                </div>
+            </div>
+            <div class="row">
+
+                <?php
+                $cards = [
+                    [
+                        'title' => 'Suicide Model Predictor',
+                        'image' => 'frontend/assets/img/about1.png',
+                    ],
+                    [
+                        'title' => 'AI Health Assistant',
+                        'image' => 'frontend/assets/img/about2.png',
+                    ],
+                    [
+                        'title' => 'Climate Change Analyzer',
+                        'image' => 'frontend/assets/img/about3.png',
+                    ],
+                ];
+
+                ?>
+                @foreach($cards as $card)
+                    <div class="col-lg-4 mb-4">
+                        <div style="">
+                            <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
+                        </div>
+                    </div>
+
+                @endforeach
+            </div>
+
+        </div>
+    </section>
+
 
     <?php
     $testimonials = [

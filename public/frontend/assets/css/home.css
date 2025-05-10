@@ -200,3 +200,17 @@
 
 
 
+.course_info{
+    width: 60%;
+    margin: -100px auto 0;
+    border-radius: 30px;
+}
+
+
+@media (max-width: 768px) {
+    .course_info{
+        width: 90%;
+        margin: -100px auto 0;
+    }
+}
+
