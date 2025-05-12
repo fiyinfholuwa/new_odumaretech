@@ -33,4 +33,31 @@ class FrontendController extends Controller
     public function course_detail():View{
         return view('frontend.course_detail');
     }
+    public function innovation():View{
+        return view('frontend.innovation');
+    }
+    public function masterclass():View{
+        return view('frontend.masterclass');
+    }
+    public function hire_grad():View{
+        return view('frontend.hire_grad');
+    }
+    public function privacy():View{
+        return view('frontend.privacy');
+    }
+    public function terms():View{
+        return view('frontend.terms');
+    }
+    public function community():View{
+        return view('frontend.community');
+    }
+    public function hire():View{
+        return view('frontend.hire');
+    }
+    public function consultation():View{
+        return view('frontend.consultation');
+    }
+    public function corporate_training():View{
+        return view('frontend.corporate_training');
+    }
 }
