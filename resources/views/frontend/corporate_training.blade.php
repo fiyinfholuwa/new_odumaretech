@@ -162,6 +162,73 @@
         </div>
     </section>
 
+    <section>
+        <div class="container">
+            <div class="text-center">
+                <h3>High-Demand Professional Capabilities</h3>
+                <p>The most requested training programs that forward-thinking organizations are leveraging for team development</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section style="background-color:; padding: 60px 0;" class="why_odumare">
+        <div class="container">
+            <div class=" mb-5">
+                <span class="badge bg-primary fs-5 mb-2">Corporate Training </span>
+
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4">
+                    <h2 style="color: #0E2293;" class="fw-bold">What Sets Us Apart</h2>
+                    <p style="color: #5A5A5A;" class="">
+                        Our distinctive approach combines cutting-edge technology with personalized support to deliver unparalleled training experiences tailored to your organization's specific needs.                    </p>
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <?php
+                    $features = [
+                        [
+                            'icon' => 'fa-handshake',
+                            'title' => 'Strategic Success Partnerships',
+                            'desc' => "Transform any space into your classroom. Whether you're at home, relaxing at the beach, working in your studio, or managing your business - your learning journey adapts to your lifestyle.",
+                        ],
+                        [
+                            'icon' => 'fa-code ',
+                            'title' => "Scalable Enterprise Infrastructure",
+                            'desc' => "Leverage our robust, business-ready platform features designed to seamlessly expand learning opportunities across your entire organizational structure.",
+                        ],
+                        [
+                            'icon' => 'fa-book',
+                            'title' => 'Tailored Learning Journeys',
+                            'desc' => 'Engage your workforce with customized educational experiences through specialized learning paths and proprietary content integration while tracking developmental progress with precision.',
+                        ],
+                    ];
+                    foreach ($features as $feature):
+                        ?>
+                    <div class="d-flex mb-4 p-3 rounded" style="background-color: #E9ECFF;">
+                        <div class="me-3 d-flex align-items-center justify-content-center" >
+                            <i style="padding: 10px; background: #4A6CF7; border-radius:100%" class="fa <?=$feature['icon'];?> text-white fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold"><?=$feature['title'];?></h5>
+                            <p class="mb-0 text-muted"><?=$feature['desc'];?></p>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 
