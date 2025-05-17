@@ -46,7 +46,7 @@
             <ul>
                 <li><a href="{{route('home')}}" class="active">Home<br></a></li>
                 <li><a href="{{route('courses')}}">Courses</a></li>
-                <li><a href="#services">MarketPlace</a></li>
+                <li><a href="{{route('marketplace')}}">MarketPlace</a></li>
                 <li><a href="{{route('blog')}}">Blog</a></li>
                 <li><a href="{{route('about')}}">About</a></li>
                 <li><a href="{{route('contact')}}">Contact Us</a></li>
@@ -109,31 +109,31 @@
                 <div class="col-lg-2 col-md-3 footer-links">
                     <h4>Company</h4>
                     <ul>
-                        <li> <a href="#"> Research and Innovation</a></li>
-                        <li> <a href="#">Masterclass</a></li>
-                        <li><a href="#"> Services</a></li>
-                        <li> <a href="#"> Corporate Trainings</a></li>
+                        <li> <a href="{{route('innovation')}}"> Research and Innovation</a></li>
+                        <li> <a href="{{route('masterclass')}}">Masterclass</a></li>
+{{--                        <li><a href="#"> Services</a></li>--}}
+                        <li> <a href="{{route('corporate_training')}}"> Corporate Trainings</a></li>
                         <li> <a href="#">Support Us</a></li>
-                        <li> <a href="#">Hire our Grad</a></li>
+                        <li> <a href="{{route('hire_grad')}}">Hire our Grad</a></li>
                     </ul>
                 </div>
 
                 <div class="col-lg-2 col-md-3 footer-links">
                     <h4>Pages</h4>
                     <ul>
-                        <li><a href="#">Courses</a></li>
-                        <li> <a href="#">About</a></li>
-                        <li> <a href="#">Contact Us</a></li>
-                        <li> <a href="#"> Join Us</a></li>
-                        <li> <a href="#"> FAQs</a></li>
+                        <li><a href="{{route('courses')}}">Courses</a></li>
+                        <li> <a href="{{route('about')}}">About</a></li>
+                        <li> <a href="{{route('contact')}}">Contact Us</a></li>
+                        <li> <a href="{{route('career')}}"> Join Us</a></li>
+                        <li> <a href="{{route('faq')}}"> FAQs</a></li>
                     </ul>
                 </div>
 
                 <div class="col-lg-2 col-md-12 footer-links">
                     <h4>Policies</h4>
                     <ul>
-                        <li> <a href="#"> Term of Use</a></li>
-                        <li> <a href="#"> Privacy Policy</a></li>
+                        <li> <a href="{{route('terms')}}"> Term of Use</a></li>
+                        <li> <a href="{{route('privacy')}}"> Privacy Policy</a></li>
                     </ul>
                 </div>
 

@@ -60,4 +60,13 @@ class FrontendController extends Controller
     public function corporate_training():View{
         return view('frontend.corporate_training');
     }
+    public function marketplace():View{
+        return view('frontend.marketplace');
+    }
+    public function course_list():View{
+        return view('frontend.course_list');
+    }
+    public function course_external_detail():View{
+        return view('frontend.course_external_detail');
+    }
 }

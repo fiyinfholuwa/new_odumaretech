@@ -29,7 +29,7 @@
                     <p>Embark on a thrilling expedition into the vast realm of technology, where innovation meets possibility and your digital potential awaits.</p>
                 </div>
                 <div style="margin-top: 30px;">
-                    <a class="btn  btn-primary">Explore Courses</a>
+                    <a href="{{route('courses')}}" class="btn  btn-primary">Explore Courses</a>
                 </div>
             </div>
         </div>
@@ -175,7 +175,7 @@
                         </div>
                         <h3 class="mt-3"><?php echo $course['title']; ?></h3>
                         <p class="text-muted"><?php echo $course['description']; ?></p>
-                        <a href="#" class="text-primary fw-bold">Learn More →</a>
+                        <a href="{{route('course.detail')}}" class="text-primary fw-bold">Learn More →</a>
                     </div>
                 </div>
                     <?php
@@ -183,7 +183,7 @@
                 ?>
             </div>
             <div style="text-align: center; padding-top: 20px;">
-                <a class="btn btn-primary">View All Courses</a>
+                <a href="{{route('courses')}}" class="btn btn-primary">View All Courses</a>
             </div>
         </div>
     </section>
@@ -380,7 +380,7 @@
                 <div class="col-lg-8">
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Accelerate Your Workforce</h2>
                     <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
-                    <a href="#" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Schedule Consultation</a>
+                    <a href="{{route('consultation')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Schedule Consultation</a>
                 </div>
             </div>
             <div class="row">
@@ -400,7 +400,7 @@
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Research and Innovation</h2>
                     <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
                         Our cutting-edge research at OdumareTech. Curiosity knows no bounds, and neither do we. Are you passionate about shaping the future? Join us in our pursuit of knowledge.                    </p>
-                    <a href="#" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Learn More</a>
+                    <a href="{{route('innovation')}}" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Learn More</a>
                 </div>
             </div>
             <div class="row">
@@ -443,7 +443,7 @@
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Intensive BootCamp</h2>
                     <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
                         Let’s partner with you to train and develop your talent in areas of tech that will inturn transform your business                    </p>
-                    <a href="#" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Our Courses</a>
+                    <a href="{{route('courses')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Our Courses</a>
                 </div>
             </div>
             <div class="row">
@@ -464,7 +464,7 @@
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Free Masterclass</h2>
                     <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
                         Our Exclusive Free Masterclass Series – Your Gateway to Professional Knowledge. Seize the Opportunity to Learn Directly from Industry Experts. Reserve Your Spot Now! </p>
-                        <a href="#" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Join Masterclass</a>
+                        <a href="{{route('masterclass')}}" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Join Masterclass</a>
                 </div>
             </div>
             <div class="row">
@@ -632,7 +632,7 @@
                 <div class="col-lg-5 mb-4">
                     <h3 class="fw-bold" style="font-size: 2.5rem;">Frequently Asked Questions</h3>
                     <p>Still have any questions? Contact our Team via <a href="mailto:contact@odumaretech.com">contact@odumaretech.com</a></p>
-                    <a href="#" class="btn btn-outline-warning">See all FAQs</a>
+                    <a href="{{route('faq')}}" class="btn btn-outline-warning">See all FAQs</a>
                 </div>
                 <div class="col-lg-7">
                     <div class="accordion" id="faqAccordion">
