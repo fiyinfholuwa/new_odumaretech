@@ -4,9 +4,6 @@ use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 
@@ -31,7 +28,6 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/course/listing', 'course_list')->name('course_list');
     Route::get('/corporate/training', 'corporate_training')->name('corporate_training');
     Route::get('/course/external/detail', 'course_external_detail')->name('course_external_detail');
-
 });
 
 require __DIR__.'/auth.php';
