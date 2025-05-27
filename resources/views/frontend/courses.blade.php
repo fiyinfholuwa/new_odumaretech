@@ -101,7 +101,7 @@
                             <span style="padding: 5px 10px; background-color: white; border-radius: 10px; font-size: 14px;"><?php echo $course['weeks']; ?></span>
                             <span style="background-color: #FFF0DC; color: #FF9500; padding: 5px 10px; border-radius: 10px; font-size: 14px;"><?php echo $course['level']; ?></span>
                         </div>
-                        <a href="{{route('course.detail')}}" style="background-color: #0E2293; border: none;" class="btn btn-primary btn-lg fw-bold">Start Learning</a>
+                        <a href="{{route('course.detail', "hello")}}" style="background-color: #0E2293; border: none;" class="btn btn-primary btn-lg fw-bold">Start Learning</a>
                     </div>
                 </div>
                     <?php

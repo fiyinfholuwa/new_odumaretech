@@ -36,7 +36,7 @@
                 <div class="col-lg-6">
                     <h3 class="mb-3">More than just Another Educational Platform</h3>
                     <p>We are your dedicated partner in mastering digital skills. Our approach combines rigorous learning with practical experience, setting us apart.</p>
-                    <img src="{{asset('frontend/assets/img/services.jpg')}}" class="img-fluid rounded shadow-sm" alt="Services">
+                    <img style="height: 300px;" src="{{asset('https://sonim-tech.transforms.svdcdn.com/production/general/Heroes/header-contact.png?w=1241&h=524&auto=compress%2Cformat&fit=crop&dm=1727991844&s=5db54b57192867c3e5b95d2f9f1feacb')}}" class="img-fluid rounded shadow-sm" alt="Services">
                 </div>
 
                 <!-- Right Side: Form + Contact Info -->

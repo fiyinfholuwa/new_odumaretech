@@ -175,7 +175,7 @@
                         </div>
                         <h3 class="mt-3"><?php echo $course['title']; ?></h3>
                         <p class="text-muted"><?php echo $course['description']; ?></p>
-                        <a href="{{route('course.detail')}}" class="text-primary fw-bold">Learn More →</a>
+                        <a href="{{route('course.detail', "hello")}}" class="text-primary fw-bold">Learn More →</a>
                     </div>
                 </div>
                     <?php

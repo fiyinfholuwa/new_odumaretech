@@ -36,7 +36,7 @@
                 <!-- Left Side -->
                 <div class="col-lg-6">
                     <h3 class="mb-3">Become an Instructor with Us Today!</h3>
-                    <img src="{{asset('frontend/assets/img/Container.png')}}" class="img-fluid rounded shadow-sm" alt="Services">
+                    <img src="{{asset('https://www.cei.se/media/wysiwyg/elearn-banner.jpg')}}" class="img-fluid rounded shadow-sm" alt="Services">
                 </div>
 
                 <!-- Right Side: Form + Contact Info -->

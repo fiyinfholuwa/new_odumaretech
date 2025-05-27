@@ -157,7 +157,6 @@ Route::middleware(['auth', 'is_admin'])->controller(InnovationController::class)
 
 
 Route::middleware(['auth', 'is_admin'])->controller(ContactController::class)->group(function () {
-    Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact/save', 'contact_save')->name('contact.save');
     Route::get('/admin/contact/all', 'get_all_message')->name('contact.all');
     Route::post('/admin/contact/delete/{id}', 'message_delete')->name('contact.delete');
