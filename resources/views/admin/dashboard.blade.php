@@ -23,12 +23,19 @@
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
 
-            .stat-card-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-            .stat-card-purple { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
-            .stat-card-dark { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
-            .stat-card-yellow { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; }
-            .stat-card-orange { background: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%); color: white; }
-            .stat-card-pink { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; }
+            .stat-card-blue { background: #E9ECFF }
+            .stat-card-purple { background: #E9ECFF}
+            .stat-card-dark { background: #E9ECFF }
+            .stat-card-yellow { background: #FFF3CF }
+            .stat-card-orange { background: #FFF3CF }
+            .stat-card-pink { background: #FFF3CF }
+
+            /*.stat-card-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }*/
+            /*.stat-card-purple { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }*/
+            /*.stat-card-dark { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }*/
+            /*.stat-card-yellow { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; }*/
+            /*.stat-card-orange { background: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%); color: white; }*/
+            /*.stat-card-pink { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #333; }*/
 
             .stat-icon {
                 font-size: 2rem;
@@ -205,14 +212,15 @@
                 <div class="card stat-card stat-card-blue">
                     <div class="row">
                         <div class="col-4">
-                            <div class="stat-icon">
-                                <i class="fas fa-user-graduate"></i>
+                            <div style="background-color: #0E2293" class="stat-icon">
+                                <i  class="fas fa-user-graduate text-white"></i>
                             </div>
                         </div>
                         <div class="col-8">
                             <div>
+                                <p class="stat-label text-muted">Students</p>
+
                                 <p class="stat-number"><?php echo $stats['students']; ?></p>
-                                <p class="stat-label">Students</p>
                             </div>
                         </div>
                     </div>
@@ -222,14 +230,14 @@
                 <div class="card stat-card stat-card-purple">
                     <div class="row">
                         <div class="col-4">
-                            <div class="stat-icon">
-                                <i class="fas fa-chalkboard-teacher"></i>
+                            <div style="background-color: #0E2293" class="stat-icon">
+                                <i class="fas fa-chalkboard-teacher text-white"></i>
                             </div>
                         </div>
                         <div class="col-8">
                             <div>
+                                <p class="stat-label text-muted">Instructors</p>
                                 <p class="stat-number"><?php echo $stats['instructors']; ?></p>
-                                <p class="stat-label">Instructors</p>
                             </div>
                         </div>
                     </div>
@@ -239,14 +247,14 @@
                 <div class="card stat-card stat-card-dark">
                     <div class="row">
                         <div class="col-4">
-                            <div class="stat-icon">
-                                <i class="fas fa-book"></i>
+                            <div style="background-color: #0E2293" class="stat-icon">
+                                <i class="fas fa-book text-white"></i>
                             </div>
                         </div>
                         <div class="col-8">
                             <div>
+                                <p class="stat-label text-muted">Courses</p>
                                 <p class="stat-number"><?php echo $stats['courses']; ?></p>
-                                <p class="stat-label">Courses</p>
                             </div>
                         </div>
                     </div>
@@ -260,14 +268,14 @@
                 <div class="card stat-card stat-card-yellow">
                     <div class="row">
                         <div class="col-4">
-                            <div class="stat-icon">
-                                <i class="fas fa-dollar-sign"></i>
+                            <div style="background-color: #FFC000;" class="stat-icon">
+                                <i class="fas fa-dollar-sign text-white"></i>
                             </div>
                         </div>
                         <div class="col-8">
                             <div>
-                                <p class="stat-number">$<?php echo number_format($stats['total_revenue']); ?></p>
                                 <p class="stat-label">Total Revenue <span class="revenue-trend">+<?php echo $stats['revenue_growth']; ?>%</span></p>
+                                <p class="stat-number">$<?php echo number_format($stats['total_revenue']); ?></p>
                             </div>
                         </div>
                     </div>
@@ -276,15 +284,15 @@
             <div class="col-md-4 mb-3">
                 <div class="card stat-card stat-card-orange">
                     <div class="row">
-                        <div class="col-4">
-                            <div class="stat-icon">
-                                <i class="fas fa-comments"></i>
+                        <div  class="col-4">
+                            <div style="background-color: #FFC000;" class="stat-icon">
+                                <i class="fas fa-comments text-white"></i>
                             </div>
                         </div>
                         <div class="col-8">
                             <div>
+                                <p class="stat-label text-muted">Testimonials</p>
                                 <p class="stat-number"><?php echo number_format($stats['testimonials']); ?></p>
-                                <p class="stat-label">Testimonials</p>
                             </div>
                         </div>
                     </div>
@@ -294,14 +302,14 @@
                 <div class="card stat-card stat-card-pink">
                     <div class="row">
                         <div class="col-4">
-                            <div class="stat-icon">
-                                <i class="fas fa-star"></i>
+                            <div style="background-color: #FFC000;" class="stat-icon">
+                                <i class="fas fa-star text-white"></i>
                             </div>
                         </div>
                         <div class="col-8">
                             <div>
+                                <p class="stat-label text-muted">Master Class</p>
                                 <p class="stat-number"><?php echo $stats['master_class']; ?></p>
-                                <p class="stat-label">Master Class</p>
                             </div>
                         </div>
                     </div>
@@ -311,7 +319,7 @@
 
         <!-- Content Sections Row -->
         <div class="row mb-4">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card section-card">
                     <div class="section-title">
                         <i class="fas fa-play-circle me-2"></i>Recent Masterclass
@@ -328,7 +336,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card section-card">
                     <div class="section-title">
                         <i class="fas fa-lightbulb me-2"></i>Innovations
@@ -346,7 +354,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card section-card">
                     <div class="section-title">
                         <i class="fas fa-blog me-2"></i>Blogs
@@ -363,33 +371,8 @@
                     <?php endforeach; ?>
                 </div>
             </div>
-        </div>
 
-        <!-- Charts and Calendar Row -->
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <div class="card section-card">
-                    <div class="section-title">
-                        <i class="fas fa-chart-bar me-2"></i>Top Purchased Course
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="purchaseChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-3">
-                <div class="card section-card">
-                    <div class="section-title">
-                        <i class="fas fa-chart-line me-2"></i>Revenue
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <button class="btn btn-sm btn-outline-secondary" onclick="previousMonth()">
@@ -405,6 +388,33 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+
+        <!-- Charts and Calendar Row -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card section-card">
+                    <div class="section-title">
+                        <i class="fas fa-chart-bar me-2"></i>Top Purchased Course
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="purchaseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card section-card">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line me-2"></i>Revenue
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 

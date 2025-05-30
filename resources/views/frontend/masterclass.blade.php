@@ -36,8 +36,7 @@
             <div class="row g-5 align-items-center">
                 <!-- Left Side -->
                 <div class="col-lg-6">
-                    <h3 class="mb-3">Become an Instructor with Us Today!</h3>
-                    <img src="{{asset('frontend/assets/img/Container.png')}}" class="img-fluid rounded shadow-sm" alt="Services">
+                    <img src="{{asset('https://d3vtxdl4wke3e9.cloudfront.net/uploads/resized/all/802635/AMS_BITM-header-resized-web_c10be1b993ca978bc3b3470fe60373f5.jpg')}}" class="img-fluid rounded shadow-sm" alt="Services">
                 </div>
 
                 <!-- Right Side: Form + Contact Info -->

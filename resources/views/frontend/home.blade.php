@@ -315,65 +315,6 @@
 
     <!-- About Section -->
 
-    <!-- Clients Section -->
-    <?php
-    $callToActions = [
-        [
-            'icon' => 'fa-laptop',
-            'title' => 'Intensive BootCamp',
-            'description' => 'Level up your skills, Join our intensive boot camp',
-            'link' => '#',
-            'link_text' => 'Our Courses ->'
-        ],
-        [
-            'icon' => 'fa-book',
-            'title' => 'Corporate Training',
-            'description' => 'Get your Team updated with the latest Technology stack',
-            'link' => '#',
-            'link_text' => 'Learn More ->'
-        ],
-        [
-            'icon' => 'fa-search',
-            'title' => 'Research and Innovation',
-            'description' => 'Cutting edge Research and Innovation',
-            'link' => '#',
-            'link_text' => 'Learn More ->'
-        ],
-        [
-            'icon' => 'fa-certificate',
-            'title' => 'Free Masterclass',
-            'description' => 'Enrich your skills by joining our Master Class',
-            'link' => '#',
-            'link_text' => 'Join Us ->'
-        ],
-    ];
-
-    $background1 = "#E9ECFF"; // dark blue
-    $background2 = "#FFF3CF"; // yellow
-    ?>
-    <section class="call_to_action py-5">
-        <div class="container">
-            <div class="row">
-                <?php foreach($callToActions as $index => $item): ?>
-                    <?php
-                    $bgColor = ($index % 2 == 0) ? $background1 : $background2;
-                    $textColor = ($index % 2 == 0) ? '#0E2293' : '#FFC000'; // Light or Dark text depending
-                    ?>
-                <div class="col-lg-3 mb-4">
-                    <div class="p-4 rounded h-100" style="background-color: <?= $bgColor; ?>;">
-                        <i  class="fa <?= $item['icon']; ?> mb-3" style="font-size: 30px;color: <?= $textColor; ?> ; background: <?= $bgColor; ?>; padding: 4px;"></i>
-                        <h3 class="h5 mb-2"><?= $item['title']; ?></h3>
-                        <p class="mb-3"><?= $item['description']; ?></p>
-                        <a href="<?= $item['link']; ?>" style="color: <?= $textColor; ?>; font-weight: bold;">
-                                <?= $item['link_text']; ?>
-                        </a>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </section>
-
     <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">

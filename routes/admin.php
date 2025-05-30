@@ -146,12 +146,10 @@ Route::middleware(['auth', 'is_admin'])->controller(MasterClassController::class
 
 
 Route::middleware(['auth', 'is_admin'])->controller(InnovationController::class)->group(function () {
-    Route::get('/innovation', 'innovation')->name('innovation');
     Route::get('/innovation/detail/{id}', 'innovation_detail')->name('innovation.detail');
     Route::post('/innovation/add/', 'innovation_add')->name('innovation.apply');
     Route::get('/innovation/apply/view', 'innovation_apply_view')->name('innovation.apply.view');
     Route::post('/innovation/delete/{id}', 'innovation_delete')->name('inno.delete');
-    Route::get('/blog', 'blog')->name('blog');
 });
 
 
