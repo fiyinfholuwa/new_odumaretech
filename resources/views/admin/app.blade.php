@@ -293,6 +293,14 @@
                     </a>
                 </li>
 
+                <li class="pc-item">
+                    <a style="color: #b01e1e; font-weight: bolder;" href="{{route('logout')}}" class="pc-link">
+                        <span class="pc-micon"><i class="fa fa-sign-out-alt"></i></span>
+                        <span class="pc-mtext">Logout</span>
+                    </a>
+                </li>
+
+
 {{--                <li class="pc-item">--}}
 {{--                    <a href="{{route('platform.configure')}}" class="pc-link">--}}
 {{--                        <span class="pc-micon"><i class="fa fa-cog"></i></span>--}}
