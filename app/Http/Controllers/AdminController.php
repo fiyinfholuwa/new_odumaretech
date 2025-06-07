@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\ApplicantNotification;
 use App\Mail\CorporateMail;
 use App\Mail\InstructorApply;
+use App\Mail\RegisterationEmail;
+use App\Models\AdminRole;
 use App\Models\AppliedCourse;
 use App\Models\ApprovedInstructor;
 use App\Models\Blog;
@@ -19,11 +21,13 @@ use App\Models\InstructorChat;
 use App\Models\MasterClass;
 use App\Models\Testimonial;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Intervention\Image\Facades\Image;
@@ -757,6 +761,191 @@ class AdminController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
+    }
+
+
+    public function role_view():View
+    {
+        $roles = AdminRole::all();
+        return view('admin.role_view', compact('roles'));
+    }
+
+    public function role_add(Request $request):RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required',
+        ]);
+        $add_role = new AdminRole;
+        $add_role->name = $request->name;
+        $add_role->save();
+        $notification = array(
+            'message' => 'role Successfully saved',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function role_delete($id)
+    {
+
+        $delete_role = AdminRole::findOrFail($id);
+        $delete_role->delete();
+        $notification = array(
+            'message' => 'Role Successfully deleted',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function role_permission($id)
+    {
+        $role = AdminRole::findOrFail($id);
+        return view('admin.permission', compact('role'));
+    }
+
+    public function role_permission_set(Request $request, $id)
+    {
+        $role = AdminRole::findOrFail($id);
+        $role->permission = $request->permission;
+        $role->save();
+        $notification = array(
+            'message' => 'Permission Successfully Set',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('role.view')->with($notification);
+    }
+
+    public function role_edit($id)
+    {
+
+        $role = AdminRole::findOrFail($id);
+        $roles = AdminRole::all();
+        return view('backend.role_edit', compact('roles', 'role'));
+    }
+
+    public function role_update(Request $request, $id)
+    {
+        $update_role = AdminRole::findOrFail($id);
+        $update_role->name = $request->name;
+        $update_role->save();
+        $notification = array(
+            'message' => 'Role Successfully Updated',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('role.view')->with($notification);
+    }
+
+
+    public function admin_manager_view()
+    {
+        $roles = AdminRole::all();
+        $users = User::whereNotNull('user_role')->where('user_type', 2)->get();
+        return view('admin.admin_manager_view', compact('roles', 'users'));
+    }
+
+    public function admin_admin_manager_save(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'phone' => 'required',
+            'user_role' => 'required',
+        ]);
+
+        $min = 100000;
+        $max = 999999;
+        $randomNumber = rand($min, $max);
+        $password = "admin_manager" . $randomNumber;
+        $add_user = new User;
+        $add_user->first_name = $request->first_name;
+        $add_user->last_name = $request->last_name;
+        $add_user->email = $request->email;
+        $add_user->phone = $request->phone;
+        $add_user->user_role = $request->user_role;
+        $add_user->user_type = 2;
+        $add_user->password = Hash::make($password);
+        $add_user->save();
+
+        $message = 'Dear ' . $request->first . ',' . PHP_EOL . PHP_EOL .
+            'Please Find attach below to your login detail. thank you.';
+        $mailData = [
+            'password' => $password,
+            'message' => $message,
+            'email' => $request->email
+        ];
+        try {
+            Mail::to($request->email)->send(new RegisterationEmail($mailData));
+        }catch (\Throwable $e){
+
+        }
+        $notification = array(
+            'message' => 'Admin Manager Successfully saved',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+
+    public function admin_manager_update(Request $request, $id)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required',
+            'user_role' => 'required'
+        ]);
+
+        $update_user = User::findOrFail($id);
+        $update_user->first_name = $request->first_name;
+        $update_user->last_name = $request->last_name;
+        $update_user->email = $request->email;
+        $update_user->phone = $request->phone;
+        $update_user->user_type = 2;
+        $update_user->user_role = $request->user_role;
+        $update_user->save();
+        $notification = array(
+            'message' => 'Admin Manager Successfully updated',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('admin_manager.view')->with($notification);
+    }
+
+    public function admin_admin_manager_block(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->block = $request->status;
+        $user->save();
+        $notification = array(
+            'message' => 'Admin Manager Successfully blocked',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function admin_admin_manager_delete($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        $notification = array(
+            'message' => 'Admin Manager Successfully deleted',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
+    public function admin_manager_edit($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = AdminRole::all();
+        $users = User::whereNotNull('user_role')->where('user_type', 2)->get();
+        return view('backend.admin_manager_edit', compact('user', 'users', 'roles'));
+    }
+
+    public function admin_manager_all()
+    {
+        $users = User::where('user_type', '=', 1)->get();
+        return view('backend.admin_manager_all', compact('users'));
     }
 
 }

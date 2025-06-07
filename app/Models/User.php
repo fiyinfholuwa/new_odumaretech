@@ -12,6 +12,11 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+
+    public function role_name()
+    {
+        return $this->hasOne(AdminRole::class, 'id', 'user_role');
+    }
     /**
      * The attributes that are mass assignable.
      *

@@ -71,6 +71,22 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::post('/admin/platform/message/delete', 'platform_message_delete')->name('platform.message.delete');
     Route::post('/admin/platform/corporate/delete', 'platform_corporate_delete')->name('platform.corporate.delete');
     Route::post('/admin/platform/masterclass/delete', 'platform_masterclass_delete')->name('platform.masterclass.delete');
+
+    Route::get('admin/role/view', 'role_view')->name('role.view');
+    Route::get('admin/role/edit/{id}', 'role_edit')->name('role.edit');
+    Route::post('admin/role/update/{id}', 'role_update')->name('role.update');
+    Route::post('admin/role/add', 'role_add')->name('role.add');
+    Route::get('admin/role/permission/view/{id}', 'role_permission')->name('role.permission');
+    Route::post('admin/role/permission/set/{id}', 'role_permission_set')->name('role.permission.set');
+    Route::post('admin/role/delete/{id}', 'role_delete')->name('role.delete');
+
+    Route::get('admin/admin_manager/view', 'admin_manager_view')->name('admin_manager.view');
+    Route::post('admin/admin_manager/save', 'admin_admin_manager_save')->name('admin.admin_manager.save');
+    Route::get('admin/admin_manager/all', 'admin_manager_all')->name('admin_manager.all');
+    Route::get('admin/admin_manager/edit/{id}', 'admin_manager_edit')->name('admin_manager.edit');
+    Route::post('admin/admin_manager/update/{id}', 'admin_manager_update')->name('admin.admin_manager.update');
+    Route::post('admin/admin_manager/delete/{id}', 'admin_admin_manager_delete')->name('admin.admin_manager.delete');
+    Route::post('admin/admin_manager/block/{id}', 'admin_admin_manager_block')->name('admin.admin_manager.block');
 });
 
 
