@@ -93,7 +93,6 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
 
 
 Route::middleware(['auth', 'is_admin'])->controller(CourseController::class)->group(function () {
-    Route::get('/course', 'all_course')->name('course');
     Route::get('/admin/category/manage', 'category_view')->name('category.view');
     Route::post('/admin/category/add', 'category_add')->name('category.add');
     Route::post('/admin/category/delete/{id}', 'category_delete')->name('category.delete');
@@ -121,7 +120,7 @@ Route::middleware(['auth', 'is_admin'])->controller(CourseController::class)->gr
     Route::post('/admin/course/delete/{id}', 'course_delete')->name('course.delete');
     Route::get('/admin/course/edit/{id}', 'course_edit')->name('course.edit');
     Route::post('/admin/course/update/{id}', 'course_update')->name('course.update');
-    Route::get('/course/{name}', 'course_detail')->name('course.detail');
+//    Route::get('/course/{name}', 'course_detail')->name('course.detail');
     Route::get('/course/category/{name}', 'course_category')->name('course.category');
     Route::get('/search', 'search')->name('search');
     Route::get('/admin/coupon/manage', 'coupon_view')->name('coupon.view');

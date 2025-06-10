@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(FrontendController::class)->group(function () {
     Route::get('/', 'home')->name('home');
     Route::get('/courses', 'courses')->name('courses');
-    Route::get('/courses/detail', 'course_detail')->name('course.detail');
+    Route::get('/courses/detail/{name}', 'course_detail')->name('course.detail');
     Route::get('/blog', 'blog')->name('blog');
     Route::get('/about', 'about')->name('about');
     Route::get('/faq', 'faq')->name('faq');

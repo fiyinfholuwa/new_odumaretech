@@ -33,7 +33,7 @@ class FrontendController extends Controller
     public function career():View{
         return view('frontend.career');
     }
-    public function course_detail():View{
+    public function course_detail($name):View{
         return view('frontend.course_detail');
     }
     public function innovation():View{
