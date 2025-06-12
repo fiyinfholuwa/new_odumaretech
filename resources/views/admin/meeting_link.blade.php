@@ -1,134 +1,166 @@
 @extends('admin.app')
 
 @section('content')
-
-            <div class="row" style="margin:10px">
-                <div class="col-md-5">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Manage Meeting Link</div>
-                        </div>
-                        <div class="card-body">
-                           <form action="{{route('meeting.link.add')}}" method="post">
-                            @csrf
-                            <div class="form-group">
-                                <select class="form-control" name="course_id">
-                                    <option value="">Select Course Title</option>
-                                    @foreach($courses as $course)
-                                    <option value="{{$course->id}}">{{$course->title}}</option>
-                                    @endforeach
-                                    
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email2">Meeting Title</label>
-                                <input type="text" class="form-control" id="email2" value="" required name="meeting_title" placeholder="Enter Meeting Title">
-                                <small style="color:red; font-weight:500">
-                                @error('link')
-                                {{$message}}
-                                @enderror
-                                </small>
-                                
-                            </div>
-
-                           <div class="form-group">
-                                <label for="email2">Meeting Link</label>
-                                <input type="text" class="form-control" id="email2" value="" required name="link" placeholder="Enter Meeting Session Link">
-                                <small style="color:red; font-weight:500">
-                                @error('link')
-                                {{$message}}
-                                @enderror
-                                </small>
-                                
-                            </div>
-                        
-                        </div>
-                        <div class="card-action">
-                            <button class="btn btn-primary">Add Meeting Link</button>
-                
-                        </div>
-                        
-                          
-                           </form>
-                    </div>
-                    
+    <div class="row my-3">
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0 text-white">Manage Meeting Link</h3>
                 </div>
+                <div class="card-body">
+                    <form action="{{ route('meeting.link.add') }}" method="POST">
+                        @csrf
 
-                <div class="col-md-7">
-                <div class="row">
-						<div class="col-md-12">
-							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title">Check Meeting Session Link</h4>
-								</div>
-								<div class="card-body">
-									<div class="table-responsive">
-										<table id="basic-datatables" class="display table table-striped table-hover" >
-											<thead>
-												<tr>
-                                                    <td>S/N</td>
-													<th>Course Title</th>
-                                                    <th>Meeting Title</th>
-                                                    <th>Meeting Link</th>
-                                                    <th>Actions</th>
-										
-												</tr>
-											</thead>
-                                            <tbody>
-                                            <?php $i = 1; ?>
-                                            @foreach($meeting_link as $link)
-                                            
-										
-											<tr>
-                                            <td>{{$i++;}}</td>
-                                            <td>{{$link->title}}</td>
-                                            <td>{{$link->meeting_title}}</td>
-                                           <td>
-                                            <a target="_blank" class="btn btn-info" href="{{$link->link}}">View Meeting Session</a>
-                                            
-                                            </td>  
-                                            <td>
-                                                <a href="{{route('meeting.link.edit', $link->id)}}" ><i style="color:blue;" class="fa fa-edit"></i></a>    
-                                                <a href="#" data-toggle="modal" data-target="#meeting_{{$link->id}}" ><i style="color:red;" class="fa fa-trash"></i></a>
-                                                </td>
-                                                
-											</tr>
+                        <div class="form-group mb-3">
+                            <label for="course_id">Course Title</label>
+                            <select class="form-control" name="course_id" id="course_id" required>
+                                <option value="">Select Course Title</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                                            
-    <!-- Modal -->
-                                        <div class="modal fade" id="meeting_{{$link->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                    <form action="{{route('meeting.link.delete', $link->id)}}" method="post">
-                                    @csrf
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-danger" id="exampleModalLabel">Meeting Link Delete</h5>
-                                            
-                                        </div>
-                                        <div class="modal-body">
-                                            Are You Sure You want to delete this Meeting Link
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </div>
-                                        </div>
-                                        </form>
-                                    </div>
-                                    </div>
+                        <div class="form-group mb-3">
+                            <label for="meeting_title">Meeting Title</label>
+                            <input type="text" class="form-control" name="meeting_title" id="meeting_title" required placeholder="Enter Meeting Title">
+                            <small class="text-danger font-weight-bold">@error('meeting_title') {{ $message }} @enderror</small>
+                        </div>
 
-										@endforeach
-                                            </tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
+                        <div class="form-group mb-4">
+                            <label for="link">Meeting Link</label>
+                            <input type="url" class="form-control" name="link" id="link" required placeholder="Enter Meeting Session Link">
+                            <small class="text-danger font-weight-bold">@error('link') {{ $message }} @enderror</small>
+                        </div>
 
-					</div>
-                    
+                        <button type="submit" class="btn btn-success w-100">Add Meeting Link</button>
+                    </form>
                 </div>
             </div>
+        </div>
 
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0 text-white">Meeting Session Links</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="basic-datatables" class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>S/N</th>
+                                <th>Course Title</th>
+                                <th>Meeting Title</th>
+                                <th>Meeting Link</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($meeting_link as $i => $link)
+                                <tr>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $link->title }}</td>
+                                    <td>{{ $link->meeting_title }}</td>
+                                    <td>
+                                        <a href="{{ $link->link }}" target="_blank" class="btn btn-sm btn-info">
+                                            View Link
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="text-primary mx-1" data-bs-toggle="modal" data-bs-target="#editMeetingModal_{{ $link->id }}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#meeting_{{ $link->id }}" class="text-danger mx-1">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="meeting_{{ $link->id }}" tabindex="-1" aria-labelledby="deleteModalLabel_{{ $link->id }}" aria-hidden="true">
+                                    <div class="modal-dialog " role="document">
+                                        <form action="{{ route('meeting.link.delete', $link->id) }}" method="POST">
+                                            @csrf
+                                            <div class="modal-content border-0 shadow-lg">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title text-white" id="deleteModalLabel_{{ $link->id }}">
+                                                        <i class="fa fa-exclamation-triangle mr-2"></i> Delete Confirmation
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <p class="mb-0">Are you sure you want to delete this meeting link?</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-end">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="modal fade" id="editMeetingModal_{{ $link->id }}" tabindex="-1" aria-labelledby="editModalLabel_{{ $link->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <form action="{{ route('meeting.link.update', $link->id) }}" method="POST">
+                                            @csrf
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h3 class="modal-title text-white" id="editModalLabel_{{ $link->id }}">Edit Meeting Link</h3>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <div class="form-group mb-3">
+                                                        <label for="course_id">Course Title</label>
+                                                        <select class="form-control" name="course_id" required>
+                                                            <option value="">Select Course Title</option>
+                                                            @foreach($courses as $course)
+                                                                <option value="{{ $course->id }}" {{ $course->id == $link->course_id ? 'selected' : '' }}>
+                                                                    {{ $course->title }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group mb-3">
+                                                        <label for="meeting_title">Meeting Title</label>
+                                                        <input type="text" class="form-control" name="meeting_title" value="{{ $link->meeting_title }}" required>
+                                                        @error('meeting_title')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
+                                                    </div>
+
+                                                    <div class="form-group mb-3">
+                                                        <label for="link">Meeting Link</label>
+                                                        <input type="text" class="form-control" name="link" value="{{ $link->link }}" required>
+                                                        @error('link')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Update Meeting Link</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

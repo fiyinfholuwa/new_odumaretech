@@ -54,12 +54,55 @@
                                             <td>{{ $i++ }}</td>
                                             <td>{{ $cohort->name }}</td>
                                             <td>
-                                                <a href="{{ route('cohort.edit', $cohort->id) }}" class="me-2 text-primary">
+                                                <!-- Edit Button (Triggers Modal) -->
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-primary me-2"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editCohortModal_{{ $cohort->id }}"
+                                                        title="Edit Cohort">
                                                     <i class="fa fa-edit"></i>
-                                                </a>
+                                                </button>
+
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#cohort_{{ $cohort->id }}" class="text-danger">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
+
+                                                <!-- Edit Cohort Modal -->
+                                                <div class="modal fade" id="editCohortModal_{{ $cohort->id }}" tabindex="-1" aria-labelledby="editCohortLabel_{{ $cohort->id }}" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <form action="{{ route('cohort.update', $cohort->id) }}" method="POST">
+                                                                @csrf
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editCohortLabel_{{ $cohort->id }}">Edit Cohort</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+
+                                                                <div class="modal-body">
+                                                                    <div class="form-group mb-3">
+                                                                        <label for="cohortName_{{ $cohort->id }}" class="form-label">Cohort Name</label>
+                                                                        <input type="text"
+                                                                               id="cohortName_{{ $cohort->id }}"
+                                                                               name="name"
+                                                                               class="form-control @error('name') is-invalid @enderror"
+                                                                               value="{{ old('name', $cohort->name) }}"
+                                                                               required
+                                                                               placeholder="Enter cohort name">
+                                                                        @error('name')
+                                                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-primary">Update Cohort</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 @include('admin.modal.deletecohort')
                                             </td>
                                         </tr>

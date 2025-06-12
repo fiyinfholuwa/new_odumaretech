@@ -9,8 +9,11 @@ use App\Models\CohortCourse;
 use App\Models\Coupon;
 use App\Models\CouponUsed;
 use App\Models\Course;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\View\View;
 
 class CourseController extends Controller
 {
@@ -200,48 +203,147 @@ class CourseController extends Controller
         return view('admin.course_view', compact('categories', 'cohorts'));
     }
 
-    public function course_add(Request $request){
+    public function course_add(Request $request):RedirectResponse
+    {
+        // Validate the request
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|integer',
+            'description' => 'required|string',
+//            'description_corp' => 'required|string',
+//            'certification' => 'required|string',
+//            'experience' => 'required|string',
+            'level' => 'required|string',
+            'duration' => 'required|integer',
+            'language' => 'required|string|max:50',
+            'cohort' => 'required|integer',
+            'start_date' => 'required|date',
+            'price' => 'required|numeric',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'lecture' => 'required|string',
+//            'certificate' => 'nullable|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-        $url_slug = strtolower($request->title);
-        $label_slug= preg_replace('/\s+/', '-', $url_slug);
+        try {
+            // Generate URL slug
+            $url_slug = strtolower($request->title);
+            $label_slug = preg_replace('/\s+/', '-', $url_slug);
+            $label_slug = preg_replace('/[^a-z0-9\-]/', '', $label_slug);
 
-        $image = $request->file('image');
-        $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalName();
-        $resizedImage = Image::make($image)->resize(1400, 1000);
-        $image->storeAs( '/course/'.$filename , $resizedImage, 'public');
-        $path = "storage/course/".$filename;
-        $new_course = new Course;
-        $new_course->title = $request->title;
-        $new_course->course_url = $label_slug;
-        $new_course->category = $request->category;
-        $new_course->level = $request->level;
-        $new_course->language = $request->language;
-        $new_course->price = $request->price;
-        $new_course->lecture = $request->lecture;
-        $new_course->discount = $request->discount;
-        $new_course->duration = $request->duration;
-        $new_course->start_date = $request->start_date;
-        $new_course->cohort = $request->cohort;
-        $new_course->category = $request->category;
-        $new_course->support = $request->support;
-        $new_course->normal_display = $request->normal_display;
-        $new_course->corporate_display = $request->corporate_display;
-        $new_course->experience = $request->experience;
-        $new_course->certification = $request->certification;
-        $new_course->description = $request->description;
-        $new_course->description_corp = $request->description_corp;
-        $new_course->image = $path;
-        $new_course->save();
-        $notification = array(
-            'message' => 'Course Successfully added',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
+
+                $image = $request->file('image');
+                $extension = $image->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $directory = 'uploads/courses/images/';
+
+                // Create directory if not exists
+                if (!file_exists(public_path($directory))) {
+                    mkdir(public_path($directory), 0755, true);
+                }
+
+                // Move file to the directory
+                $image->move(public_path($directory), $filename);
+                $imageUrl =$directory . $filename;
+
+
+            // Create new course
+            $new_course = new Course();
+            $new_course->title = $request->title;
+            $new_course->course_url = $label_slug;
+            $new_course->category = $request->category;
+            $new_course->level = $request->level;
+            $new_course->language = $request->language;
+            $new_course->price = $request->price;
+            $new_course->lecture = $request->lecture;
+            $new_course->discount = $request->discount ?? 0;
+            $new_course->duration = $request->duration;
+            $new_course->start_date = $request->start_date;
+            $new_course->cohort = $request->cohort;
+
+            // Handle checkbox values properly
+            $new_course->normal_display = $request->has('normal_display') ? 'yes' : 'no';
+            $new_course->corporate_display = $request->has('corporate_display') ? 'yes' : 'no';
+
+            $new_course->experience = $request->experience;
+            $new_course->certification = $request->certificate;
+            $new_course->description = $request->description;
+            $new_course->description_corp = $request->description_corp;
+
+            // Map form field names to database column names
+            $new_course->course_outline = $request->course_outline; // Based on your form
+            $new_course->outcome = $request->career_outcome; // Based on your form
+            $new_course->requirement = $request->requirement; // Based on your form
+
+            $new_course->image = $imageUrl;
+            $new_course->save();
+
+            $notification = [
+                'message' => 'Course successfully added',
+                'alert-type' => 'success'
+            ];
+
+            return redirect()->back()->with($notification);
+
+        } catch (\Exception $e) {
+            $notification = [
+                'message' => 'Error adding course: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ];
+
+            return redirect()->back()->with($notification);
+        }
     }
 
-    public function course_all(){
+    public function course_all():View{
         $courses = Course::all();
-        return view('admin.course_all', compact('courses'));
+        $instructors = User::all();
+        return view('admin.course_all', compact('courses','instructors'));
+    }
+
+    public function curriculum($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('admin.curriculum', compact('course'));
+    }
+
+    public function saveCurriculum(Request $request, $id)
+    {
+        $course = Course::findOrFail($id);
+
+        $validated = $request->validate([
+            'curriculum' => 'required|array',
+            'curriculum.*.title' => 'required|string',
+            'curriculum.*.points' => 'required|array',
+            'curriculum.*.points.*' => 'required|string',
+        ]);
+
+        $course->curriculum = json_encode($validated['curriculum']);
+        $course->save();
+
+        $notification = [
+            'message' => 'Curriculum updated successfully.',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('course.all')->with($notification);
+    }
+
+    public function assignInstructor(Request $request):RedirectResponse
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'instructor_id' => 'required|exists:users,id', // assuming instructors are in users table
+        ]);
+
+       $course = Course::findOrFail($request->course_id);
+       $course->instructor = $request->instructor_id;
+       $course->save();
+        $notification = [
+            'message' => 'Instructor assigned successfully.',
+            'alert-type' => 'success'
+        ];
+        return redirect()->back()->with($notification);
     }
 
     public function course_delete($id){
@@ -256,54 +358,100 @@ class CourseController extends Controller
         return redirect()->back()->with($notification);
     }
 
-    public function course_edit($id){
+    public function course_edit($id):View{
         $categories = Category::all();
         $cohorts = Cohort::all();
         $course = Course::findOrFail($id);
         return view('admin.course_edit', compact('course', 'categories', 'cohorts'));
     }
 
-    public function course_update(Request $request, $id){
-        $update_course = course::findOrFail($id);
+    public function course_update(Request $request, $id): RedirectResponse
+    {
+        // Validate the request
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|integer',
+            'description' => 'required|string',
+            'level' => 'required|string',
+            'duration' => 'required|integer',
+            'language' => 'required|string|max:50',
+            'cohort' => 'required|integer',
+            'start_date' => 'required|date',
+            'price' => 'required|numeric',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'lecture' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-        if($request->hasfile('image')){
-            $image = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalName();
-            $resizedImage = Image::make($image)->resize(200, 200);
-            $image->storeAs( '/course/'.$filename , $resizedImage, 'public');
-            $path = "storage/course/".$filename;
-        }else{
-            $path = $update_course->image;
+        try {
+            $course = Course::findOrFail($id);
+
+            // Generate URL slug
+            $url_slug = strtolower($request->title);
+            $label_slug = preg_replace('/\s+/', '-', $url_slug);
+            $label_slug = preg_replace('/[^a-z0-9\-]/', '', $label_slug);
+
+            // Handle image upload if a new image is provided
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $extension = $image->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $directory = 'uploads/courses/images/';
+
+                if (!file_exists(public_path($directory))) {
+                    mkdir(public_path($directory), 0755, true);
+                }
+
+                $image->move(public_path($directory), $filename);
+                $imageUrl = $directory . $filename;
+            } else {
+                $imageUrl = $course->image; // retain the old image
+            }
+
+            // Update course data
+            $course->title = $request->title;
+            $course->course_url = $label_slug;
+            $course->category = $request->category;
+            $course->level = $request->level;
+            $course->language = $request->language;
+            $course->price = $request->price;
+            $course->lecture = $request->lecture;
+            $course->discount = $request->discount ?? 0;
+            $course->duration = $request->duration;
+            $course->start_date = $request->start_date;
+            $course->cohort = $request->cohort;
+
+            $course->normal_display = $request->has('normal_display') ? 'yes' : 'no';
+            $course->corporate_display = $request->has('corporate_display') ? 'yes' : 'no';
+
+            $course->experience = $request->experience;
+            $course->certification = $request->certificate;
+            $course->description = $request->description;
+            $course->description_corp = $request->description_corp;
+
+            // Additional optional fields
+            $course->course_outline = $request->course_outline;
+            $course->outcome = $request->career_outcome;
+            $course->requirement = $request->requirement;
+            $course->support = $request->support;
+
+            $course->image = $imageUrl;
+            $course->save();
+
+            $notification = [
+                'message' => 'Course successfully updated',
+                'alert-type' => 'success'
+            ];
+
+            return redirect()->route('course.all')->with($notification);
+
+        } catch (\Exception $e) {
+            $notification = [
+                'message' => 'Error updating course: ' . $e->getMessage(),
+                'alert-type' => 'error'
+            ];
+            return redirect()->back()->with($notification);
         }
-        $url_slug = strtolower($request->title);
-        $label_slug= preg_replace('/\s+/', '-', $url_slug);
-        $update_course->title = $request->title;
-        $update_course->course_url = $label_slug;
-        $update_course->category = $request->category;
-        $update_course->level = $request->level;
-        $update_course->language = $request->language;
-        $update_course->price = $request->price;
-        $update_course->lecture = $request->lecture;
-        $update_course->discount = $request->discount;
-        $update_course->duration = $request->duration;
-        $update_course->start_date = $request->start_date;
-        $update_course->cohort = $request->cohort;
-        $update_course->normal_display = $request->normal_display;
-        $update_course->corporate_display = $request->corporate_display;
-        $update_course->category = $request->category;
-        $update_course->support = $request->support;
-        $update_course->experience = $request->experience;
-        $update_course->certification = $request->certification;
-        $update_course->description = $request->description;
-        $update_course->description_corp = $request->description_corp;
-        $update_course->image = $path;
-        $update_course->save();
-
-        $notification = array(
-            'message' => 'Course successfully updated',
-            'alert-type' => 'success'
-        );
-        return redirect()->route('course.all')->with($notification);
     }
 
     public function course_detail($name){

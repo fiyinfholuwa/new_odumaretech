@@ -120,6 +120,13 @@ Route::middleware(['auth', 'is_admin'])->controller(CourseController::class)->gr
     Route::post('/admin/course/delete/{id}', 'course_delete')->name('course.delete');
     Route::get('/admin/course/edit/{id}', 'course_edit')->name('course.edit');
     Route::post('/admin/course/update/{id}', 'course_update')->name('course.update');
+
+    Route::get('/course/curriculum/{id}',  'curriculum')->name('course.curriculum');
+    Route::post('/course/assign-instructor',  'assignInstructor')->name('course.assignInstructor');
+
+    Route::post('/admin/course/{id}/save-curriculum',  'saveCurriculum')->name('course.saveCurriculum');
+
+
 //    Route::get('/course/{name}', 'course_detail')->name('course.detail');
     Route::get('/course/category/{name}', 'course_category')->name('course.category');
     Route::get('/search', 'search')->name('search');

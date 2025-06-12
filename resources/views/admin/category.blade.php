@@ -59,11 +59,13 @@
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $category->name }}</td>
                                         <td class="text-center">
-                                            <a href="{{ route('category.edit', $category->id) }}"
-                                               class="btn btn-sm btn-outline-primary"
-                                               title="Edit">
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editCategoryModal_{{ $category->id }}"
+                                                    title="Edit">
                                                 <i class="fa fa-edit"></i>
-                                            </a>
+                                            </button>
+
                                             <a href="#"
                                                class="btn btn-sm btn-outline-danger"
                                                data-bs-toggle="modal"
@@ -73,6 +75,43 @@
                                             </a>
                                         </td>
                                     </tr>
+
+                                    <div class="modal fade" id="editCategoryModal_{{ $category->id }}" tabindex="-1" aria-labelledby="editCategoryLabel_{{ $category->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{ route('category.update', $category->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editCategoryLabel_{{ $category->id }}">Edit Course Category</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="categoryName_{{ $category->id }}" class="font-weight-semibold">Category Name</label>
+                                                            <input
+                                                                type="text"
+                                                                id="categoryName_{{ $category->id }}"
+                                                                name="name"
+                                                                class="form-control"
+                                                                placeholder="Enter Course Category Name"
+                                                                value="{{ old('name', $category->name) }}"
+                                                                required
+                                                            >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-success">
+                                                            <i class="fa fa-edit me-1"></i> Update Category
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     @include('admin.modal.deleteCategory')
                                 @endforeach
                                 </tbody>

@@ -135,11 +135,13 @@
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon"><i class="fas fa-tag"></i></span>
-                        <span class="pc-mtext">Course Category</span>
+                        <span class="pc-mtext">Manage Courses</span>
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
                         <li class="pc-item"><a class="pc-link" href="{{route('category.view')}}">Manage Course Category</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{route('course.view')}}">Add Course</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{route('course.all')}}">All Course</a></li>
                     </ul>
                 </li>
 
@@ -151,21 +153,10 @@
                     </a>
                     <ul class="pc-submenu">
                         <li class="pc-item"><a class="pc-link" href="{{route('cohort.view')}}">Manage Cohort</a></li>
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('cohort_m.view')}}">Manage Cohort Price</a></li>--}}
+                        <li class="pc-item"><a class="pc-link" href="{{route('cohort_m.view')}}">Manage Cohort Price</a></li>
                     </ul>
                 </li>
 
-{{--                <li class="pc-item pc-hasmenu">--}}
-{{--                    <a href="#!" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fas fa-sticky-note"></i></span>--}}
-{{--                        <span class="pc-mtext">Manage Courses</span>--}}
-{{--                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>--}}
-{{--                    </a>--}}
-{{--                    <ul class="pc-submenu">--}}
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('course.view')}}">Add Course</a></li>--}}
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('course.all')}}">All Courses</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
@@ -244,19 +235,19 @@
                     </a>
                 </li>
 
-{{--                <li class="pc-item">--}}
-{{--                    <a href="{{route('meeting.link')}}" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fa fa-link"></i></span>--}}
-{{--                        <span class="pc-mtext">Manage Meeting Link</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                <li class="pc-item">
+                    <a href="{{route('meeting.link')}}" class="pc-link">
+                        <span class="pc-micon"><i class="fa fa-link"></i></span>
+                        <span class="pc-mtext">Manage Meeting Link</span>
+                    </a>
+                </li>
 
-{{--                <li class="pc-item">--}}
-{{--                    <a href="{{route('record.link')}}" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fas fa-microphone"></i></span>--}}
-{{--                        <span class="pc-mtext">Manage Record Sessions</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                <li class="pc-item">
+                    <a href="{{route('record.link')}}" class="pc-link">
+                        <span class="pc-micon"><i class="fas fa-microphone"></i></span>
+                        <span class="pc-mtext">Manage Record Sessions</span>
+                    </a>
+                </li>
 
 {{--                <li class="pc-item">--}}
 {{--                    <a href="{{route('admin.chat.all')}}" class="pc-link">--}}
@@ -272,19 +263,19 @@
                     </a>
                 </li>
 
-                <li class="pc-item">
+{{--                <li class="pc-item">--}}
 {{--                    <a href="{{route('transaction.all')}}" class="pc-link">--}}
 {{--                        <span class="pc-micon"><i class="fas fa-exchange-alt"></i></span>--}}
 {{--                        <span class="pc-mtext">All Transactions</span>--}}
 {{--                    </a>--}}
-                </li>
-
-{{--                <li class="pc-item">--}}
-{{--                    <a href="{{route('coupon.view')}}" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fas fa-gift"></i></span>--}}
-{{--                        <span class="pc-mtext">Manage Coupons</span>--}}
-{{--                    </a>--}}
 {{--                </li>--}}
+
+                <li class="pc-item">
+                    <a href="{{route('coupon.view')}}" class="pc-link">
+                        <span class="pc-micon"><i class="fas fa-gift"></i></span>
+                        <span class="pc-mtext">Manage Coupons</span>
+                    </a>
+                </li>
 
                 <li class="pc-item">
                     <a href="{{route('contact.all')}}" class="pc-link">
@@ -296,7 +287,7 @@
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon"><i class="fa fa-blog"></i></span>
-                        <span class="pc-mtext">Role & Permission</span>
+                        <span class="pc-mtext">Platform Configuration</span>
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
@@ -313,13 +304,6 @@
                     </a>
                 </li>
 
-
-{{--                <li class="pc-item">--}}
-{{--                    <a href="{{route('platform.configure')}}" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fa fa-cog"></i></span>--}}
-{{--                        <span class="pc-mtext">Platform Configuration</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
 
 
 
@@ -733,6 +717,20 @@
 <script>
     ClassicEditor
         .create(document.querySelector('#myTextarea2'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#myTextarea3'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#myTextarea4'))
         .catch(error => {
             console.error(error);
         });
