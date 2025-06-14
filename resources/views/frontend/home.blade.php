@@ -259,7 +259,7 @@
     <section style="background-color:; padding: 60px 0;" class="why_odumare">
         <div class="container">
             <div class=" mb-5">
-                <span class="badge bg-primary fs-5 mb-2">Why Odumare?</span>
+                <span class="badge bg-primary fs-5 mb-2">Why Odumaretech?</span>
 
             </div>
 
