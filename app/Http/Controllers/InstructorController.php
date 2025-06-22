@@ -519,7 +519,7 @@ public function view_submitted_project($id){
     public function student_chat_all(){
         $user_id = Auth::user()->id;
         $instructor = ApprovedInstructor::where('user_id', '=', $user_id)->first();
-        $course_ids = $instructor->course_ids;
+        $course_ids = json_decode($instructor->course_ids,true);
         $chats = UserChat::whereIn('course_id', $course_ids)->get();
         return view('instructor.chat_student', compact('chats'));
     }
