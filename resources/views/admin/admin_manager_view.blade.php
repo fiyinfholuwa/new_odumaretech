@@ -4,6 +4,56 @@
 @section('page',  'Manage Manager')
 
 @section('content')
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* When checked */
+.switch input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.switch-label {
+  font-weight: 500;
+}
+
+</style>
+
     <main id="main" class="main">
         <section class="section">
             <div class="row">
@@ -37,15 +87,23 @@
                                     <p class="text-danger small fw-bold">@error('phone') {{ $message }} @enderror</p>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="form-label">Select Role</label>
-                                    <select class="form-control" name="user_role">
-                                        <option value="">Select Role</option>
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <p class="text-danger small fw-bold">@error('user_role') {{ $message }} @enderror</p>
-                                </div>
+    <label class="form-label">Select Roles</label>
+    <div class="row">
+        @foreach($roles as $role)
+            <div class="col-md-6 mb-2">
+                <label class="switch-label d-flex justify-content-between align-items-center">
+                    <span>{{ $role->name }}</span>
+                    <label class="switch">
+                        <input type="checkbox" name="user_roles[]" value="{{ $role->id }}">
+                        <span class="slider round"></span>
+                    </label>
+                </label>
+            </div>
+        @endforeach
+    </div>
+    <p class="text-danger small fw-bold">@error('user_roles') {{ $message }} @enderror</p>
+</div>
+
                                 <div>
                                     <button style="background-color: navy" type="submit" class="btn btn-primary w-100">Add Admin Manager</button>
                                 </div>
@@ -76,11 +134,19 @@
                                         <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>
-                                        <span class="badge bg-success">
-                                            <i class="bi bi-check-circle me-1"></i>
-                                            {{ optional($user->role_name)->name }}
-                                        </span>
-                                        </td>
+    @php
+        $userRoleIds = json_decode($user->user_role ?? '[]', true);
+    @endphp
+
+    @foreach($userRoleIds as $roleId)
+        @if(isset($roles[$roleId]))
+            <span class="badge bg-success mb-1 d-inline-block">
+                <i class="bi bi-check-circle me-1"></i> {{ $roles[$roleId]->name }}
+            </span>
+        @endif
+    @endforeach
+</td>
+
                                         <td>
                                             <!-- Edit Button -->
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#editModal_{{ $user->id }}">
@@ -123,15 +189,27 @@
                                                                     <input type="text" name="phone" class="form-control" value="{{ $user->phone }}">
                                                                 </div>
                                                                 <div class="col-md-12">
-                                                                    <label class="form-label">Select Role</label>
-                                                                    <select name="user_role" class="form-control">
-                                                                        @foreach($roles as $role)
-                                                                            <option value="{{ $role->id }}" {{ $user->user_role == $role->id ? 'selected' : '' }}>
-                                                                                {{ $role->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
+    <label class="form-label">Select Roles</label>
+    <div class="row">
+        @php
+            $selectedRoles = json_decode($user->user_role ?? '[]', true);
+        @endphp
+
+        @foreach($roles as $role)
+            <div class="col-md-6 mb-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>{{ $role->name }}</span>
+                    <label class="switch">
+                        <input type="checkbox" name="user_roles[]" value="{{ $role->id }}"
+                            {{ in_array($role->id, $selectedRoles) ? 'checked' : '' }}>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

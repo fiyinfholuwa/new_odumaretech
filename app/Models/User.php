@@ -13,6 +13,12 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
 
+    public function getRoleNamesAttribute()
+{
+    $ids = json_decode($this->user_roles ?? '[]');
+    return AdminRole::whereIn('id', $ids)->pluck('name');
+}
+
     public function role_name()
     {
         return $this->hasOne(AdminRole::class, 'id', 'user_role');
@@ -22,12 +28,8 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
+    protected $guarded = ['id'];
+   
     /**
      * The attributes that should be hidden for serialization.
      *

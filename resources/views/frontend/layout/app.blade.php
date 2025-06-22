@@ -73,9 +73,19 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <a  class="btn-getstarted" href="{{route('login')}}">Login</a>
+
+            @auth
+            
+            <a  class="btn-getstarted" href="{{route('redirect')}}">Dashboard</a>
+
+        <a style='background-color:  #0E2293; border:none' class="btn-getstarted" href="{{route('logout')}}">Logout</a>
+                @else
+
+<a  class="btn-getstarted" href="{{route('login')}}">Login</a>
 
         <a style='background-color:  #0E2293; border:none' class="btn-getstarted" href="{{route('register')}}">Register</a>
+            @endauth
+        
 
     </div>
 </header>
@@ -170,6 +180,43 @@
 
 <!-- Main JS File -->
 <script src="{{asset('frontend/assets/js/main.js')}}"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" >
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+
+
+ @if(Session::has('message'))
+ var type = "{{ Session::get('alert-type','info') }}"
+ switch(type){
+    case 'info':
+      Toastify({ text: "{{ Session::get('message') }}", duration: 3000,
+            style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+    }).showToast();
+    break;
+
+    case 'success':
+      Toastify({ text: "{{ Session::get('message') }}", duration: 3000,
+        style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+    }).showToast();
+    break;
+
+    case 'warning':
+      Toastify({ text: "{{ Session::get('message') }}", duration: 3000,
+            style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+    }).showToast();
+    break;
+
+    case 'error':
+      Toastify({ text: "{{ Session::get('message') }}", duration: 3000,
+            style: { background: "linear-gradient(to right, #ff0000, #ff0000)" }
+    }).showToast();
+    break;
+ }
+ @endif
+</script>
+
 
 </body>
 

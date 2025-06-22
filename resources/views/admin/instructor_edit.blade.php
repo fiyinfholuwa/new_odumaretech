@@ -29,7 +29,7 @@
                             <div class="form-group">
                                 <label for="email2">Instructor Current Courses</label> </br>
                                 <?php $j = 1; ?>
-                                @foreach($courses_old as $course_old)
+                                @foreach(json_decode($courses_old, true) as $course_old)
                                                 {{$j++;}}. {{$course_old->title}}. </br>
                                 @endforeach
                             </div>

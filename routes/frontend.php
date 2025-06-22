@@ -21,6 +21,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/hire/grad', 'hire_grad')->name('hire_grad');
     Route::get('/privacy', 'privacy')->name('privacy');
     Route::get('/terms', 'terms')->name('terms');
+    Route::post('/instructor/add', 'instructor_add')->name('instructor.add');
     Route::get('/community', 'community')->name('community');
     Route::get('/hire', 'hire')->name('hire');
     Route::get('/consultation', 'consultation')->name('consultation');

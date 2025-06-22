@@ -313,12 +313,12 @@ class AdminController extends Controller
                 'email' => $request->email,
                 'student_id' => $studentID,
                 'password' => Hash::make($password),
-                'user_type' => "1"
+                'user_type' => "instructor"
             ]);
             $user_id = $user->id;
             $approved_instructor = new ApprovedInstructor;
             $approved_instructor->user_id = $user_id;
-            $approved_instructor->course_ids = $request->course_ids;
+            $approved_instructor->course_ids = json_encode($request->course_ids);
             $approved_instructor->save();
 
             $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
@@ -334,7 +334,12 @@ class AdminController extends Controller
                 'message' => $message,
                 'email' => $request->email
             ];
-            Mail::to($request->email)->send(new ApplicantNotification($mailData));
+            try{
+                Mail::to($request->email)->send(new ApplicantNotification($mailData));
+
+            }catch(\Throwable $e){
+
+            }
             $notification = array(
                 'message' => 'Applicant Successfully updated',
                 'alert-type' => 'success'
@@ -837,11 +842,11 @@ class AdminController extends Controller
 
 
     public function admin_manager_view()
-    {
-        $roles = AdminRole::all();
-        $users = User::whereNotNull('user_role')->where('user_type', 2)->get();
-        return view('admin.admin_manager_view', compact('roles', 'users'));
-    }
+{
+    $roles = AdminRole::all()->keyBy('id'); // key roles by ID for easy lookup
+    $users = User::whereNotNull('user_role')->where('user_type', 2)->get();
+    return view('admin.admin_manager_view', compact('roles', 'users'));
+}
 
     public function admin_admin_manager_save(Request $request)
     {
@@ -850,8 +855,10 @@ class AdminController extends Controller
             'last_name' => 'required',
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'phone' => 'required',
-            'user_role' => 'required',
+            'user_roles' => 'required|array',
+            'user_roles.*' => 'exists:admin_roles,id',
         ]);
+        
 
         $min = 100000;
         $max = 999999;
@@ -862,7 +869,7 @@ class AdminController extends Controller
         $add_user->last_name = $request->last_name;
         $add_user->email = $request->email;
         $add_user->phone = $request->phone;
-        $add_user->user_role = $request->user_role;
+        $add_user->user_role = json_encode($request->user_roles); 
         $add_user->user_type = 2;
         $add_user->password = Hash::make($password);
         $add_user->save();
@@ -893,24 +900,27 @@ class AdminController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'phone' => 'required',
-            'user_role' => 'required'
+            'user_roles' => 'required|array',
+            'user_roles.*' => 'exists:admin_roles,id',
         ]);
-
+    
         $update_user = User::findOrFail($id);
         $update_user->first_name = $request->first_name;
         $update_user->last_name = $request->last_name;
         $update_user->email = $request->email;
         $update_user->phone = $request->phone;
         $update_user->user_type = 2;
-        $update_user->user_role = $request->user_role;
+        $update_user->user_role = json_encode($request->user_roles); // Store as JSON array
         $update_user->save();
-        $notification = array(
+    
+        $notification = [
             'message' => 'Admin Manager Successfully updated',
             'alert-type' => 'success'
-        );
+        ];
+    
         return redirect()->route('admin_manager.view')->with($notification);
     }
-
+    
     public function admin_admin_manager_block(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -947,5 +957,21 @@ class AdminController extends Controller
         $users = User::where('user_type', '=', 1)->get();
         return view('backend.admin_manager_all', compact('users'));
     }
+
+
+    public function viewResume($id)
+{
+    $applicant = Instructor::findOrFail($id);
+    $filePath = public_path($applicant->resume);
+
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => mime_content_type($filePath),
+        'Content-Disposition' => 'inline; filename="' . basename($filePath) . '"'
+    ]);
+}
 
 }

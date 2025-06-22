@@ -25,6 +25,7 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::post('/admin/testimonial/delete/{id}', 'testimonial_delete')->name('testimonial.delete');
     Route::get('/admin/testimonial/edit/{id}', 'testimonial_edit')->name('testimonial.edit');
     Route::post('/admin/testimonial/update/{id}', 'testimonial_update')->name('testimonial.update');
+    Route::get('/applicant/resume/{id}', 'viewResume')->name('applicant.view.resume');
 
     Route::get('/company/training', 'company_view')->name('corporate.training');
     Route::get('/company/training/detail/{id}', 'company_view_detail')->name('corporate.training.detail');
@@ -32,7 +33,6 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::get('/company/training/all', 'company_all')->name('company.all');
 
     Route::get('/instructor', 'instructor_view')->name('instructor');
-    Route::post('/instructor/add', 'instructor_add')->name('instructor.add');
     Route::get('/admin/intructor/applications', 'instructor_application_all')->name('instructor.application.all');
     Route::post('/admin/intructor/applicant/delete/{id}', 'applicant_delete')->name('applicant.delete');
     Route::get('/admin/intructor/applicant/edit/{id}', 'applicant_edit')->name('applicant.edit');
