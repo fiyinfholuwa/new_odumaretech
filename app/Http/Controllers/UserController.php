@@ -406,5 +406,14 @@ public function transactions_user()
     public function user_reward(){
         return view('user.reward');
     }
+    public function user_badge(){
+        return view('user.badge');
+    }
+    public function user_leaderboard(){
+        return view('user.leaderboard');
+    }
+    public function user_certificates(){
+        return view('user.certificates');
+    }
 
 }
