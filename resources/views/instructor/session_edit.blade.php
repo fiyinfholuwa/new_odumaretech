@@ -94,23 +94,27 @@
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label mb-2">Cohort Categories</label>
-                        <div class="row">
-                            @foreach($cohorts as $cohort)
-                                <div class="col-md-6">
-                                    <label class="toggle-label">
-                                        <span>{{ $cohort->name }}</span>
-                                        <div class="form-switch">
-                                            <input type="checkbox" name="cohort_ids[]" value="{{ $cohort->id }}"
-                                                {{ in_array($cohort->id, json_decode($session->cohort_id ?? '[]')) ? 'checked' : '' }}>
-                                            <span class="slider"></span>
-                                        </div>
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
+                    @php
+    $selectedCohorts = json_decode($session->cohort_id ?? '[]', true) ?: [];
+@endphp
+
+<div class="mb-4">
+    <label class="form-label mb-2">Cohort Categories</label>
+    <div class="row">
+        @foreach($cohorts as $cohort)
+            <div class="col-md-6">
+                <label class="toggle-label">
+                    <span>{{ $cohort->name }}</span>
+                    <div class="form-switch">
+                        <input type="checkbox" name="cohort_ids[]" value="{{ $cohort->id }}"
+                            {{ in_array($cohort->id, $selectedCohorts) ? 'checked' : '' }}>
+                        <span class="slider"></span>
                     </div>
+                </label>
+            </div>
+        @endforeach
+    </div>
+</div>
 
                     <div class="mb-3">
                         <label class="form-label">Session Link</label>

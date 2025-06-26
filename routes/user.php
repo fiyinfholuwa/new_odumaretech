@@ -35,6 +35,7 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
     Route::get('/user/record/all/{id}/{co}', 'user_record')->name('records.user.all');
     Route::get('/user/password/view/', 'user_password_view')->name('user.password.view');
     Route::post('/user/password/change/', 'user_password_change')->name('user.password.change');
+    Route::get('/user/transactions/all', 'transactions_user')->name('transaction.user.all');
 
     Route::get('/user/project/view', 'project_view_user')->name('project.user.view');
     // Route::get('/user/assignment/all/{id}', 'assignment_user_all')->name('assignment.user.all');

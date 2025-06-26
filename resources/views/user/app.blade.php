@@ -103,12 +103,29 @@
         <div class="loader-fill"></div>
     </div>
 </div>
+
+<style>
+.bgc-primary{
+    background-color:#E9ECFF  !important;
+
+}
+.bgc-primary-text{
+    color:#0E2293 !important;
+}
+.bgc-secondary{
+    background-color:#FFF3CF !important;
+
+}
+.bgc-secondary-text{
+    color:#FFC000 !important;
+}
+</style>
 <!-- [ Pre-loader ] End -->
 <!-- [ Sidebar Menu ] start -->
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header">
-            <a href="{{route('admin.dashboard')}}" class="b-brand text-primary">
+            <a href="{{route('user.dashboard')}}" class="b-brand text-primary">
                 <img  style="border-radius:10px; width: 200px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
 
                 <!-- ========   Change your logo from here   ============ -->
@@ -219,12 +236,12 @@
     </a>
 </li>
 
-<li class="pc-item">
+{{-- <li class="pc-item">
     <a href="{{ route('transaction.user.all') }}" class="pc-link">
         <span class="pc-micon"><i class="fa fa-exchange-alt"></i></span>
         <span class="pc-mtext">Transactions History</span>
     </a>
-</li>
+</li> --}}
 
 <li class="pc-item">
     <a href="{{ route('user.password.view') }}" class="pc-link">

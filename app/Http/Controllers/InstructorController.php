@@ -308,22 +308,29 @@ class InstructorController extends Controller
         return view('instructor.session_edit', compact('session', 'courses', 'cohorts'));
     }
 
-    public function session_update(Request $request, $id){
-        $ss_update = LiveSession::findOrFail($id);
+    public function session_update(Request $request, $id)
+{
+    $ss_update = LiveSession::findOrFail($id);
 
-        $ss_update->course_id = $request->course_id;
-        $ss_update->title = $request->title;
-        $ss_update->status = $request->status;
-        $ss_update->description = $request->description;
-        $ss_update->time = $request->date;
-        $ss_update->cohort_id = $request->cohort_id;
-        $ss_update->save();
-        $notification = array(
-            'message' => 'Session Successfully updated',
-            'alert-type' => 'success'
-        );
-        return redirect()->route('session.all.instructor')->with($notification);
-    }
+    $ss_update->course_id = $request->course_id;
+    $ss_update->title = $request->title;
+    $ss_update->status = $request->status;
+    $ss_update->description = $request->description;
+    $ss_update->time = $request->date;
+
+    // Ensure cohort_ids is always an array before encoding
+    $ss_update->cohort_id = json_encode($request->cohort_ids ?? []);
+
+    $ss_update->save();
+
+    $notification = [
+        'message' => 'Session Successfully updated',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->route('session.all.instructor')->with($notification);
+}
+
 
     public function notification_view(){
         $courses = $this->get_instructor_courses();
