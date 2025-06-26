@@ -1,126 +1,167 @@
+
+
+
+
 @extends('user.app')
 
 @section('content')
 
-            <div class="row" style="margin:10px">
-                <div class="col-md-10">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">View Recorded: <span style="color:red; font-weight:bold;">{{$course_title->title}}</span></div>
-                        </div>
-
-                        <div class="card-body">
-									<div class="table-responsive">
-										<table id="basic-datatables" class="display table table-striped table-hover" >
-											<thead>
-												<tr>
-													<th>S/N</th>
-													<th>Course</th>
-                                                    <th>Recorded Link</th>
-                                                    <th>Action</th>
-												</tr>
-											</thead>
-											
-                                            <tbody>
-											<?php $i = 1; ?>
-                                            @foreach($records as $record)
-                                           
-											<tr>
-												<td>{{$i++;}}</td>
-                                                <td>{{optional($record->course_name)->title}}</td>
-                                                <td><div class="form-group">
-                                <!-- <label for="email2">Github Link</label> -->
-                                                <input type="text" id="text-input" class="form-control text-input" readonly  value="{{$record != null ? $record->link : 'No Recorded Session link provided yet'}}">
-                                                <small style="color:red; font-weight:500">
-                                                </div>
-                                                </td>
-                                                <td>
-                                                
-                                                    <button id="copy-button" class="btn btn-danger copy-button">copy link <i class="fa fa-copy"></i></button>
-                                        
-                                                </td>
-                                            
-											</tr>
-											
-                                            @endforeach
-                                    
-                                            </tbody>
-										</table>
-									</div>
-								</div>
+<div class="row" style="margin:10px">
+    <div class="col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title">View Recorded: <span style="color:red; font-weight:bold;">{{$course_title->title}}</span></h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatables" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>S/N</th>
+                                <th>Course Title</th>
+                                <th>Recorded Link</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $i = 1; ?>
+                            @foreach($records as $index => $record)
+                            <tr>
+                                <td>{{ $i++ }}</td>
+                                <td>{{ optional($record->course_name)->title }}</td>
+                                <td>
+                                    <input type="text" id="text-input-{{ $index }}" class="form-control text-input" readonly value="{{ $record ? $record->link : 'No link provided' }}">
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary copy-button" data-index="{{ $index }}">
+                                        Copy Link <i class="fa fa-copy"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <script>
-            
-            function showErrorMessage(message) {
-            // Get the error message element
-            var errorMessageElement = document.getElementById("errorMessage");
-
-            // Set the error message content
-            errorMessageElement.textContent = message;
-
-            // Trigger the modal to show
-            var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
-            errorModal.show();
-            }
-            </script>
-
-        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-            <div class="modal-header">
-                <!-- <h5 class="modal-title" id="errorModalLabel">Error Message</h5> -->
-                <!-- <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button> -->
-            </div>
-            <div class="modal-body">
-                <div style="color:green; font-weight:700;" class="alert alert-success" role="alert" id="errorMessage">
-                <!-- Error message content goes here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-            </div>
-            </div>
         </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div class="action_modal-overlay" id="clipboardModal" onclick="closeClipboardModal(event)">
+    <div class="action_modal" onclick="event.stopPropagation()">
+        <div class="action_modal-icon success" id="modalIcon">
+            <span id="modalIconText"><i class="fa fa-check-circle text-white"></i></span>
         </div>
+        <h3 class="action_modal-title" id="modalTitle">Success!</h3>
+        <p class="action_modal-message" id="modalMessage">Recorded session link copied to clipboard!</p>
+        <button class="action_modal-btn" onclick="closeClipboardModal()">Ok</button>
+    </div>
+</div>
 
+<!-- Modal CSS -->
+<style>
+    .action_modal-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease-in-out;
+    }
+    .action_modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    .action_modal {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 32px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        transform: scale(0.9) translateY(20px);
+        transition: all 0.4s ease-in-out;
+    }
+    .action_modal-overlay.active .action_modal {
+        transform: scale(1) translateY(0);
+    }
+    .action_modal-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+    .action_modal-icon.success {
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+    .action_modal-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 12px;
+    }
+    .action_modal-message {
+        font-size: 16px;
+        color: #6b7280;
+        margin-bottom: 24px;
+    }
+    .action_modal-btn {
+        padding: 12px 28px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        transition: all 0.3s ease;
+    }
+    .action_modal-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+</style>
 
+<!-- Clipboard Script -->
+<script>
+    function showClipboardModal() {
+        document.getElementById('clipboardModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
 
-        
+    function closeClipboardModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        document.getElementById('clipboardModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
 
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') closeClipboardModal();
+    });
 
-    <script>
-        // Get all copy buttons and text inputs
-        const copyButtons = document.querySelectorAll(".copy-button");
-        const textInputs = document.querySelectorAll(".text-input");
-        const modal = document.getElementById("myModal");
-        const modalContent = document.querySelector(".modal-content");
-        const copiedText = document.getElementById("copiedText");
+    document.querySelectorAll(".copy-button").forEach(button => {
+        button.addEventListener("click", () => {
+            const index = button.getAttribute("data-index");
+            const text = document.getElementById("text-input-" + index).value;
 
-        // Add click event listeners to each copy button
-        copyButtons.forEach((button, index) => {
-            button.addEventListener("click", () => {
-                // Copy the text from the corresponding input
-                const textToCopy = textInputs[index].value;
-
-                // Create a temporary textarea to copy the text
-                const tempTextarea = document.createElement("textarea");
-                tempTextarea.value = textToCopy;
-                document.body.appendChild(tempTextarea);
-                tempTextarea.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempTextarea);
-                showErrorMessage("Recorded Session link has been copied");
+            navigator.clipboard.writeText(text).then(() => {
+                showClipboardModal();
+            }).catch(() => {
+                alert("Failed to copy. Please try manually.");
             });
         });
-
-        // Close the modal when the user clicks the close button
-        const closeButton = document.querySelector(".close");
-        closeButton.addEventListener("click", () => {
-            modal.style.display = "none";
-        });
-    </script>
-        
+    });
+</script>
 
 @endsection

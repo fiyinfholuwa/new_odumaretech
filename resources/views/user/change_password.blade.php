@@ -5,8 +5,8 @@
 <div class="row" style="margin: 10px;">
     <div class="col-md-8">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary text-white">
-                <h4 class="card-title mb-0">Change Password</h4>
+            <div class="card-header bgc-primary text-white">
+                <h4 class="card-title mb-0 bgc-primary-text">Change Password</h4>
             </div>
             <div class="card-body">
                 <form action="{{ route('user.password.change') }}" method="POST">

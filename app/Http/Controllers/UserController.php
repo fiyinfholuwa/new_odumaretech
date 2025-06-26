@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AppliedCourse;
 use App\Models\Assignment;
 use App\Models\Course;
+use App\Models\User;
 use App\Models\FinalProject;
 use App\Models\GitHubLink;
 use App\Models\InstructorNotification;
@@ -84,8 +85,10 @@ class UserController extends Controller
     public function project_submit($id, $co){
         $course_id = $id;
         $cohort_id = $co;
-        $project = FinalProject::where('course_id', '=', $course_id)->where('cohort_id', '=', $co)->first();
-        return view('user.project_submit', compact('project'));
+        $project = FinalProject::where('course_id', $course_id)
+        ->whereJsonContains('cohort_id', $co)
+        ->first();
+    return view('user.project_submit', compact('project'));
     }
 
     public function project_submit_user(Request $request, $id){
@@ -399,5 +402,9 @@ public function transactions_user()
         return view('user.payment', compact('payments'));
     }
 
+
+    public function user_reward(){
+        return view('user.reward');
+    }
 
 }

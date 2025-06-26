@@ -208,12 +208,43 @@
     </ul>
 </li>
 
+
+
+
 <li class="pc-item">
     <a href="{{ route('session.view') }}" class="pc-link">
-        <span class="pc-micon"><i class="fa fa-users"></i></span>
+        <span class="pc-micon"><i class="fas fa-video"></i></span>
         <span class="pc-mtext">Live Sessions</span>
     </a>
 </li>
+
+<!-- Community Menu -->
+<li class="pc-item pc-hasmenu">
+    <a href="#!" class="pc-link">
+        <span class="pc-micon"><i class="fas fa-users"></i></span>
+        <span class="pc-mtext">Community</span>
+        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+    </a>
+    <ul class="pc-submenu">
+        <li class="pc-item"><a class="pc-link" href="{{ route('project.user.view') }}"><i class="fas fa-comments me-2"></i>Forums</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('project.submitted.user') }}"><i class="fas fa-question-circle me-2"></i>Q & A</a></li>
+    </ul>
+</li>
+
+<!-- Achievement Menu -->
+<li class="pc-item pc-hasmenu">
+    <a href="#!" class="pc-link">
+        <span class="pc-micon"><i class="fas fa-trophy"></i></span>
+        <span class="pc-mtext">Achievement</span>
+        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+    </a>
+    <ul class="pc-submenu">
+        <li class="pc-item"><a class="pc-link" href="{{ route('user.badge') }}"><i class="fas fa-award me-2"></i>My Badges</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('user.leaderboard') }}"><i class="fas fa-chart-line me-2"></i>LeaderBoard</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('user.certificates') }}"><i class="fas fa-certificate me-2"></i>Certificates</a></li>
+    </ul>
+</li>
+
 
 <li class="pc-item">
     <a href="{{ route('notification.view') }}" class="pc-link">
@@ -233,6 +264,12 @@
     <a href="{{ route('record.user.view') }}" class="pc-link">
         <span class="pc-micon"><i class="fa fa-microphone"></i></span>
         <span class="pc-mtext">Recorded Sessions</span>
+    </a>
+</li>
+<li class="pc-item">
+    <a href="{{ route('user.reward') }}" class="pc-link">
+        <span class="pc-micon"><i class="fas fa-gift"></i></span>
+        <span class="pc-mtext">Referral Reward</span>
     </a>
 </li>
 
@@ -645,6 +682,19 @@
 <script>
     $(document).ready(function () {
         var table = $('#my-table').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            responsive: true // optional but recommended for responsive tables
+        });
+
+        // Adjust columns and redraw table after initialization
+        table.columns.adjust().draw();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $('#basic-datatables').DataTable({
             paging: true,
             searching: true,
             ordering: true,

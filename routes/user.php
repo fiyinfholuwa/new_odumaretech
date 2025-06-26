@@ -43,6 +43,10 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
     Route::post('/user/project/submit/save/{id}', 'project_submit_user')->name('project.submit.user');
     Route::get('/user/project/submitted', 'project_submitted')->name('project.submitted.user');
     Route::get('/user/download/certificate/{id}', 'download_certificate')->name('download.certificate');
+    Route::get('/user/reward', 'user_reward')->name('user.reward');
+    Route::get('/user/badge', 'user_badge')->name('user.badge');
+    Route::get('/user/leaderboard', 'user_leaderboard')->name('user.leaderboard');
+    Route::get('/user/certificates', 'user_certificates')->name('user.certificates');
 });
 
 

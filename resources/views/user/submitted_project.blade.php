@@ -6,8 +6,8 @@
             
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title">All Submitted Projects</h4>
+								<div class="card-header bgc-primary">
+									<h4 class="card-title bgc-primary-text">All Submitted Projects</h4>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
