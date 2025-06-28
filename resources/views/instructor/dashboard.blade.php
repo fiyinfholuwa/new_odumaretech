@@ -190,7 +190,7 @@
 <body>
     <div class="container-fluid">
         <!-- Welcome Section -->
-        <div class="welcome-section">
+        <div style="margin-bottom:30px;">
             <h2 class="mb-0">Welcome Abayomi Bello 👋</h2>
         </div>
         
@@ -199,73 +199,65 @@
             <div class="col-lg-12">
                 <!-- Stats Cards -->
                 <div class="row mb-4">
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card blue">
+                    <div class="col-md-4 mb-3">
+                        <div style="background:#E9ECFF;"  class="stat-card blue">
                             <div class="stat-icon">
-                                <i class="fas fa-users"></i>
+                                <i style="background:#0E2293;padding:20px;border-radius:5px;"  class="fas fa-users"></i>
                             </div>
-                            <div class="stat-number" id="studentsCount">20</div>
-                            <div class="stat-label">Students</div>
+                            <div class="stat-number text-dark" id="studentsCount">20</div>
+                            <div class="stat-label text-muted">Students</div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card orange">
+                    <div class="col-md-4 mb-3">
+                        <div style="background:#E9ECFF;" class="stat-card orange">
                             <div class="stat-icon">
-                                <i class="fas fa-tasks"></i>
+                                <i style="background:#0E2293;padding:20px;border-radius:5px;"  class="fas fa-tasks"></i>
                             </div>
-                            <div class="stat-number" id="assignmentsCount">10</div>
-                            <div class="stat-label">Assignments</div>
+                            <div class="stat-number text-dark" id="assignmentsCount">10</div>
+                            <div class="stat-label text-muted">Assignments</div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card green">
+                    <div class="col-md-4 mb-3">
+                        <div style="background:#E9ECFF;" class="stat-card green">
                             <div class="stat-icon">
-                                <i class="fas fa-book"></i>
+                                <i style="background:#0E2293;padding:20px;border-radius:5px;" class="fas fa-book"></i>
                             </div>
-                            <div class="stat-number" id="coursesCount">24</div>
-                            <div class="stat-label">Courses</div>
+                            <div class="stat-number text-dark" id="coursesCount">24</div>
+                            <div class="stat-label text-muted">Courses</div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card yellow">
-                            <div class="stat-icon">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <div class="stat-number" id="liveSessionsCount">1,204</div>
-                            <div class="stat-label">Live Sessions</div>
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 <div class="row mb-4">
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card blue">
+                    <div class="col-md-4 mb-3">
+                        <div style="background:#FFF3CF;"  class="stat-card blue">
                             <div class="stat-icon">
-                                <i class="fas fa-users"></i>
+                                <i style="background:#FFC000;padding:20px;border-radius:5px;"  class="fas fa-users"></i>
                             </div>
-                            <div class="stat-number" id="slidesCount">20</div>
-                            <div class="stat-label">Students</div>
+                            <div class="stat-number text-dark" id="slidesCount">20</div>
+                            <div class="stat-label text-muted">Students</div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card orange">
+                    <div class="col-md-4 mb-3">
+                        <div style="background:#FFF3CF;" class="stat-card orange">
                             <div class="stat-icon">
-                                <i class="fas fa-tasks"></i>
+                                <i style="background:#FFC000;padding:20px;border-radius:5px;"  class="fas fa-tasks"></i>
                             </div>
-                            <div class="stat-number" id="projectsCount">10</div>
-                            <div class="stat-label">Assignments</div>
+                            <div class="stat-number text-dark" id="projectsCount">10</div>
+                            <div class="stat-label text-muted">Assignments</div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card green">
+                    <div class="col-md-4 mb-3">
+                        <div style="background:#FFF3CF;" class="stat-card green">
                             <div class="stat-icon">
-                                <i class="fas fa-book"></i>
+                                <i style="background:#FFC000;padding:20px;border-radius:5px;"  class="fas fa-book"></i>
                             </div>
-                            <div class="stat-number" id="coursesCount">24</div>
-                            <div class="stat-label">Courses</div>
+                            <div class="stat-number text-dark" id="coursesCount">24</div>
+                            <div class="stat-label text-muted">Courses</div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div style="display:none;" class="col-md-3 mb-3">
                         <div class="stat-card yellow">
                             <div class="stat-icon">
                                 <i class="fas fa-video"></i>

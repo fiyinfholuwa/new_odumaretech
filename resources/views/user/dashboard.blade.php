@@ -52,7 +52,7 @@ $chat_messages = [
 
     <style>
         :root {
-            --primary-color: #4f46e5;
+            --primary-color: #E9ECFF;
             --secondary-color: #f8fafc;
             --accent-color: #fbbf24;
             --success-color: #10b981;
@@ -518,62 +518,64 @@ $chat_messages = [
 
         <!-- Stats Cards Row -->
         <div class="row mb-4">
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="stats-card primary">
+            <div class="col-lg-4 col-md-6 mb-3">
+                <div  style="background:#E9ECFF;" class="stats-card primary">
                     <div class="stats-icon">
-                        <i class="fas fa-book-open"></i>
+                        <i style="background:#0E2293;padding:20px;border-radius:5px;" class="fas fa-book-open"></i>
                     </div>
-                    <div class="stats-value"><?php echo $user_data['active_courses']; ?></div>
-                    <div class="stats-label">Active Course(s)</div>
+                    <div class="stats-value  text-dark"><?php echo $user_data['active_courses']; ?></div>
+                    <div class="stats-label text-dark">Active Course(s)</div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="stats-card secondary">
+            <div  class="col-lg-4 col-md-6 mb-3">
+                <div style="background:#E9ECFF;" class="stats-card secondary">
                     <div class="stats-icon">
-                        <i class="fas fa-graduation-cap"></i>
+                        <i style="background:#0E2293;padding:20px;border-radius:5px;" class="fas fa-graduation-cap"></i>
                     </div>
-                    <div class="stats-value"><?php echo $user_data['completed_courses']; ?></div>
-                    <div class="stats-label">Completed Course(s)</div>
+                    <div class="stats-value text-dark"><?php echo $user_data['completed_courses']; ?></div>
+                    <div class="stats-label text-dark">Completed Course(s)</div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="stats-card accent">
+            <div class="col-lg-4 col-md-6 mb-3">
+                <div style="background:#E9ECFF;" class="stats-card accent">
                     <div class="stats-icon">
-                        <i class="fas fa-users"></i>
+                        <i style="background:#0E2293;padding:20px;border-radius:5px;" class="fas fa-users"></i>
                     </div>
-                    <div class="stats-value"><?php echo $user_data['live_sessions']; ?></div>
-                    <div class="stats-label">Live Sessions</div>
+                    <div class="stats-value text-dark"><?php echo $user_data['live_sessions']; ?></div>
+                    <div class="stats-label text-dark">Live Sessions</div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3">
-                <div class="stats-card">
-                    <div class="stats-icon" style="background: #f3f4f6; color: var(--primary-color);">
-                        <i class="fas fa-folder"></i>
-                    </div>
-                    <div class="stats-value" style="color: var(--text-primary);"><?php echo number_format($user_data['resources']); ?></div>
-                    <div class="stats-label" style="color: var(--text-secondary);">Resources</div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Second Row Stats -->
         <div class="row mb-4">
-            <div class="col-lg-4 col-md-6 mb-3">
-                <div class="stats-card accent">
-                    <div class="stats-icon">
-                        <i class="fas fa-tasks"></i>
+
+        <div class="col-lg-4 col-md-6 mb-3">
+                <div style="background:#FFF3CF;" class="stats-card">
+                    <div  class="stats-icon">
+                        <i style="background:#FFC000;padding:20px;border-radius:5px;" class="fas fa-folder"></i>
                     </div>
-                    <div class="stats-value"><?php echo $user_data['assignments']; ?></div>
-                    <div class="stats-label">All Assignments</div>
+                    <div class="stats-value text-muted"><?php echo number_format($user_data['resources']); ?></div>
+                    <div class="stats-label text-dark">Resources</div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 mb-3">
-                <div class="stats-card accent">
+                <div style="background:#FFF3CF;" class="stats-card accent">
                     <div class="stats-icon">
-                        <i class="fas fa-clipboard-check"></i>
+                        <i style="background:#FFC000;padding:20px;border-radius:5px;" class="fas fa-tasks"></i>
                     </div>
-                    <div class="stats-value"><?php echo $user_data['submitted_assignments']; ?></div>
-                    <div class="stats-label">Submitted Assignment</div>
+                    <div class="stats-value text-muted"><?php echo $user_data['assignments']; ?></div>
+                    <div class="stats-label text-dark">All Assignments</div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-3">
+                <div style="background:#FFF3CF;" class="stats-card accent">
+                    <div class="stats-icon">
+                        <i style="background:#FFC000;padding:20px;border-radius:5px;" class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="stats-value text-muted"><?php echo $user_data['submitted_assignments']; ?></div>
+                    <div class="stats-label text-dark">Submitted Assignment</div>
                 </div>
             </div>
         </div>
@@ -581,7 +583,7 @@ $chat_messages = [
         <!-- Charts and Content Row -->
         <div class="row">
             <!-- Recent Courses -->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
                 <div class="chart-container">
                     <div class="chart-title">
                         <i class="fas fa-clock me-2"></i>Recent Enrolled Course
@@ -601,7 +603,7 @@ $chat_messages = [
             </div>
 
             <!-- Resources -->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
                 <div class="chart-container">
                     <div class="chart-title">
                         <i class="fas fa-folder me-2"></i>Your Resources
@@ -616,7 +618,7 @@ $chat_messages = [
             </div>
 
             <!-- Calendar -->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <button class="btn btn-sm btn-outline-secondary">
@@ -644,8 +646,32 @@ $chat_messages = [
                 </div>
             </div>
 
+            
+        </div>
+
+        <!-- Hours Spent Chart -->
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="chart-container">
+                    <div class="chart-title">
+                        <i class="fas fa-clock me-2"></i>Hours Spent
+                    </div>
+                    <div class="chart-bars">
+                        <?php foreach($user_data['hours_spent'] as $day => $hours): ?>
+                        <div class="chart-bar" style="height: <?php echo ($hours / 20) * 100; ?>%" 
+                             title="<?php echo $day . ': ' . $hours . ' hours'; ?>"></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="chart-labels">
+                        <?php foreach(array_keys($user_data['hours_spent']) as $day): ?>
+                        <span><?php echo $day; ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+
             <!-- Performance -->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
                 <div class="chart-container text-center">
                     <div class="chart-title">
                         <i class="fas fa-chart-line me-2"></i>Performance
@@ -668,28 +694,6 @@ $chat_messages = [
                     </div>
                     <div class="mt-3">
                         <span class="badge bg-warning">Assignment Submission Performance</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hours Spent Chart -->
-        <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="chart-container">
-                    <div class="chart-title">
-                        <i class="fas fa-clock me-2"></i>Hours Spent
-                    </div>
-                    <div class="chart-bars">
-                        <?php foreach($user_data['hours_spent'] as $day => $hours): ?>
-                        <div class="chart-bar" style="height: <?php echo ($hours / 20) * 100; ?>%" 
-                             title="<?php echo $day . ': ' . $hours . ' hours'; ?>"></div>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="chart-labels">
-                        <?php foreach(array_keys($user_data['hours_spent']) as $day): ?>
-                        <span><?php echo $day; ?></span>
-                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
