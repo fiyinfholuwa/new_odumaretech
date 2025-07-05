@@ -17,6 +17,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/contact', 'contact')->name('contact');
     Route::get('/career', 'career')->name('career');
     Route::get('/innovation', 'innovation')->name('innovation');
+    Route::get('/innovation/{id}', 'innovation')->name('innovation.info');
     Route::get('/masterclass', 'masterclass')->name('masterclass');
     Route::get('/hire/grad', 'hire_grad')->name('hire_grad');
     Route::get('/privacy', 'privacy')->name('privacy');

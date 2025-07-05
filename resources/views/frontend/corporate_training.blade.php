@@ -21,7 +21,7 @@
 
             <p style="margin: 15px 0;">
                 Upskill your team with our comprehensive corporate eLearning platform. Custom solutions for businesses of all sizes.</p>
-                <a href="#" class="btn btn-warning" style="margin-bottom: 20px;">Schedule Consultation</a>
+                <a href="{{ route('consultation') }}" class="btn btn-warning" style="margin-bottom: 20px;">Schedule Consultation</a>
 
             <div style="position: relative; height: 100px; margin-top: 30px; display: flex; justify-content: center;">
                 <div style="position: relative; width: 230px;"> <!-- Adjust width depending on how many images and overlap -->
@@ -142,7 +142,7 @@
         </div>
     </section>
 
-    <section style="background-color:#FFF3CF; padding: 60px 0;" class="accelerate text-white">
+    {{-- <section style="background-color:#FFF3CF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-8">
@@ -160,7 +160,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section>
         <div class="container">
@@ -251,6 +251,8 @@
                         </div>
                     </div>
                     <?php endforeach; ?>
+
+                    <a href="{{ route('consultation') }}" class="btn btn-primary">Schedule Consultation</a>
                 </div>
             </div>
         </div>

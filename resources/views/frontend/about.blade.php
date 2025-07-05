@@ -20,7 +20,7 @@
             <h2 style="margin-top: 20px;">Welcome to Odumare Tech</h2>
             <p style="margin: 15px 0;">
                 We are not just another tech company; we are your dedicated ally on the path to excellence. We go beyond theoretical concepts. We believe in the power of practical application, which is why we provide you with hands-on projects and real-world case studies. Your journey with us culminates in a prestigious certification that validates your comprehensive skills and expertise.            </p>
-            <a href="#" class="btn btn-warning" style="margin-bottom: 20px;">Get Started</a>
+            <a href="{{ route('courses') }}" class="btn btn-warning" style="margin-bottom: 20px;">Get Started</a>
 
         </div>
     </section>
@@ -182,7 +182,7 @@
                 <div class="col-lg-8">
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Join Our Team of Experts</h2>
                     <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Ignite Minds and Inspire Others. Become an Instructor with Us Today!</p>
-                    <a href="#" class="btn btn-warning btn-lg text-white">Join The Team</a>
+                    <a href="{{ route('career') }}" class="btn btn-warning btn-lg text-white">Join The Team</a>
                 </div>
             </div>
             <div class="row">

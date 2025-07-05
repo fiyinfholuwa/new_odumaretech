@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InstructorApply;
+use App\Models\Blog;
 use App\Models\Course;
+use App\Models\Innovation;
 use App\Models\Instructor;
+use App\Models\Testimonial;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -13,15 +16,32 @@ use Illuminate\View\View;
 class FrontendController extends Controller
 {
     public function home():View{
-        return view('frontend.home');
+
+        $popular_courses = Course::with('cat')->paginate(3);
+        $testimonials= Testimonial::paginate(8);
+        $innovations= Innovation::paginate(3);
+        return view('frontend.home',['popular_courses'=> $popular_courses,'testimonials' => $testimonials,'innovations'=>$innovations]);
     }
 
     public function courses():View{
         return view('frontend.courses');
     }
-    public function blog():View{
-        return view('frontend.blog');
+    public function blog(Request $request): View
+    {
+        $query = Blog::query();
+    
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('desc', 'LIKE', '%' . $keyword . '%');
+            });
+        }
+    
+        $blogs = $query->paginate(6)->withQueryString();
+        return view('frontend.blog', ['blogs' => $blogs]);
     }
+    
 
     public function about():View{
         return view('frontend.about');

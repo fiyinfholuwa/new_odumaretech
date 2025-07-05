@@ -4,10 +4,268 @@
 @section('content')
 <main class="main">
 
+
+    <style>
+        
+        
+        /* Cube Animation Styles */
+        .cube-container {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            perspective: 1000px;
+            z-index: 1;
+        }
+        
+        .cube {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 20s infinite linear;
+        }
+        
+        .cube-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid #FFC000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        .cube-face:hover {
+            background: rgba(255, 192, 0, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .cube-face img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .cube-face h3 {
+            font-size: 16px;
+            margin: 10px 0 5px 0;
+            color: #FFC000;
+        }
+        
+        .cube-face p {
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+        
+        /* Cube face positioning */
+        .front {
+            transform: rotateY(0deg) translateZ(100px);
+        }
+        
+        .back {
+            transform: rotateY(180deg) translateZ(100px);
+        }
+        
+        .right {
+            transform: rotateY(90deg) translateZ(100px);
+        }
+        
+        .left {
+            transform: rotateY(-90deg) translateZ(100px);
+        }
+        
+        .top {
+            transform: rotateX(90deg) translateZ(100px);
+        }
+        
+        .bottom {
+            transform: rotateX(-90deg) translateZ(100px);
+        }
+        
+        @keyframes rotateCube {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+        
+        /* Floating particles around cube */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFC000;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .particle:nth-child(2) {
+            top: 80%;
+            right: 20%;
+            animation-delay: 2s;
+        }
+        
+        .particle:nth-child(3) {
+            bottom: 30%;
+            left: 30%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+                opacity: 0.5;
+            }
+        }
+        
+        
+        
+        
+        .decorative-line {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            left: -80px;
+            top: 50px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .decorative-line {
+                display: none !important;
+            }
+            
+            .cube-container {
+                position: static;
+                transform: none;
+                display: flex;
+                justify-content: center;
+                margin: 40px 0;
+            }
+            
+            .cube {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .cube-face {
+                width: 150px;
+                height: 150px;
+                padding: 15px;
+            }
+            
+            .cube-face img {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .cube-face h3 {
+                font-size: 14px;
+            }
+            
+            .cube-face p {
+                font-size: 10px;
+            }
+            
+            .front, .back {
+                transform: rotateY(0deg) translateZ(75px);
+            }
+            .back {
+                transform: rotateY(180deg) translateZ(75px);
+            }
+            .right {
+                transform: rotateY(90deg) translateZ(75px);
+            }
+            .left {
+                transform: rotateY(-90deg) translateZ(75px);
+            }
+            .top {
+                transform: rotateX(90deg) translateZ(75px);
+            }
+            .bottom {
+                transform: rotateX(-90deg) translateZ(75px);
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .col-xl-6, .col-lg-8 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
         <img src="{{asset('frontend/assets/img/hero.jpg')}}" alt="" data-aos="fade-in">
+
+<div class="cube-container">
+            <div class="cube">
+                <div class="cube-face front">
+                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=WEB" alt="Web Development">
+                    <h3>Web Dev</h3>
+                    <p>Master modern web technologies</p>
+                </div>
+                <div class="cube-face back">
+                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=AI" alt="AI & ML">
+                    <h3>AI & ML</h3>
+                    <p>Explore artificial intelligence</p>
+                </div>
+                <div class="cube-face right">
+                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=DATA" alt="Data Science">
+                    <h3>Data Science</h3>
+                    <p>Unlock insights from data</p>
+                </div>
+                <div class="cube-face left">
+                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=CYBER" alt="Cybersecurity">
+                    <h3>Cybersecurity</h3>
+                    <p>Protect digital assets</p>
+                </div>
+                <div class="cube-face top">
+                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=CLOUD" alt="Cloud Computing">
+                    <h3>Cloud Tech</h3>
+                    <p>Scale with cloud solutions</p>
+                </div>
+                <div class="cube-face bottom">
+                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=MOBILE" alt="Mobile Development">
+                    <h3>Mobile Dev</h3>
+                    <p>Build mobile experiences</p>
+                </div>
+            </div>
+            
+            <!-- Floating particles -->
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
 
         <div class="container">
 
@@ -135,7 +393,8 @@
     </section>
 
 
-    <section class="popular-section py-5">
+@if (count($popular_courses)> 0)
+<section class="popular-section py-5">
         <div class="container popular">
             <div class="section-header text-center mb-5">
                 <h2 class="fw-bold" style="font-size: 2.5rem;">Popular Courses</h2>
@@ -143,39 +402,26 @@
             </div>
             <div class="course-list row g-4">
                 <?php
-                $courses = [
-                    [
-                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSLTTbwYtmozuV9DOL8N0iYvU-37x2fm1TVA&s',
-                        'category' => 'Web Development',
-                        'title' => 'Frontend Development',
-                        'description' => 'This immersive program covers front-end development, equipping you with the skills needed to create stunning and interactive websites and web applications.',
-                    ],
-                    [
-                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSLTTbwYtmozuV9DOL8N0iYvU-37x2fm1TVA&s',
-                        'category' => 'Data Science',
-                        'title' => 'Data Analytics',
-                        'description' => 'Learn how to work with data, analyze patterns, and make decisions using real-world datasets and powerful tools like Python and SQL.',
-                    ],
-                    [
-                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSLTTbwYtmozuV9DOL8N0iYvU-37x2fm1TVA&s',
-                        'category' => 'Cybersecurity',
-                        'title' => 'Ethical Hacking',
-                        'description' => 'Master the skills needed to protect systems and networks from cyber attacks with hands-on ethical hacking training.',
-                    ],
-                    // Add more courses if needed
-                ];
-
-                foreach ($courses as $course) {
+                
+                foreach ($popular_courses as $course) {
                     ?>
                 <div  class="col-lg-4 col-md-6">
                     <div style="background-color: #E9ECFF; !important;"  class="course-card p-3 bg-light shadow-sm rounded-4 position-relative">
                         <div class="course-image position-relative">
                             <img src="<?php echo $course['image']; ?>" alt="Course Image" class="img-fluid rounded-3">
-                            <span class="badge-category"><?php echo $course['category']; ?></span>
+                        <span class="badge-category">
+                            {{ $course->cat->name ?? 'No Category' }}
+                        </span>
                         </div>
                         <h3 class="mt-3"><?php echo $course['title']; ?></h3>
-                        <p class="text-muted"><?php echo $course['description']; ?></p>
-                        <a href="{{route('course.detail', "hello")}}" class="text-primary fw-bold">Learn More →</a>
+                        @php
+                            $cleaned = strip_tags(html_entity_decode($course['description']));
+                            $words = explode(' ', $cleaned);
+                            $shortDesc = implode(' ', array_slice($words, 0, 20));
+                        @endphp
+
+                        <p class="text-muted">{{ $shortDesc }}{{ count($words) > 20 ? '...' : '' }}</p>
+                        <a href="{{route('course.detail', $course['course_url'])}}" class="text-primary fw-bold">Learn More →</a>
                     </div>
                 </div>
                     <?php
@@ -187,7 +433,10 @@
             </div>
         </div>
     </section>
+    
+@endif
 
+    
     <section class="how_you_will_learn py-5" style="background-color: #f8f9fa;">
         <div class="container">
             <div class="section-header text-center mb-5">
@@ -321,7 +570,7 @@
                 <div class="col-lg-8">
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Accelerate Your Workforce</h2>
                     <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
-                    <a href="{{route('consultation')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Schedule Consultation</a>
+                    <a href="{{route('corporate_training')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Read More</a>
                 </div>
             </div>
             <div class="row">
@@ -334,7 +583,8 @@
         </div>
     </section>
 
-    <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
+    @if (count($innovations)  > 0)
+        <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-8">
@@ -346,29 +596,15 @@
             </div>
             <div class="row">
 
-                <?php
-                $cards = [
-                    [
-                        'title' => 'Suicide Model Predictor',
-                        'image' => 'frontend/assets/img/image4.png',
-                    ],
-                    [
-                        'title' => 'AI Health Assistant',
-                        'image' => 'frontend/assets/img/image5.png',
-                    ],
-                    [
-                        'title' => 'Climate Change Analyzer',
-                        'image' => 'frontend/assets/img/image6.png',
-                    ],
-                ];
-
-                ?>
-                @foreach($cards as $card)
+                
+                @foreach($innovations as $card)
                     <div class="col-lg-4 mb-4">
+                    <a href="{{route('innovation.info',$card->id)}}">
                         <div style="background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; text-align: ; height: 100%;">
-                            <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
-                            <h4 style="color: #333; font-weight: bold; margin-top: 20px;">{{ $card['title'] }}</h4>
+                            <img src="{{ asset($card['image']) }}" alt="{{ $card['image'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
+                            <h4 style="color: #333; font-weight: bold; margin-top: 20px;">{{ $card['name'] }}</h4>
                         </div>
+                        </a>
                     </div>
 
                 @endforeach
@@ -377,6 +613,8 @@
         </div>
     </section>
 
+    @endif
+    
     <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
@@ -413,26 +651,25 @@
                 <?php
                 $cards = [
                     [
-                        'title' => 'Suicide Model Predictor',
-                        'image' => 'frontend/assets/img/about1.png',
+                        'image' => 'https://csweb.rice.edu/sites/g/files/bxs4941/files/2022-06/MCS%20vs%20Bootcamp_Hero_Web-min.jpg',
                     ],
                     [
-                        'title' => 'AI Health Assistant',
-                        'image' => 'frontend/assets/img/about2.png',
+                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXLtAsdGC_e5xCXNFsPIVlLdN9jWS3y-Ci4w&s',
                     ],
                     [
-                        'title' => 'Climate Change Analyzer',
-                        'image' => 'frontend/assets/img/about3.png',
+                        'image' => 'https://i0.wp.com/www.ripplesnigeria.com/wp-content/uploads/2022/01/IMG-20220113-WA0004_copy_650x366.jpg?fit=650%2C366&ssl=1',
                     ],
                 ];
 
                 ?>
                 @foreach($cards as $card)
                     <div class="col-lg-4 mb-4">
-                        <div style="">
-                            <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
-                        </div>
-                    </div>
+    <div style="height: 250px; overflow: hidden; border-radius: 10px;">
+        <img src="{{ asset($card['image']) }}"
+             class="img-fluid w-100 h-100"
+             style="object-fit: cover;" />
+    </div>
+</div>
 
                 @endforeach
             </div>
@@ -441,36 +678,8 @@
     </section>
 
 
-    <?php
-    $testimonials = [
-        [
-            'image' => 'https://media.istockphoto.com/id/1230749818/photo/portrait-of-smiling-male-owner-of-fashion-store-standing-in-front-of-clothing-display.jpg?s=612x612&w=0&k=20&c=xoWhF-hrQcbMEPDYncHiHF8HJX2YgmYt7T-KLCPZIpY=',
-            'name' => 'Sarah L',
-            'work' => 'Works at Deloitte',
-            'comment' => 'The web design course provided a solid foundation for me. The instructors were knowledgeable and supportive, and the interactive learning environment was engaging. I highly recommend it!'
-        ],
-        [
-            'image' => 'https://media.istockphoto.com/id/1230749818/photo/portrait-of-smiling-male-owner-of-fashion-store-standing-in-front-of-clothing-display.jpg?s=612x612&w=0&k=20&c=xoWhF-hrQcbMEPDYncHiHF8HJX2YgmYt7T-KLCPZIpY=',
-            'name' => 'Michael D',
-            'work' => 'Software Engineer at Google',
-            'comment' => 'Thanks to the coding bootcamp, I landed my dream job! The hands-on projects really helped me build confidence and skills.'
-        ],
-        [
-            'image' => 'https://images.unsplash.com/photo-1552058544-f2b08422138a?crop=faces&fit=crop&w=400&h=400',
-            'name' => 'Jessica T',
-            'work' => 'UX Designer at Amazon',
-            'comment' => 'Amazing experience! The mentorship and practical exercises made the difference. I feel fully prepared for real-world challenges.'
-        ],
-        [
-            'image' => 'https://images.unsplash.com/photo-1552058544-f2b08422138a?crop=faces&fit=crop&w=400&h=400',
-            'name' => 'Chris P',
-            'work' => 'Freelance Developer',
-            'comment' => 'This course changed my career. I went from no experience to building client websites within a few months. Highly recommend!'
-        ]
-    ];
-    ?>
-
-    <section class="testimonial py-5">
+    @if (count($testimonials) > 0)
+       <section class="testimonial py-5">
         <div class="container">
             <div class="text-center mb-5">
                 <h3 class="fw-bold" style="font-size: 2.5rem;">What Our Students Say</h3>
@@ -488,14 +697,14 @@
                 </div>
                 <div style="background-color: <?= $bgColor ?>; border-radius: 12px; padding: 20px; " class="col-lg-9 text-start">
                     <h5  class="fw-bold mb-1"><?= $testimonial['name']; ?></h5>
-                    <p style="color: #5A5A5A;" class=" mb-2"><?= $testimonial['work']; ?></p>
-                    <p style="color: #5A5A5A;"><?= $testimonial['comment']; ?></p>
+                    <p style="color: #5A5A5A;" class=" mb-2"><?= $testimonial['title']; ?></p>
+                    <p style="color: #5A5A5A;"><?= html_entity_decode($testimonial['content']); ?></p>
                 </div>
                 <?php else: ?>
                 <div style="background-color: <?= $bgColor ?>; border-radius: 12px; padding: 20px;" class="col-lg-9 text-start order-lg-1 order-2">
                     <h5 class="fw-bold mb-1"><?= $testimonial['name']; ?></h5>
-                    <p style="color: #5A5A5A;" class=" mb-2"><?= $testimonial['work']; ?></p>
-                    <p style="color: #5A5A5A;" ><?= $testimonial['comment']; ?></p>
+                    <p style="color: #5A5A5A;" class=" mb-2"><?= $testimonial['title']; ?></p>
+                <p style="color: #5A5A5A;"><?= html_entity_decode($testimonial['content']); ?></p>
                 </div>
                 <div class="col-lg-3 text-center order-lg-2 order-1 mb-3 mb-lg-0">
                     <img src="<?= $testimonial['image']; ?>" alt="<?= $testimonial['name']; ?>" style="height: 120px; width: 120px; border-radius: 50%; object-fit: cover;">
@@ -505,7 +714,9 @@
             <?php endforeach; ?>
         </div>
     </section>
-
+ 
+    @endif
+    
 
     <section style="background-color: #FFF3CF; padding: 60px 0;">
         <div class="company container">

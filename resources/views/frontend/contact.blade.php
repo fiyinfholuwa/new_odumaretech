@@ -42,28 +42,34 @@
                 <!-- Right Side: Form + Contact Info -->
                 <div class="col-lg-6">
                     <div class="p-5 rounded-4 shadow-sm" style="background-color: #F7F7F7;">
-                        <form>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" name="name" placeholder="Full Name">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="email" class="form-control" name="email" placeholder="Email Address">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" name="phone" placeholder="Phone Number">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" name="subject" placeholder="Subject">
-                                </div>
-                                <div class="col-12">
-                                    <textarea class="form-control" name="message" rows="4" placeholder="Your Message"></textarea>
-                                </div>
-                                <div class="col-12 text-start">
-                                    <button style="background-color: #0E2293; border:none;" type="submit" class="btn btn-primary px-4">Send Message</button>
-                                </div>
-                            </div>
-                        </form>
+                        <form method="POST" action="{{ route('contact.save') }}">
+    @csrf
+    <div class="row g-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" placeholder="Full Name" value="{{ old('name') }}">
+            @error('name')<small class="text-danger">{{ $message }}</small>@enderror
+        </div>
+        <div class="col-md-6">
+            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Email Address" value="{{ old('email') }}">
+            @error('email')<small class="text-danger">{{ $message }}</small>@enderror
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control @error('phone') is-invalid @enderror" name="phone" placeholder="Phone Number" value="{{ old('phone') }}">
+            @error('phone')<small class="text-danger">{{ $message }}</small>@enderror
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control @error('subject') is-invalid @enderror" name="subject" placeholder="Subject" value="{{ old('subject') }}">
+            @error('subject')<small class="text-danger">{{ $message }}</small>@enderror
+        </div>
+        <div class="col-12">
+            <textarea class="form-control @error('message') is-invalid @enderror" name="message" rows="4" placeholder="Your Message">{{ old('message') }}</textarea>
+            @error('message')<small class="text-danger">{{ $message }}</small>@enderror
+        </div>
+        <div class="col-12 text-start">
+            <button style="background-color: #0E2293; border:none;" type="submit" class="btn btn-primary px-4">Send Message</button>
+        </div>
+    </div>
+</form>
 
                         <!-- Contact Info -->
                         <div class="mt-4">

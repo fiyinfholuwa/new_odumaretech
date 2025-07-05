@@ -136,6 +136,16 @@
             </div>
         </div>
     </section>
+<script>
+    const fileInput = document.getElementById('resume-upload');
+    const dropArea = document.querySelector('.drop-area');
+
+    fileInput.addEventListener('change', function () {
+        if (fileInput.files.length > 0) {
+            dropArea.innerHTML = '<p class="text-success m-0">' + fileInput.files[0].name + '</p>';
+        }
+    });
+</script>
 
 </main>
 
