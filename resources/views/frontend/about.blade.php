@@ -30,16 +30,32 @@
             <p class="mb-4">
                 We understand that practical experience is invaluable, which is why we offer you the unique opportunity to join our exclusive Research and Innovation department and acquire the practical skills necessary to flourish in your domain. Even after you complete our program, our commitment to your success remains unwavering. We offer ongoing drop-in sessions where our team provides guidance, interview tips, and valuable insights, maximizing your chances of securing your first job in the competitive tech market.
             </p>
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <img src="{{ asset('frontend/assets/img/about1.png') }}" class="img-fluid rounded-3 w-100">
-                </div>
-                <div class="col-md-4">
-                    <img src="{{ asset('frontend/assets/img/about2.png') }}" class="img-fluid rounded-3 w-100">
-                </div>
-                <div class="col-md-4">
-                    <img src="{{ asset('frontend/assets/img/about3.png') }}" class="img-fluid rounded-3 w-100">
-                </div>
+            <div class="row">
+
+                <?php
+                $cards = [
+                    [
+                        'image' => 'https://csweb.rice.edu/sites/g/files/bxs4941/files/2022-06/MCS%20vs%20Bootcamp_Hero_Web-min.jpg',
+                    ],
+                    [
+                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXLtAsdGC_e5xCXNFsPIVlLdN9jWS3y-Ci4w&s',
+                    ],
+                    [
+                        'image' => 'https://i0.wp.com/www.ripplesnigeria.com/wp-content/uploads/2022/01/IMG-20220113-WA0004_copy_650x366.jpg?fit=650%2C366&ssl=1',
+                    ],
+                ];
+
+                ?>
+                @foreach($cards as $card)
+                    <div class="col-lg-4 mb-4">
+    <div style="height: 250px; overflow: hidden; border-radius: 10px;">
+        <img src="{{ asset($card['image']) }}"
+             class="img-fluid w-100 h-100"
+             style="object-fit: cover;" />
+    </div>
+</div>
+
+                @endforeach
             </div>
         </div>
     </section>
