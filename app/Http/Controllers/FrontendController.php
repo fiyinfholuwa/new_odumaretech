@@ -24,7 +24,9 @@ class FrontendController extends Controller
     }
 
     public function courses():View{
-        return view('frontend.courses');
+        $popular_courses = Course::with('cat')->paginate(4);
+        $testimonials= Testimonial::paginate(8);
+        return view('frontend.courses', ['courses'=> $popular_courses,'testimonials' => $testimonials]);
     }
     public function blog(Request $request): View
     {
