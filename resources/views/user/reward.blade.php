@@ -3,12 +3,13 @@
 @section('content')
 
 <?php
+
 // data.php
 $referralStats = [
-    'total_referrals' => 20,
-    'total_earnings' => 50,
+    'total_referrals' => count($rewards),
+    'total_earnings' => $balance,
     'min_payout' => 50,
-    'available_earnings' => 75,
+    'available_earnings' => $balance,
     'processing_fee' => 0,
 ];
 
@@ -232,7 +233,7 @@ $referrals = [
         <div class="col-12 col-xl-12">
             <h2 class="text-dark mb-2 fw-bold">💰 Referral Rewards</h2>
 
-           
+
             <!-- Stats Cards -->
             <div class="row mb-4 fade-in-up" style="animation-delay: 0.2s">
                 <div class="col-md-6 mb-3">
@@ -252,7 +253,7 @@ $referrals = [
                     <div class="stats-card bgc-secondary p-4 text-white">
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3" style="width: 50px; height: 50px;">
-                                <i class="fas fa-dollar-sign text-dark"></i>
+{{--                                <i class="fas fa-dollar-sign text-dark"></i>--}}
                             </div>
                             <div>
                                 <h6 class="mb-1 opacity-90">Total Earnings</h6>
@@ -267,21 +268,48 @@ $referrals = [
             <div class="card border-0 shadow-sm fade-in-up" style="animation-delay: 0.4s; border-radius: 16px;">
                 <div class="card-body p-4">
 
-                    <!-- Referral Link Section -->
+                    <!-- Referral Link UI -->
                     <div class="referral-link-container mb-4">
                         <h5 class="mb-3 fw-bold text-gray-800">
                             <i class="fas fa-link me-2 text-primary"></i>
                             Your Referral Link
                         </h5>
                         <div class="input-group">
-                            <input type="text" id="refLink" class="form-control border-0 bg-white" 
-                                   value="https://odumaretech.com/ref/odumaretech338916" readonly
+                            <input type="text" id="refLink" class="form-control border-0 bg-white"
+                                   value="https://odumaretech.com/register?ref={{ Auth::user()->referral_code }}"
+                                   readonly
                                    style="border-radius: 8px 0 0 8px; font-family: monospace;">
-                            <button onclick="copyLink()" class="copy-btn text-white px-4">
+                            <button onclick="copyLink()" class="btn btn-primary text-white px-4" style="border-radius: 0 8px 8px 0;">
                                 <i class="fas fa-copy me-2"></i>Copy Link
                             </button>
                         </div>
                     </div>
+
+                    <!-- Toast -->
+                    <div id="copyToast" class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-4"
+                         role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 1055;">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                ✅ Referral link copied to clipboard!
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                                    aria-label="Close"></button>
+                        </div>
+                    </div>
+
+                    <!-- Script -->
+                    <script>
+                        function copyLink() {
+                            const refInput = document.getElementById('refLink');
+                            refInput.select();
+                            refInput.setSelectionRange(0, 99999); // mobile support
+                            navigator.clipboard.writeText(refInput.value).then(() => {
+                                const toastEl = document.getElementById('copyToast');
+                                const toast = new bootstrap.Toast(toastEl);
+                                toast.show();
+                            });
+                        }
+                    </script>
 
                     <!-- Payout Alert -->
                     <?php if ($referralStats['total_earnings'] >= $referralStats['min_payout']): ?>
@@ -330,40 +358,35 @@ $referrals = [
                             <i class="fas fa-table me-2 text-primary"></i>
                             Your Referrals
                         </h5>
-                        <small class="text-muted"><?= count($referrals) ?> total referrals</small>
+                        <small class="text-muted"><?= count($rewards) ?> total referrals</small>
                     </div>
-                    
+
                     <div class="table-responsive">
                         <table  id="my-table" class="referrals-table table table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th>Student ID</th>
                                     <th>Name</th>
-                                    <th>Course</th>
+{{--                                    <th>Course</th>--}}
                                     <th>Earnings</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($referrals as $ref): ?>
+                                <?php foreach ($rewards as $ref): ?>
                                     <tr>
-                                        <td>
-                                            <span class="text-muted small"><?= $ref['id'] ?></span>
-                                        </td>
+
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
                                                      style="width: 32px; height: 32px; font-size: 0.8rem; color: white;">
                                                     <?= strtoupper(substr($ref['name'], 0, 1)) ?>
                                                 </div>
                                                 <span class="fw-medium"><?= $ref['name'] ?></span>
                                             </div>
                                         </td>
+
                                         <td>
-                                            <span class="text-gray-700"><?= $ref['course'] ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="earnings-highlight">$<?= $ref['earnings'] ?></span>
+                                            <span class="earnings-highlight">$0<?= $ref['earnings'] ?></span>
                                         </td>
                                         <td>
                                             <span class="status-badge bg-success text-white">
@@ -415,7 +438,7 @@ $referrals = [
                         </div>
                     </div>
                 </div>
-                
+
                 <h6 class="mb-3 fw-bold">
                     <i class="fas fa-credit-card me-2 text-primary"></i>
                     Payout Method
@@ -446,44 +469,5 @@ $referrals = [
     </div>
 </div>
 
-<script>
-function copyLink() {
-    var copyText = document.getElementById("refLink");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); // For mobile devices
-    
-    navigator.clipboard.writeText(copyText.value).then(function() {
-        // Success feedback
-        const btn = event.target.closest('button');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
-        btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.style.background = 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)';
-        }, 2000);
-    }).catch(function() {
-        // Fallback for older browsers
-        document.execCommand("copy");
-        alert("Link copied: " + copyText.value);
-    });
-}
-
-// Add smooth animations on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const elements = document.querySelectorAll('.fade-in-up');
-    elements.forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        
-        setTimeout(() => {
-            el.style.transition = 'all 0.6s ease';
-            el.style.opacity = '1';
-            el.style.transform = 'translateY(0)';
-        }, index * 200);
-    });
-});
-</script>
 
 @endsection

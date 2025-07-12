@@ -504,6 +504,15 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control @error('referral_code') is-invalid @enderror"
+                                   id="referral_code" name="referral_code" placeholder="ODUMare1234"
+                                   value="{{ old('referral_code', request('ref')) }}">
+                            <label for="referral_code">Referral Code</label>
+                            @error('referral_code')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <!-- Password -->
                         <div class="mb-3 position-relative">

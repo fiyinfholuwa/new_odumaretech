@@ -404,7 +404,9 @@ public function transactions_user()
 
 
     public function user_reward(){
-        return view('user.reward');
+        $rewards= User::where('referred_by', '=', Auth::user()->referral_code)->get();
+        $reward_bal= Auth::user()->referral_bonus ?? 0;
+        return view('user.reward', ['rewards'=>  $rewards,  'balance' => $reward_bal]);
     }
     public function user_badge(){
         return view('user.badge');
