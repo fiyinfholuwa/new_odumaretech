@@ -209,12 +209,12 @@ Route::controller(MasterClassController::class)->group(function () {
 });
 
 Route::middleware(['auth', 'is_admin'])->controller(PaymentController::class)->group(function () {
-    Route::post('/pay', 'makePayment')->name('pay');
-    Route::get('/payment/callback/paystack', 'paymentCallbackPaystack')->name('pay.callback.paystack');
-    Route::get('/payment/callback/stripe/success', 'paymentcallbackstripesuccess')->name('pay.callback.stripe.success');
-    Route::get('/payment/callback/stripe/cancel', 'paymentCallbackStripeFailed')->name('pay.callback.stripe.failed');
-
-    Route::get('/payment/callback/stripe/success/complete', 'user_complete_callback_stripe_complete')->name('pay.callback.stripe.success.complete');
+//    Route::post('/pay', 'makePayment')->name('pay');
+//    Route::get('/payment/callback/paystack', 'paymentCallbackPaystack')->name('pay.callback.paystack');
+//    Route::get('/payment/callback/stripe/success', 'paymentcallbackstripesuccess')->name('pay.callback.stripe.success');
+//    Route::get('/payment/callback/stripe/cancel', 'paymentCallbackStripeFailed')->name('pay.callback.stripe.failed');
+//
+//    Route::get('/payment/callback/stripe/success/complete', 'user_complete_callback_stripe_complete')->name('pay.callback.stripe.success.complete');
 
     Route::get('/admin/transactions/all', 'transactions')->name('transaction.all');
     Route::post('/admin/fix/payment/{id}', 'admin_fix_payment')->name('admin.fix.payment');

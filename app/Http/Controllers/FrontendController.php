@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Mail\InstructorApply;
+use App\Models\AppliedCourse;
 use App\Models\Blog;
+use App\Models\Cohort;
+use App\Models\Coupon;
+use App\Models\CouponUsed;
 use App\Models\Course;
 use App\Models\Innovation;
 use App\Models\Instructor;
 use App\Models\Testimonial;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
@@ -31,7 +36,7 @@ class FrontendController extends Controller
     public function blog(Request $request): View
     {
         $query = Blog::query();
-    
+
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
             $query->where(function ($q) use ($keyword) {
@@ -39,11 +44,11 @@ class FrontendController extends Controller
                   ->orWhere('desc', 'LIKE', '%' . $keyword . '%');
             });
         }
-    
+
         $blogs = $query->paginate(6)->withQueryString();
         return view('frontend.blog', ['blogs' => $blogs]);
     }
-    
+
 
     public function about():View{
         return view('frontend.about');
@@ -59,7 +64,21 @@ class FrontendController extends Controller
         return view('frontend.career', ['courses' => $courses]);
     }
     public function course_detail($name):View{
-        return view('frontend.course_detail');
+        $popular_courses = Course::with('cat')->paginate(3);
+
+        $course = Course::with('cat')->where('course_url', $name)->first();
+
+        if(Auth::check()){
+            $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id','=', $course->id)->first();
+            $has_pending = AppliedCourse::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)
+                ->where('status' , '=' , "pending")->first();
+        }else{
+            $check_user_has_coupon = NULL;
+            $has_pending = NULL;
+        }
+        $cohort_name = Cohort::where('id', $course->cohort)->first();
+        $coupon_check = Coupon::where('course_id', '=', $course->id)->first();
+        return view('frontend.course_detail', ['course' => $course, 'courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending, 'cohort_name' => $cohort_name]);
     }
     public function innovation():View{
         return view('frontend.innovation');

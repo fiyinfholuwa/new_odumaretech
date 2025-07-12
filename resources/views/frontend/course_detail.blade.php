@@ -20,54 +20,51 @@
 " class="section dark-background">
 
         <div style="max-width: 700px; margin-bottom: 20px; margin-top: 10px;">
-            <h2 style="margin-top: 20px;">Web Development (Frontend)</h2>
+            <h2 style="margin-top: 20px;">{{$course->title}}</h2>
 
         </div>
 
     </section>
 
-    <?php
+    @php
+        $sections = [
+            [
+                'details' => [
+                    ['label' => 'Course', 'value' => $course->title],
+                    ['label' => 'Program Length', 'value' => $course->duration . ' Weeks'],
+                ],
+            ],
+            [
+                'details' => [
+                    ['label' => 'Certificate', 'value' => $course->certification],
+                    ['label' => 'Start Date', 'value' => $course->start_date],
+                ],
+            ],
+            [
+                'details' => [
+                    ['label' => 'Application Fee', 'value' => '#' . $course->price],
+                    ['label' => 'Location', 'value' => 'Virtual'],
+                ],
+            ],
+        ];
+    @endphp
 
-    $sections = [
-        [
-            'details' => [
-                ['label' => 'Course', 'value' => 'Web Development'],
-                ['label' => 'Program Length', 'value' => '16 Weeks'],
-            ],
-        ],
-        [
-            'details' => [
-                ['label' => 'Course', 'value' => 'Data Science'],
-                ['label' => 'Program Length', 'value' => '24 Weeks'],
-            ],
-        ],
-        [
-            'details' => [
-                ['label' => 'Course', 'value' => 'UI/UX Design'],
-                ['label' => 'Program Length', 'value' => '12 Weeks'],
-            ],
-        ],
-    ];
-
-    ?>
-    <section  style="background-color: #FFF3CF;  padding: 20px;" class="course_info">
+    <section class="course_info py-4 px-3" style="background-color: #FFF3CF;">
         @foreach($sections as $section)
-                    <div class="row" style="padding: 5px;">
-                        @foreach($section['details'] as $detail)
-                            <div class="col-lg-6">
-                                <div style="font-size: 1.1rem; color: #333;">
-                                    {{ $detail['label'] }}:
-                                    <span style="background-color: #fff; padding: 8px 12px; border-radius: 6px; display: inline-block;">
-                                {{ $detail['value'] }}
-                                  </span>
-                                </div>
-                            </div>
-                        @endforeach
-                </div>
+            <div class="row mb-3">
+                @foreach($section['details'] as $detail)
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex flex-wrap align-items-center" style="font-size: 1.05rem; color: #333;">
+                            <strong style="min-width: 150px;">{{ $detail['label'] }}:</strong>
+                            <span class="bg-white px-3 py-2 rounded shadow-sm" style="flex: 1;">
+                            {{ $detail['value'] }}
+                        </span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         @endforeach
-
     </section>
-
 
     <section>
         <div class="">
@@ -118,154 +115,137 @@
                     <section style="background-color: ; padding: 60px 0;" class="accelerate text-white">
                         <div class="container">
                             <div class="row">
-                                <div class="col-12">
-                                    <div class="ratio ratio-16x9">
-                                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>
-                                    </div>
+                                <div class="w-100">
+                                    <img src="{{ asset($course->image) }}" alt="Course Image" class="w-100" style="max-height: 800px; object-fit: cover;">
+                                </div>
+
+
+                                {{--                                    <div class="ratio ratio-16x9">--}}
+                                {{--                                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>--}}
+                                {{--                                    </div>--}}
+                            </div>
+                        </div>
+                    </section>
+
+
+                    @if(!is_null($course->description))
+                        <section style="background-color: #FFF3CF;" class="course_description">
+                            <div style="padding: 30px; margin-top: -40px;" class="container">
+                                <h3>Course Description</h3>
+                                <div style="background-color: white; padding: 30px; border-radius: 30px;" class="">
+                                    <p>
+                                        {!!$course->description!!}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+
+                    @endif
 
 
-                    <section style="background-color: #FFF3CF;" class="course_description">
-                        <div style="padding: 30px; margin-top: -40px;" class="container">
-                            <h3>Course Description</h3>
-                            <div style="background-color: white; padding: 30px; border-radius: 30px;" class="">
-                                <p>
-                                    Ready to unlock the power of the web? Join our Web Development course at OdumareTech and embark on a thrilling journey into the dynamic world of technology. This immersive program covers front-end development, equipping you with the skills needed to create stunning and interactive websites and web applications.
-                                    In this course, you'll dive deep into the essential building blocks of web development, starting with HTML, CSS, and JavaScript. You'll learn to craft visually appealing web pages, master responsive design techniques, and bring interactivity to life through JavaScript. We'll guide you through the latest front-end frameworks, empowering you to build powerful user interfaces and manage complex data flows.
-                                    Throughout the course, you'll tackle real-world challenges, collaborate with fellow learners, and receive expert guidance from our experienced instructors. By the end, you'll be well-versed in front-end development website development.
-                                    Whether you're a beginner or an experienced professional, this course is designed to meet you at your skill level and guide you towards web development mastery. Join us at OdumareTech and unlock your potential to shape the digital world with your creativity and technical expertise. Enroll now and kickstart your journey into the exciting realm of web development!
-                                </p>
+                    @if(!is_null($course->requirement))
+                        <section style="background-color:;" class="course_description">
+                            <div style="padding: 30px; margin-top: -40px;" class="container">
+                                <h3>Admission Requirements</h3>
+                                <div style="background-color: #FFF3CF; padding: 30px; border-radius: 30px;">
+                                    <p>
+                                       {!! $course->requirement !!}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
 
-
-                    <section style="background-color:;" class="course_description">
-                        <div style="padding: 30px; margin-top: -40px;" class="container">
-                            <h3>Admission Requirements</h3>
-                            <div style="background-color: #FFF3CF; padding: 30px; border-radius: 30px;">
-                                <p>
-                                    1. <strong>Educational Background:</strong> You don’t need to have a certificate to apply for this diploma program. We expect anyone to take the program.<br><br>
-                                    2. <strong>Language Proficiency:</strong> The course is conducted in English, so applicants must have a basic understanding of the English language to effectively engage with the curriculum and participate in discussions.<br><br>
-                                    3. <strong>Assessment:</strong> All applicants will be required to take an assessment. However, we would provide you with a study kit to prepare you for the assessment.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
-
+                    @endif
                     {{-- Curriculum Section --}}
-                    <section style="padding: 40px; background-color: #E9ECFF;">
-                        <div style=" margin: auto;" class="container">
-                            <h2 style="text-align: ; margin-bottom: 20px;">Curriculum</h2>
-                            <p style="text-align: ; margin-bottom: 40px;">6 Sections • 202 Lectures</p>
 
-                            <div style="background-color: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                    @if (!is_null($course->curriculum))
+                        @php
+                            $decodedCurriculum = json_decode($course->curriculum, true);
+                        @endphp
 
-                                @php
-                                    $curriculumData = [
-                                        [
-                                            'title' => 'Getting Started',
-                                            'color' => '#FFC000',
-                                            'lectures' => [
-                                                'What is Webflow?',
-                                                'Sign up in Webflow',
-                                                'Webflow Terms & Conditions',
-                                                'Teaser of Webflow',
-                                                'Practice Project',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Secret of Good Design',
-                                            'color' => '#FF5733',
-                                            'lectures' => [
-                                                'Practice Design Like an Artist',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Web Development (Webflow)',
-                                            'color' => '#28A745',
-                                            'lectures' => [
-                                                'Full Web Development Training using Webflow',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Secrets of Making Money Freelancing',
-                                            'color' => '#FFC107',
-                                            'lectures' => [
-                                                'Learn how to monetize your web design skills',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Advanced',
-                                            'color' => '#6610f2',
-                                            'lectures' => [
-                                                'Advanced Tips & Strategies for Professionals',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Course Outline',
-                                            'color' => '#E83E8C',
-                                            'lectures' => [
-                                                'Master creating websites that adapt seamlessly to all screen sizes.',
-                                                'Learn websockets and real-time communication for live updates.',
-                                                'Understand frontend frameworks like React and Vue.js.',
-                                                'Deploy frontend applications to various hosting platforms.',
-                                                'Communicate with server-side APIs to fetch and display data.',
-                                                'Follow coding standards, conventions, and code review processes.',
-                                                'Enhance website performance and user experience.',
-                                                'Prepare for frontend engineering job interviews and build a strong portfolio.',
-                                            ],
-                                        ],
-                                    ];
-                                @endphp
+                        <section style="padding: 40px; background: #E9ECFF;">
+                            <div class="container mx-auto">
+                                <h3 style="margin-bottom: 15px; color: black; font-size: 2.5rem; font-weight: 700; text-align: ;">Course Curriculum</h3>
+                                <p style="margin-bottom: 40px;  font-size: 1.1rem;">
+                                    {{ count($decodedCurriculum) }} Sections •
+                                    {{ collect($decodedCurriculum)->reduce(fn($carry, $item) => $carry + count($item['points']), 0) }} Lectures
+                                </p>
 
-                                @foreach ($curriculumData as $index => $section)
-                                    <div style="margin-bottom: 20px;">
-                                        <h3 onclick="toggleSection(this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                                            <span>{{ $section['title'] }}</span>
-                                            <span style="display: flex; align-items: center; gap: 5px;">
-                            <i class="fa fa-play" style="color: #FFC000; border-radius: 100%; border: 1px solid   #FFC000;"></i>
-                            <small>({{ count($section['lectures']) }})</small>
-                        </span>
-                                        </h3>
-                                        <ul style="display: none; padding-left: 20px; margin-top: 10px;">
-                                            @foreach ($section['lectures'] as $i => $lecture)
-                                                <li>{{ $i + 1 }}. {{ $lecture }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endforeach
-
-
-                            </div>
-                            <div style="margin-top: 20px;">
-                                <h3>Course Outline</h3>
-                                <div>
-                                    @php
-                                        $courseOutline = [
-                                            'Master the art of creating websites that adapt seamlessly to different screen sizes and devices, ensuring an optimal user experience.',
-                                            'Learn about websockets and real-time communication to enable live updates and interactivity in your applications.',
-                                            'Gain insights into popular frontend frameworks like React and Vue.js, enabling you to build robust and interactive web applications.',
-                                            'Successfully deploy frontend applications to various hosting platforms and understand the deployment process.',
-                                            'Learn how to communicate with server-side APIs to fetch and display data on your web applications.',
-                                            'Acquire insights into industry standards, coding conventions, and code review processes to ensure code quality and collaboration.',
-                                            'Explore techniques to enhance website performance, reduce loading times, and improve user experience.',
-                                            'Prepare for frontend engineering job interviews by honing your skills and building a strong portfolio of projects.',
-                                        ];
-                                    @endphp
-
-                                    @foreach ($courseOutline as $index => $point)
-                                        <p>{{ $index + 1 }}. {{ $point }}</p>
+                                <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); backdrop-filter: blur(10px);">
+                                    @foreach ($decodedCurriculum as $index => $section)
+                                        <div style="margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s ease;">
+                                            <h3 onclick="toggleSection(this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 20px; margin: 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-size: 1.2rem; font-weight: 600; color: #334155; transition: all 0.3s ease;">
+                                                <span>{{ $section['title'] }}</span>
+                                                <span style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 30px; height: 30px; background: #FFC000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                                    <i class="fa fa-play" style="color: white; font-size: 12px; margin-left: 2px;"></i>
+                                </div>
+                                <small style="color: #64748b; font-weight: 500;">{{ count($section['points']) }} lectures</small>
+                                <i class="fa fa-chevron-down" style="color: #94a3b8; transition: transform 0.3s ease;"></i>
+                            </span>
+                                            </h3>
+                                            <ul style="display: none; padding: 0; margin: 0; background: #fefefe;">
+                                                @foreach ($section['points'] as $i => $point)
+                                                    <li style="padding: 15px 25px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; transition: all 0.2s ease;">
+                                                        <span style="width: 25px; height: 25px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #64748b;">{{ $i + 1 }}</span>
+                                                        <span style="color: #475569; line-height: 1.5;">{{ $point }}</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
+                        </section>
 
-                        </div>
+                        <style>
+                            .curriculum-section h3:hover {
+                                background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+                                transform: translateY(-1px);
+                            }
 
-                    </section>
+                            .curriculum-section li:hover {
+                                background: #f8fafc !important;
+                            }
+
+                            .curriculum-section li:last-child {
+                                border-bottom: none !important;
+                            }
+
+                            .curriculum-section .expanded .fa-chevron-down {
+                                transform: rotate(180deg);
+                            }
+
+                            .curriculum-section .expanded .fa-play {
+                                animation: pulse 1s infinite;
+                            }
+
+                            @keyframes pulse {
+                                0% { transform: scale(1); }
+                                50% { transform: scale(1.1); }
+                                100% { transform: scale(1); }
+                            }
+                        </style>
+
+                        <script>
+                            function toggleSection(header) {
+                                const ul = header.nextElementSibling;
+                                const chevron = header.querySelector('.fa-chevron-down');
+                                const section = header.parentElement;
+
+                                if (ul.style.display === 'none' || ul.style.display === '') {
+                                    ul.style.display = 'block';
+                                    section.classList.add('expanded');
+                                    chevron.style.transform = 'rotate(180deg)';
+                                } else {
+                                    ul.style.display = 'none';
+                                    section.classList.remove('expanded');
+                                    chevron.style.transform = 'rotate(0deg)';
+                                }
+                            }
+                        </script>
+                    @endif
+
 
                     {{-- Toggle Script --}}
                     <script>
@@ -288,57 +268,52 @@
                     {{-- Load Font Awesome (if you haven't already) --}}
 
 
-                    <section>
+                    @php
+                        $actualPrice = floatval($course->price);
+                        $installmentPercent = 40;
+                        $installmentAmount = round($actualPrice * $installmentPercent / 100, 2);
+
+                        $plans = [
+                            [
+                                'title' => 'Installment',
+                                'price' => '₦' . number_format($installmentAmount),
+                                'description' => 'Pay ₦' . number_format($installmentAmount) . ' upfront, then weekly until the full ₦' . number_format($actualPrice) . ' is covered.',
+                                'popular' => false,
+                                'background' => '#FFF3CF',
+                            ],
+                            [
+                                'title' => 'Full Payment',
+                                'price' => '₦' . number_format($actualPrice),
+                                'description' => 'Pay once and enjoy full access. Save more with a one-time payment.',
+                                'popular' => true,
+                                'background' => '#E9ECFF',
+                            ],
+                        ];
+                    @endphp
+
+                    <section class="py-5" style="background: #f8f9fa;">
                         <div class="container">
                             <h2>Cost</h2>
-                            <div class="row">
-                                @php
-                                    $plans = [
-                                        [
-                                            'title' => 'Weekly',
-                                            'price' => '$10/week',
-                                            'description' => 'Pay the same amount each week until your course is fully paid for.',
-                                            'popular' => false,
-                                            'background' => '#FFF3CF', // normal background
-                                        ],
-                                        [
-                                            'title' => 'Monthly',
-                                            'price' => '$35/month',
-                                            'description' => 'Save more by paying monthly.',
-                                            'popular' => true,
-                                            'background' => '#E9ECFF', // special background for popular
-                                        ],
-                                        [
-                                            'title' => 'One Time',
-                                            'price' => '$300',
-                                            'description' => 'Pay once and forget about it!',
-                                            'popular' => false,
-                                            'background' => '#FFF3CF',
-                                        ],
-                                    ];
-                                @endphp
 
+                            <div class="row">
                                 @foreach ($plans as $plan)
-                                    <div class="col-lg-4 mb-4">
-                                        <div style="background-color: {{ $plan['background'] }}; padding: 30px; border-radius: 10px; text-align: center; position: relative;">
+                                    <div class="col-md-6 mb-4">
+                                        <div style="background-color: {{ $plan['background'] }}; padding: 30px; border-radius: 12px; text-align: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s;">
 
                                             @if ($plan['popular'])
-                                                <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background-color: #FFC000; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px;">
+                                                <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background-color: #FFC000; color: white; padding: 5px 12px; border-radius: 30px; font-size: 12px; font-weight: bold;">
                                 Most Popular
                             </span>
                                             @endif
 
-                                            <h5>{{ $plan['title'] }}</h5>
-                                            <h2 >{{ $plan['price'] }}</h2>
-                                            <button style="margin: 15px 0; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px;">
-                                                Choose
-                                            </button>
-                                            <p>{{ $plan['description'] }}</p>
+                                            <h5 style="font-weight: bold;">{{ $plan['title'] }}</h5>
+                                            <h2 class="my-3" style="color: #333;">{{ $plan['price'] }}</h2>
+                                            <p style="font-size: 0.95rem; color: #555;">{{ $plan['description'] }}</p>
 
+{{--                                            <button class="btn btn-primary mt-3">Choose Plan</button>--}}
                                         </div>
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
                     </section>
@@ -385,38 +360,20 @@
                         </div>
                     </section>
 
+
+                    @if(!is_null($course->outcome)))
                     <section style="background-color: #FFF3CF;">
                         <div class="container" style="padding: 30px; margin-top: -40px;">
                             <h3>Career Outcome</h3>
 
-                            @php
-                                $careerOutcomes = [
-                                    [
-                                        'title' => 'Educational Background',
-                                        'description' => 'You don’t need to have a certificate to apply for this diploma program. We expect anyone to take the program.',
-                                    ],
-                                    [
-                                        'title' => 'Language Proficiency',
-                                        'description' => 'The course is conducted in English, so applicants must have a basic understanding of the English language to effectively engage with the curriculum and participate in discussions.',
-                                    ],
-                                    [
-                                        'title' => 'Assessment',
-                                        'description' => 'All applicants will be required to take an assessment. However, we would provide you with a study kit to prepare you for the assessment.',
-                                    ],
-                                ];
-                            @endphp
 
                             <div style="background-color: white; padding: 30px; border-radius: 30px;">
-                                <ul style="padding-left: 20px; list-style: decimal;">
-                                    @foreach ($careerOutcomes as $outcome)
-                                        <li style="margin-bottom: 20px;">
-                                            <strong>{{ $outcome['title'] }}:</strong> {{ $outcome['description'] }}
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                {!! $course->outcome !!}
                             </div>
                         </div>
                     </section>
+
+                    @endif
 
 
 
@@ -427,75 +384,70 @@
                 <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
 
 
-                    <section  style="background-color: #FFF3CF; margin-top: 50px; margin-bottom: -60px;" class="course_description">
-                        <div style="padding: 30px; margin-top: -40px;" class="container">
-                            <h3>Course Description</h3>
-                            <div style="background-color: white; padding: 30px; border-radius: 30px;" class="">
-                                <p>
-                                    Ready to unlock the power of the web? Join our Web Development course at OdumareTech and embark on a thrilling journey into the dynamic world of technology. This immersive program covers front-end development, equipping you with the skills needed to create stunning and interactive websites and web applications.
-                                    In this course, you'll dive deep into the essential building blocks of web development, starting with HTML, CSS, and JavaScript. You'll learn to craft visually appealing web pages, master responsive design techniques, and bring interactivity to life through JavaScript. We'll guide you through the latest front-end frameworks, empowering you to build powerful user interfaces and manage complex data flows.
-                                    Throughout the course, you'll tackle real-world challenges, collaborate with fellow learners, and receive expert guidance from our experienced instructors. By the end, you'll be well-versed in front-end development website development.
-                                    Whether you're a beginner or an experienced professional, this course is designed to meet you at your skill level and guide you towards web development mastery. Join us at OdumareTech and unlock your potential to shape the digital world with your creativity and technical expertise. Enroll now and kickstart your journey into the exciting realm of web development!
-                                </p>
+                    @if(!is_null($course->description))
+                        <section style="background-color: #FFF3CF; margin-top: 60px;" class="course_description">
+                            <div style="padding: 30px; margin-top: -40px;" class="container">
+                                <h3>Course Description</h3>
+                                <div style="background-color: white; padding: 30px; border-radius: 30px;" class="">
+                                    <p>
+                                        {!!$course->description!!}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
+
+                    @endif
 
                 </div>
 
                 <div class="tab-pane fade" id="cost" role="tabpanel" aria-labelledby="cost-tab">
 
-                    <section>
+                    @php
+                        $actualPrice = floatval($course->price);
+                        $installmentPercent = 40;
+                        $installmentAmount = round($actualPrice * $installmentPercent / 100, 2);
+
+                        $plans = [
+                            [
+                                'title' => 'Installment',
+                                'price' => '₦' . number_format($installmentAmount),
+                                'description' => 'Pay ₦' . number_format($installmentAmount) . ' upfront, then weekly until the full ₦' . number_format($actualPrice) . ' is covered.',
+                                'popular' => false,
+                                'background' => '#FFF3CF',
+                            ],
+                            [
+                                'title' => 'Full Payment',
+                                'price' => '₦' . number_format($actualPrice),
+                                'description' => 'Pay once and enjoy full access. Save more with a one-time payment.',
+                                'popular' => true,
+                                'background' => '#E9ECFF',
+                            ],
+                        ];
+                    @endphp
+
+                    <section class="py-5" style="background: #f8f9fa; margin-top: 60px;">
                         <div class="container">
                             <h2>Cost</h2>
-                            <div class="row">
-                                @php
-                                    $plans = [
-                                        [
-                                            'title' => 'Weekly',
-                                            'price' => '$10/week',
-                                            'description' => 'Pay the same amount each week until your course is fully paid for.',
-                                            'popular' => false,
-                                            'background' => '#FFF3CF', // normal background
-                                        ],
-                                        [
-                                            'title' => 'Monthly',
-                                            'price' => '$35/month',
-                                            'description' => 'Save more by paying monthly.',
-                                            'popular' => true,
-                                            'background' => '#E9ECFF', // special background for popular
-                                        ],
-                                        [
-                                            'title' => 'One Time',
-                                            'price' => '$300',
-                                            'description' => 'Pay once and forget about it!',
-                                            'popular' => false,
-                                            'background' => '#FFF3CF',
-                                        ],
-                                    ];
-                                @endphp
 
+                            <div class="row">
                                 @foreach ($plans as $plan)
-                                    <div class="col-lg-4 mb-4">
-                                        <div style="background-color: {{ $plan['background'] }}; padding: 30px; border-radius: 10px; text-align: center; position: relative;">
+                                    <div class="col-md-6 mb-4">
+                                        <div style="background-color: {{ $plan['background'] }}; padding: 30px; border-radius: 12px; text-align: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s;">
 
                                             @if ($plan['popular'])
-                                                <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background-color: #FFC000; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px;">
+                                                <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background-color: #FFC000; color: white; padding: 5px 12px; border-radius: 30px; font-size: 12px; font-weight: bold;">
                                 Most Popular
                             </span>
                                             @endif
 
-                                            <h5>{{ $plan['title'] }}</h5>
-                                            <h2 >{{ $plan['price'] }}</h2>
-                                            <button style="margin: 15px 0; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px;">
-                                                Choose
-                                            </button>
-                                            <p>{{ $plan['description'] }}</p>
+                                            <h5 style="font-weight: bold;">{{ $plan['title'] }}</h5>
+                                            <h2 class="my-3" style="color: #333;">{{ $plan['price'] }}</h2>
+                                            <p style="font-size: 0.95rem; color: #555;">{{ $plan['description'] }}</p>
 
+                                            {{--                                            <button class="btn btn-primary mt-3">Choose Plan</button>--}}
                                         </div>
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
                     </section>
@@ -504,19 +456,19 @@
 
                 <!-- Requirement -->
                 <div class="tab-pane fade" id="requirement" role="tabpanel" aria-labelledby="requirement-tab">
-                    <section style="background-color:;" class="course_description">
-                        <div style="padding: 30px; margin-top: -40px;" class="container">
-                            <h3>Admission Requirements</h3>
-                            <div style="background-color: #FFF3CF; padding: 30px; border-radius: 30px;">
-                                <p>
-                                    1. <strong>Educational Background:</strong> You don’t need to have a certificate to apply for this diploma program. We expect anyone to take the program.<br><br>
-                                    2. <strong>Language Proficiency:</strong> The course is conducted in English, so applicants must have a basic understanding of the English language to effectively engage with the curriculum and participate in discussions.<br><br>
-                                    3. <strong>Assessment:</strong> All applicants will be required to take an assessment. However, we would provide you with a study kit to prepare you for the assessment.
-                                </p>
+                    @if(!is_null($course->requirement))
+                        <section style="background-color:;" class="course_description">
+                            <div style="padding: 30px; margin-top: -40px;" class="container">
+                                <h3>Admission Requirements</h3>
+                                <div style="background-color: #FFF3CF; padding: 30px; border-radius: 30px;">
+                                    <p>
+                                        {!! $course->requirement !!}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
 
+                    @endif
                 </div>
 
 
@@ -565,177 +517,163 @@
 
                 <div class="tab-pane fade" id="outcome" role="tabpanel" aria-labelledby="outcome-tab">
 
-                    <section style="background-color: #FFF3CF; margin-top: 50px;margin-bottom: -60px;">
+                    @if(!is_null($course->outcome)))
+                    <section style="background-color: #FFF3CF; margin-top: 60px;">
                         <div class="container" style="padding: 30px; margin-top: -40px;">
                             <h3>Career Outcome</h3>
 
-                            @php
-                                $careerOutcomes = [
-                                    [
-                                        'title' => 'Educational Background',
-                                        'description' => 'You don’t need to have a certificate to apply for this diploma program. We expect anyone to take the program.',
-                                    ],
-                                    [
-                                        'title' => 'Language Proficiency',
-                                        'description' => 'The course is conducted in English, so applicants must have a basic understanding of the English language to effectively engage with the curriculum and participate in discussions.',
-                                    ],
-                                    [
-                                        'title' => 'Assessment',
-                                        'description' => 'All applicants will be required to take an assessment. However, we would provide you with a study kit to prepare you for the assessment.',
-                                    ],
-                                ];
-                            @endphp
 
                             <div style="background-color: white; padding: 30px; border-radius: 30px;">
-                                <ul style="padding-left: 20px; list-style: decimal;">
-                                    @foreach ($careerOutcomes as $outcome)
-                                        <li style="margin-bottom: 20px;">
-                                            <strong>{{ $outcome['title'] }}:</strong> {{ $outcome['description'] }}
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                {!! $course->outcome !!}
                             </div>
                         </div>
                     </section>
+
+                    @endif
 
                 </div>
 
 
                 <!-- Curriculum -->
                 <div class="tab-pane fade" id="curriculum" role="tabpanel" aria-labelledby="curriculum-tab">
-                    <section style="padding: 40px; background-color: #E9ECFF; margin-top: 50px; margin-bottom: -60px;">
-                        <div style=" margin: auto;" class="container">
-                            <h2 style="text-align: ; margin-bottom: 20px;">Curriculum</h2>
-                            <p style="text-align: ; margin-bottom: 40px;">6 Sections • 202 Lectures</p>
+                    @if (!is_null($course->curriculum))
+                        @php
+                            $decodedCurriculum = json_decode($course->curriculum, true);
+                        @endphp
 
-                            <div style="background-color: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                        <section style="padding: 40px; background: #E9ECFF; margin-top: 60px;">
+                            <div class="container mx-auto">
+                                <h3 style="margin-bottom: 15px; color: black; font-size: 2.5rem; font-weight: 700; text-align: ;">Course Curriculum</h3>
+                                <p style="margin-bottom: 40px;  font-size: 1.1rem;">
+                                    {{ count($decodedCurriculum) }} Sections •
+                                    {{ collect($decodedCurriculum)->reduce(fn($carry, $item) => $carry + count($item['points']), 0) }} Lectures
+                                </p>
 
-                                @php
-                                    $curriculumData = [
-                                        [
-                                            'title' => 'Getting Started',
-                                            'color' => '#FFC000',
-                                            'lectures' => [
-                                                'What is Webflow?',
-                                                'Sign up in Webflow',
-                                                'Webflow Terms & Conditions',
-                                                'Teaser of Webflow',
-                                                'Practice Project',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Secret of Good Design',
-                                            'color' => '#FF5733',
-                                            'lectures' => [
-                                                'Practice Design Like an Artist',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Web Development (Webflow)',
-                                            'color' => '#28A745',
-                                            'lectures' => [
-                                                'Full Web Development Training using Webflow',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Secrets of Making Money Freelancing',
-                                            'color' => '#FFC107',
-                                            'lectures' => [
-                                                'Learn how to monetize your web design skills',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Advanced',
-                                            'color' => '#6610f2',
-                                            'lectures' => [
-                                                'Advanced Tips & Strategies for Professionals',
-                                            ],
-                                        ],
-                                        [
-                                            'title' => 'Course Outline',
-                                            'color' => '#E83E8C',
-                                            'lectures' => [
-                                                'Master creating websites that adapt seamlessly to all screen sizes.',
-                                                'Learn websockets and real-time communication for live updates.',
-                                                'Understand frontend frameworks like React and Vue.js.',
-                                                'Deploy frontend applications to various hosting platforms.',
-                                                'Communicate with server-side APIs to fetch and display data.',
-                                                'Follow coding standards, conventions, and code review processes.',
-                                                'Enhance website performance and user experience.',
-                                                'Prepare for frontend engineering job interviews and build a strong portfolio.',
-                                            ],
-                                        ],
-                                    ];
-                                @endphp
-
-                                @foreach ($curriculumData as $index => $section)
-                                    <div style="margin-bottom: 20px;">
-                                        <h3 onclick="toggleSection(this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                                            <span>{{ $section['title'] }}</span>
-                                            <span style="display: flex; align-items: center; gap: 5px;">
-                            <i class="fa fa-play" style="color: #FFC000; border-radius: 100%; border: 1px solid   #FFC000;"></i>
-                            <small>({{ count($section['lectures']) }})</small>
-                        </span>
-                                        </h3>
-                                        <ul style="display: none; padding-left: 20px; margin-top: 10px;">
-                                            @foreach ($section['lectures'] as $i => $lecture)
-                                                <li>{{ $i + 1 }}. {{ $lecture }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endforeach
-
-
-                            </div>
-                            <div style="margin-top: 20px;">
-                                <h3>Course Outline</h3>
-                                <div>
-                                    @php
-                                        $courseOutline = [
-                                            'Master the art of creating websites that adapt seamlessly to different screen sizes and devices, ensuring an optimal user experience.',
-                                            'Learn about websockets and real-time communication to enable live updates and interactivity in your applications.',
-                                            'Gain insights into popular frontend frameworks like React and Vue.js, enabling you to build robust and interactive web applications.',
-                                            'Successfully deploy frontend applications to various hosting platforms and understand the deployment process.',
-                                            'Learn how to communicate with server-side APIs to fetch and display data on your web applications.',
-                                            'Acquire insights into industry standards, coding conventions, and code review processes to ensure code quality and collaboration.',
-                                            'Explore techniques to enhance website performance, reduce loading times, and improve user experience.',
-                                            'Prepare for frontend engineering job interviews by honing your skills and building a strong portfolio of projects.',
-                                        ];
-                                    @endphp
-
-                                    @foreach ($courseOutline as $index => $point)
-                                        <p>{{ $index + 1 }}. {{ $point }}</p>
+                                <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); backdrop-filter: blur(10px);">
+                                    @foreach ($decodedCurriculum as $index => $section)
+                                        <div style="margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; transition: all 0.3s ease;">
+                                            <h3 onclick="toggleSection(this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 20px; margin: 0; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); font-size: 1.2rem; font-weight: 600; color: #334155; transition: all 0.3s ease;">
+                                                <span>{{ $section['title'] }}</span>
+                                                <span style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 30px; height: 30px; background: #FFC000; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                                    <i class="fa fa-play" style="color: white; font-size: 12px; margin-left: 2px;"></i>
+                                </div>
+                                <small style="color: #64748b; font-weight: 500;">{{ count($section['points']) }} lectures</small>
+                                <i class="fa fa-chevron-down" style="color: #94a3b8; transition: transform 0.3s ease;"></i>
+                            </span>
+                                            </h3>
+                                            <ul style="display: none; padding: 0; margin: 0; background: #fefefe;">
+                                                @foreach ($section['points'] as $i => $point)
+                                                    <li style="padding: 15px 25px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; transition: all 0.2s ease;">
+                                                        <span style="width: 25px; height: 25px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #64748b;">{{ $i + 1 }}</span>
+                                                        <span style="color: #475569; line-height: 1.5;">{{ $point }}</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
+                        </section>
 
-                        </div>
-
-                    </section>
-
-                    {{-- Toggle Script --}}
-                    <script>
-                        function toggleSection(header) {
-                            const ul = header.nextElementSibling;
-                            const icon = header.querySelector('.fa');
-
-                            if (ul.style.display === "none" || ul.style.display === "") {
-                                ul.style.display = "block";
-                                icon.classList.remove('fa-play');
-                                icon.classList.add('fa-chevron-down');
-                            } else {
-                                ul.style.display = "none";
-                                icon.classList.remove('fa-chevron-down');
-                                icon.classList.add('fa-play');
+                        <style>
+                            .curriculum-section h3:hover {
+                                background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+                                transform: translateY(-1px);
                             }
-                        }
-                    </script>
+
+                            .curriculum-section li:hover {
+                                background: #f8fafc !important;
+                            }
+
+                            .curriculum-section li:last-child {
+                                border-bottom: none !important;
+                            }
+
+                            .curriculum-section .expanded .fa-chevron-down {
+                                transform: rotate(180deg);
+                            }
+
+                            .curriculum-section .expanded .fa-play {
+                                animation: pulse 1s infinite;
+                            }
+
+                            @keyframes pulse {
+                                0% { transform: scale(1); }
+                                50% { transform: scale(1.1); }
+                                100% { transform: scale(1); }
+                            }
+                        </style>
+
+                        <script>
+                            function toggleSection(header) {
+                                const ul = header.nextElementSibling;
+                                const chevron = header.querySelector('.fa-chevron-down');
+                                const section = header.parentElement;
+
+                                if (ul.style.display === 'none' || ul.style.display === '') {
+                                    ul.style.display = 'block';
+                                    section.classList.add('expanded');
+                                    chevron.style.transform = 'rotate(180deg)';
+                                } else {
+                                    ul.style.display = 'none';
+                                    section.classList.remove('expanded');
+                                    chevron.style.transform = 'rotate(0deg)';
+                                }
+                            }
+                        </script>
+                    @endif
 
                 </div>
             </div>
         </div>
 
         <!-- Enroll Modal -->
+{{--        <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">--}}
+{{--            <div class="modal-dialog">--}}
+{{--                <div class="modal-content border-0 shadow-lg rounded-4">--}}
+{{--                    <div class="modal-header border-0 pb-0">--}}
+{{--                        <h1 class="modal-title fs-4 fw-bold" id="enrollModalLabel">Enroll Now</h1>--}}
+{{--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-body">--}}
+{{--                        <div class=" p-4 rounded-3 mb-4 text-center fw-semibold" style="background-color: #E9ECFF;">--}}
+{{--                            Web Development (Frontend)--}}
+{{--                        </div>--}}
+{{--                        <form>--}}
+
+{{--                            <div class="mb-3">--}}
+{{--                                <label for="paymentMethod" class="form-label fw-semibold">Select Payment Method</label>--}}
+{{--                                <select class="form-select rounded-3" id="paymentMethod">--}}
+{{--                                    <option value="">-- Choose Payment Method --</option>--}}
+{{--                                    <option value="card">Card</option>--}}
+{{--                                    <option value="bank_transfer">Bank Transfer</option>--}}
+{{--                                    <option value="cash">Cash</option>--}}
+{{--                                    <option value="paypal">PayPal</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                            <div class="mb-3">--}}
+{{--                                <label for="paymentType" class="form-label fw-semibold">Select Payment Type</label>--}}
+{{--                                <select class="form-select rounded-3" id="paymentType">--}}
+{{--                                    <option value="">-- Choose Payment Type --</option>--}}
+{{--                                    <option value="full">Full Payment</option>--}}
+{{--                                    <option value="installment">Installment</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                            <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 fw-semibold">Submit Enrollment</button>--}}
+{{--                        </form>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+
+        @php
+            $installmentPercent = 40;
+            $installmentAmount = round($course->price * $installmentPercent / 100, 2);
+            $formattedFullPrice = '₦' . number_format($course->price);
+            $formattedInstallment = '₦' . number_format($installmentAmount);
+        @endphp
+
         <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content border-0 shadow-lg rounded-4">
@@ -743,36 +681,80 @@
                         <h1 class="modal-title fs-4 fw-bold" id="enrollModalLabel">Enroll Now</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
-                        <div class=" p-4 rounded-3 mb-4 text-center fw-semibold" style="background-color: #E9ECFF;">
-                            Web Development (Frontend)
+                        <div class="p-4 rounded-3 mb-4 text-center fw-semibold" style="background-color: #E9ECFF;">
+                            {{ $course->title }}
                         </div>
-                        <form>
+
+                        <form method="POST" action="{{ route('pay') }}">
+                            @csrf
+
+                            <input type="hidden" name="course_id" value="{{ $course->id }}">
 
                             <div class="mb-3">
                                 <label for="paymentMethod" class="form-label fw-semibold">Select Payment Method</label>
-                                <select class="form-select rounded-3" id="paymentMethod">
-                                    <option value="">-- Choose Payment Method --</option>
-                                    <option value="card">Card</option>
-                                    <option value="bank_transfer">Bank Transfer</option>
-                                    <option value="cash">Cash</option>
-                                    <option value="paypal">PayPal</option>
+                                <select name="payment" required class="form-control" id="paymentSelect">
+                                    <option value="">Select Payment option</option>
+                                    <option value="paystack">Naira Payment (#)</option>
+                                    <option value="stripe">International Payment</option>
+                                    <option value="bank_transfer">International Bank Transfer</option>
                                 </select>
+
                             </div>
+
                             <div class="mb-3">
                                 <label for="paymentType" class="form-label fw-semibold">Select Payment Type</label>
-                                <select class="form-select rounded-3" id="paymentType">
+                                <select class="form-select rounded-3" id="paymentType" name="payment_type" required>
                                     <option value="">-- Choose Payment Type --</option>
-                                    <option value="full">Full Payment</option>
-                                    <option value="installment">Installment</option>
+                                    <option value="installment">Installment ({{ $formattedInstallment }} upfront)</option>
+                                    <option value="full">Full Payment ({{ $formattedFullPrice }})</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 rounded-3 py-2 fw-semibold">Submit Enrollment</button>
+                            <input type="hidden" name="cohort_id"
+                                   value="{{$cohort_name != NULL ? $cohort_name->id : 1 }}"/>
+                            @if(Auth::check())
+                                <input type="hidden" name="user_email" value="{{Auth::user()->email}}"/>
+                                @if($course->discount == 0 || $course->discount == null)
+                                    @if($check_user_has_coupon)
+                                        <input type="hidden" name="amount"
+                                               value="{{$course->price - ($course->price * $coupon_check->discount /100)}}"/>
+                                    @else
+                                        <input type="hidden" name="amount" value="{{$course->price}}"/>
+                                    @endif
+
+                                @else
+                                    @if($check_user_has_coupon)
+                                        <input type="hidden" name="amount"
+                                               value="{{$course->price - ($course->price * $course->discount/100) - ($course->price * $coupon_check->discount /100)}}"/>
+                                    @else
+                                        <input type="hidden" name="amount"
+                                               value="{{$course->price - ($course->price * $course->discount/100)}}"/>
+                                    @endif
+
+                                @endif
+
+                                @if($has_pending)
+                                    <button id="myBtn" type="button"
+                                            class="btn cta-btn radius-xl text-uppercase">You Already
+                                        Registered for a course.
+                                    </button>
+                                @else
+                                    <button id="myBtn" type="submit"
+                                            class="btn  cta-btn radius-xl text-uppercase">Enroll
+                                    </button>
+                                @endif
+                            @else
+                                <a href="{{route('login')}}"
+                                   class="btn cta-btn  radius-xl text-uppercase">Enroll</a>
+                            @endif
+
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
 
 
@@ -784,53 +766,25 @@
             </div>
             <div class="course-list row g-4">
                 <?php
-                $courses = [
-                    [
-                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSLTTbwYtmozuV9DOL8N0iYvU-37x2fm1TVA&s',
-                        'category' => 'Web Development',
-                        'title' => 'Frontend Development',
-                        'description' => 'This immersive program covers front-end development, equipping you with the skills needed to create stunning and interactive websites and web applications.',
-                        'weeks' => '4 Weeks',
-                        'level' => 'Beginner',
-                    ],
-                    [
-                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSLTTbwYtmozuV9DOL8N0iYvU-37x2fm1TVA&s',
-                        'category' => 'Data Science',
-                        'title' => 'Data Analytics',
-                        'description' => 'Learn how to work with data, analyze patterns, and make decisions using real-world datasets and powerful tools like Python and SQL.',
-                        'weeks' => '6 Weeks',
-                        'level' => 'Intermediate',
-                    ],
-                    [
-                        'image' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSLTTbwYtmozuV9DOL8N0iYvU-37x2fm1TVA&s',
-                        'category' => 'Cybersecurity',
-                        'title' => 'Ethical Hacking',
-                        'description' => 'Master the skills needed to protect systems and networks from cyber attacks with hands-on ethical hacking training.',
-                        'weeks' => '8 Weeks',
-                        'level' => 'Advanced',
-                    ]
-                    // Add more courses if needed
-                ];
-
-                $colors = ['#E9ECFF']; // alternating background colors
+                $colors = ['#E9ECFF', '#FFF3CF']; // alternating background colors
 
                 foreach ($courses as $index => $course) {
                     $colorIndex = floor($index / 2) % count($colors);
                     $bgColor = $colors[$colorIndex];
                     ?>
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <div style="background-color: <?php echo $bgColor; ?>;" class="course-card p-3 shadow-sm rounded-4 position-relative">
                         <div class="course-image position-relative">
-                            <img src="<?php echo $course['image']; ?>" alt="Course Image" class="img-fluid rounded-3">
-                            <span style="background-color: #FFC000; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 14px;"><?php echo $course['category']; ?></span>
+                            <img src=" {{asset($course['image'])}}" alt="Course Image" class="img-fluid rounded-3">
+                            <span style="background-color: #FFC000; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 14px;">{{ optional($course->cat)->name }}</span>
                         </div>
                         <h3 class="mt-3"><?php echo $course['title']; ?></h3>
                         <p class="text-muted"><?php echo $course['description']; ?></p>
                         <div class="mb-3">
-                            <span style="padding: 5px 10px; background-color: white; border-radius: 10px; font-size: 14px;"><?php echo $course['weeks']; ?></span>
+                            <span style="padding: 5px 10px; background-color: white; border-radius: 10px; font-size: 14px;"><?php echo $course['duration']; ?> Weeks</span>
                             <span style="background-color: #FFF0DC; color: #FF9500; padding: 5px 10px; border-radius: 10px; font-size: 14px;"><?php echo $course['level']; ?></span>
                         </div>
-                        <a href="{{route('course.detail', "hello")}}" style="background-color: #0E2293; border: none;" class="btn btn-primary btn-lg fw-bold">Start Learning</a>
+                        <a href="{{route('course.detail', $course->course_url)}}" style="background-color: #0E2293; border: none;" class="btn btn-primary btn-lg fw-bold">Start Learning</a>
                     </div>
                 </div>
                     <?php

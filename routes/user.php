@@ -47,6 +47,28 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
     Route::get('/user/badge', 'user_badge')->name('user.badge');
     Route::get('/user/leaderboard', 'user_leaderboard')->name('user.leaderboard');
     Route::get('/user/certificates', 'user_certificates')->name('user.certificates');
+
+
+
+
+
 });
+
+Route::middleware(['auth'])->controller(PaymentController::class)->group(function () {
+    Route::post('/pay', 'makePayment')->name('pay');
+    Route::get('/payment/callback/paystack', 'paymentCallbackPaystack')->name('pay.callback.paystack');
+    Route::get('/payment/callback/stripe/success', 'paymentcallbackstripesuccess')->name('pay.callback.stripe.success');
+    Route::get('/payment/callback/stripe/cancel', 'paymentCallbackStripeFailed')->name('pay.callback.stripe.failed');
+
+    Route::get('/payment/callback/stripe/success/complete', 'user_complete_callback_stripe_complete')->name('pay.callback.stripe.success.complete');
+
+    Route::get('/admin/transactions/all', 'transactions')->name('transaction.all');
+    Route::post('/admin/fix/payment/{id}', 'admin_fix_payment')->name('admin.fix.payment');
+    Route::get('/user/transactions/all', 'transactions_user')->name('transaction.user.all');
+    Route::post('/payment/conplete/{id}', 'user_complete')->name('user.complete.payment');
+    Route::post('/payment/resolution/{id}', 'payment_resolution')->name('payment.resolution');
+    Route::get('/payment/callback/user', 'user_complete_callback')->name('pay.callback.user.complete');
+});
+
 
 
