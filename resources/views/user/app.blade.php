@@ -226,8 +226,8 @@
         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
     </a>
     <ul class="pc-submenu">
-        <li class="pc-item"><a class="pc-link" href="{{ route('project.user.view') }}"><i class="fas fa-comments me-2"></i>Forums</a></li>
-        <li class="pc-item"><a class="pc-link" href="{{ route('project.submitted.user') }}"><i class="fas fa-question-circle me-2"></i>Q & A</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('forum') }}"><i class="fas fa-comments me-2"></i>Forums</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('q.a') }}"><i class="fas fa-question-circle me-2"></i>Q & A</a></li>
     </ul>
 </li>
 
@@ -246,12 +246,12 @@
 </li>
 
 
-<li class="pc-item">
+{{-- <li class="pc-item">
     <a href="{{ route('notification.view') }}" class="pc-link">
         <span class="pc-micon"><i class="fa fa-bell"></i></span>
         <span class="pc-mtext">Notifications</span>
     </a>
-</li>
+</li> --}}
 
 <li class="pc-item">
     <a href="{{ route('user.github') }}" class="pc-link">

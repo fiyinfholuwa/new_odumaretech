@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExportController;
@@ -8,7 +8,9 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\InnovationController;
 use App\Http\Controllers\MasterClassController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -69,6 +71,28 @@ Route::middleware(['auth'])->controller(PaymentController::class)->group(functio
     Route::post('/payment/resolution/{id}', 'payment_resolution')->name('payment.resolution');
     Route::get('/payment/callback/user', 'user_complete_callback')->name('pay.callback.user.complete');
 });
+Route::middleware(['auth'])->controller(CommunityController::class)->group(function () {
+    Route::get('/forum', 'forum')->name('forum');
+    Route::post('/threads', 'store')->name('threads.store');
+    Route::post('/delete/threads/{id}',  'destroy')->name('threads.destroy');
+
+    Route::get('/threads/{id}', 'show')->name('threads.show');
+    Route::post('/threads/{id}/reply','reply')->name('threads.reply');
+    Route::post('/replies/{id}/helpful','markHelpful')->name('replies.helpful');
 
 
+    Route::get('/q&a', 'q_a')->name('q.a');
+    Route::post('/add/questions', 'storeQuestion')->name('question.store');
+    Route::post('/threads', 'store')->name('threads.store');
+    Route::post('/delete/threads/{id}',  'destroy')->name('threads.destroy');
+
+    Route::get('/question/{id}', 'q_a_detail')->name('question.show');
+    Route::post('/threads/{id}/reply','reply')->name('threads.reply');
+    Route::post('/replies/{id}/helpful','markHelpful')->name('replies.helpful');
+});
+
+
+Route::middleware('auth')->group(function () {
+    
+});
 
