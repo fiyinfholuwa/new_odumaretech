@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use GeoIP;
 
 if (!function_exists('getConvertedAfricanCurrencies')) {
     function getConvertedAfricanCurrencies($amount = 10): array
@@ -42,16 +43,18 @@ if (!function_exists('getUserCountryCode')) {
         $ip = $ip ?? request()->header('X-Forwarded-For') ?? request()->ip();
 
         if (app()->environment('local') && ($ip === '127.0.0.1' || $ip === '::1')) {
-            $ip = '102.89.32.1'; // Nigerian IP
+            $ip = '102.89.32.1'; // Default Nigerian IP for local testing
         }
 
-        $response = Http::get("http://ip-api.com/json/{$ip}");
-
-        return ($response->successful() && isset($response['countryCode']))
-            ? $response['countryCode']
-            : null;
+        try {
+            $location = geoip()->getLocation($ip);
+            return $location->iso_code ?? null; // Returns e.g., "NG", "GH", etc.
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }
+
 
 if (!function_exists('getUserLocalCurrencyConversion')) {
     function getUserLocalCurrencyConversion($amount = 10, $currencyCodeOverride = null): array
