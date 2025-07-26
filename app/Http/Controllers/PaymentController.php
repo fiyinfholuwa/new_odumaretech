@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Payment;
-use App\Models\Course;
 use App\Models\AppliedCourse;
-use App\Models\User;
 use App\Models\CohortCourse;
+use App\Models\Course;
 use App\Models\DollarRate;
+use App\Models\Payment;
+use App\Models\ReferralBonusHistory;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 
 
@@ -617,7 +618,11 @@ public function create_payment_flutterwave(
                     ]);
     
                     $get_payment_details = Payment::where('referenceId', $referenceId)->first();
-    
+                    
+                    if($get_payment_details->payment_type ==='full'){
+                        self::give_bonus($get_payment_details->course_id);
+                    }
+                    
                     $applied_course = new AppliedCourse;
                     $applied_course->user_id = Auth::id();
                     $applied_course->course_id = $get_payment_details->course_id;
@@ -643,6 +648,42 @@ public function create_payment_flutterwave(
     }
     
 
+
+    public static function give_bonus($course_id)
+    {
+        $course_info = Course::find($course_id);
+        if (!$course_info) {
+            return false;
+        }
+    
+        $amount = $course_info->price * 0.02;
+        $user = Auth::user();
+    
+        $referrer = User::where('referral_code', $user->referred_by)->first();
+    
+        if ($referrer) {
+            // Increment referrer bonus balance
+            $referrer->increment('referral_bonus', $amount);
+
+            $formattedAmount = number_format($amount, 2);
+
+            $message = "You earned \${$formattedAmount} because {$user->name} purchased the course {$course_info->title}.";
+    
+            ReferralBonusHistory::create([
+                'referrer_id'      => $referrer->id,
+                'referred_user_id' => $user->id,
+                'course_id'        => $course_id,
+                'bonus_amount'     => $amount,
+                'message'          => $message,
+            ]);
+    
+            return true;
+        }
+    
+        return false;
+    }
+    
+ 
 
     public function paymentCallbackPaystack()
     {

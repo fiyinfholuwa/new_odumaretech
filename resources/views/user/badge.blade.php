@@ -3,62 +3,8 @@
 @section('content')
 
 <?php
-$achievements = [
-    [
-        'title' => 'First Course Completed',
-        'description' => 'Completed your first course',
-        'earned' => true,
-        'date' => '12/10/2023',
-        'color' => 'primary',
-        'icon' => 'graduation-cap',
-        'points' => 100
-    ],
-    [
-        'title' => 'Coding Expert',
-        'description' => 'Completed 5 programming courses',
-        'earned' => true,
-        'date' => '12/10/2023',
-        'color' => 'warning',
-        'icon' => 'code',
-        'points' => 500
-    ],
-    [
-        'title' => 'Persistent Learner',
-        'description' => 'Logged in for 30 consecutive days',
-        'earned' => false,
-        'progress' => 54,
-        'color' => 'primary',
-        'icon' => 'calendar-check',
-        'points' => 300,
-        'current' => 16,
-        'target' => 30
-    ],
-    [
-        'title' => 'Knowledge Seeker',
-        'description' => 'Complete 10 different courses',
-        'earned' => false,
-        'progress' => 30,
-        'color' => 'info',
-        'icon' => 'book',
-        'points' => 750,
-        'current' => 3,
-        'target' => 10
-    ],
-    [
-        'title' => 'Speed Demon',
-        'description' => 'Complete a course in under 24 hours',
-        'earned' => false,
-        'progress' => 0,
-        'color' => 'danger',
-        'icon' => 'lightning-bolt',
-        'points' => 200,
-        'current' => 0,
-        'target' => 1
-    ]
-];
 
-$totalEarned = count(array_filter($achievements, fn($a) => $a['earned']));
-$totalPoints = array_sum(array_column(array_filter($achievements, fn($a) => $a['earned']), 'points'));
+
 ?>
 
 <style>

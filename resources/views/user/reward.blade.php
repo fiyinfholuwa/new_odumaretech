@@ -6,22 +6,14 @@
 
 // data.php
 $referralStats = [
-    'total_referrals' => count($rewards),
+    'total_referrals' => $reward_count,
     'total_earnings' => $balance,
     'min_payout' => 50,
     'available_earnings' => $balance,
-    'processing_fee' => 0,
+    'processing_fee' => 20,
 ];
 
-$referrals = [
-    [
-        'id' => 'odumaretech338920',
-        'name' => 'Alex Johnson',
-        'course' => 'Advanced JavaScript',
-        'earnings' => 25,
-        'status' => 'Completed'
-    ]
-];
+
 ?>
 
 <style>
@@ -257,7 +249,9 @@ $referrals = [
                             </div>
                             <div>
                                 <h6 class="mb-1 opacity-90">Total Earnings</h6>
-                                <div class="stats-number  bgc-secondary-text">$<?= $referralStats['total_earnings'] ?></div>
+<div class="stats-number bgc-secondary-text">
+    $<?= number_format($referralStats['total_earnings'], 2) ?>
+</div>
                             </div>
                         </div>
                     </div>
@@ -276,9 +270,10 @@ $referrals = [
                         </h5>
                         <div class="input-group">
                             <input type="text" id="refLink" class="form-control border-0 bg-white"
-                                   value="https://odumaretech.com/register?ref={{ Auth::user()->referral_code }}"
-                                   readonly
-                                   style="border-radius: 8px 0 0 8px; font-family: monospace;">
+       value="{{ route('register') }}?ref={{ Auth::user()->referral_code }}"
+       readonly
+       style="border-radius: 8px 0 0 8px; font-family: monospace;">
+
                             <button onclick="copyLink()" class="btn btn-primary text-white px-4" style="border-radius: 0 8px 8px 0;">
                                 <i class="fas fa-copy me-2"></i>Copy Link
                             </button>
@@ -286,11 +281,11 @@ $referrals = [
                     </div>
 
                     <!-- Toast -->
-                    <div id="copyToast" class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-4"
+                    <div id="copyToast" class="toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-4"
                          role="alert" aria-live="assertive" aria-atomic="true" style="z-index: 1055;">
                         <div class="d-flex">
                             <div class="toast-body">
-                                ✅ Referral link copied to clipboard!
+                                Referral link copied to clipboard!
                             </div>
                             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
                                     aria-label="Close"></button>
@@ -362,42 +357,59 @@ $referrals = [
                     </div>
 
                     <div class="table-responsive">
-                        <table  id="my-table" class="referrals-table table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-{{--                                    <th>Course</th>--}}
-                                    <th>Earnings</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($rewards as $ref): ?>
-                                    <tr>
+                        <table id="my-table" class="referrals-table table table-hover mb-0">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Earnings</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($rewards as $entry)
+            <tr>
+                {{-- Referred User Name --}}
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
+                             style="width: 32px; height: 32px; font-size: 0.8rem; color: white;">
+                            {{ strtoupper(substr($entry->referredUser->name ?? 'N', 0, 1)) }}
+                        </div>
+                        <span class="fw-medium">{{ $entry->referredUser->name ?? 'N/A' }}</span>
+                    </div>
+                </td>
 
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
-                                                     style="width: 32px; height: 32px; font-size: 0.8rem; color: white;">
-                                                    <?= strtoupper(substr($ref['name'], 0, 1)) ?>
-                                                </div>
-                                                <span class="fw-medium"><?= $ref['name'] ?></span>
-                                            </div>
-                                        </td>
+                {{-- Course --}}
+                <td>{{ $entry->course->title ?? 'N/A' }}</td>
 
-                                        <td>
-                                            <span class="earnings-highlight">$0<?= $ref['earnings'] ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="status-badge bg-success text-white">
-                                                <i class="fas fa-check-circle me-1"></i>
-                                                <?= $ref['status'] ?>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+                {{-- Earnings --}}
+                <td>
+                    <span class="earnings-highlight text-white fw-bold">
+                        ${{ number_format($entry->bonus_amount, 2) }}
+                    </span>
+                </td>
+
+                {{-- Message --}}
+                <td>{{ $entry->message }}</td>
+
+                {{-- Date --}}
+                <td>{{ $entry->created_at->format('M d, Y') }}</td>
+
+                {{-- Status --}}
+                <td>
+                    <span class="status-badge {{ $entry->bonus_amount > 0 ? 'bg-success' : 'bg-danger' }} text-white">
+                        <i class="fas {{ $entry->bonus_amount > 0 ? 'fa-check-circle' : 'fa-times-circle' }} me-1"></i>
+                        {{ $entry->bonus_amount > 0 ? 'Credited' : 'Pending' }}
+                    </span>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
                     </div>
 
                 </div>
@@ -406,68 +418,121 @@ $referrals = [
     </div>
 </div>
 
-<!-- Enhanced Modal -->
 <div class="modal fade" id="payoutModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content">
+        <form class="modal-content" action="{{ route('user.payout.request') }}" method="POST">
+            @csrf
             <div class="modal-header bgc-primary">
-                <h5   class="modal-title bgc-primary-text">
-                    <i class="fas fa-money-bill-wave me-2"></i>
-                    Request Payout
+                <h5 class="modal-title bgc-primary-text">
+                    <i class="fas fa-money-bill-wave me-2"></i> Request Payout
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body p-4">
+                {{-- ✅ Earnings Summary --}}
                 <div class="row mb-4">
                     <div class="col-md-4">
                         <div class="text-center p-3 bg-light rounded">
                             <h6 class="text-muted mb-1">Available</h6>
-                            <h4 class="text-success mb-0">$<?= $referralStats['available_earnings'] ?></h4>
+                            <h4 class="text-success mb-0">${{ $referralStats['available_earnings'] }}</h4>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="text-center p-3 bg-light rounded">
                             <h6 class="text-muted mb-1">Processing Fee</h6>
-                            <h4 class="text-warning mb-0">$<?= $referralStats['processing_fee'] ?></h4>
+                            <h4 class="text-warning mb-0">${{ $referralStats['processing_fee'] }}</h4>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="text-center p-3 bg-primary text-white rounded">
                             <h6 class="opacity-90 mb-1">Total Payout</h6>
-                            <h4 class="mb-0">$<?= $referralStats['available_earnings'] - $referralStats['processing_fee'] ?></h4>
+                            <h4 class="mb-0 text-white">${{ $referralStats['available_earnings'] - $referralStats['processing_fee'] }}</h4>
                         </div>
                     </div>
                 </div>
 
-                <h6 class="mb-3 fw-bold">
-                    <i class="fas fa-credit-card me-2 text-primary"></i>
-                    Payout Method
-                </h6>
-                <div class="p-3 border rounded">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" checked name="payoutMethod" id="bankTransfer">
-                        <label class="form-check-label fw-medium" for="bankTransfer">
-                            <i class="fas fa-university me-2 text-primary"></i>
-                            Bank Transfer
-                            <small class="text-muted d-block">3–5 business days</small>
-                        </label>
+@php
+        $bankInfo = json_decode(Auth::user()->bank_info, true) ?? [];
+
+@endphp
+                {{-- ✅ Bank Info Section --}}
+                @if(!empty($bankInfo))
+                    <div class="p-3 border rounded mb-3 bg-light">
+                        <h6 class="fw-bold mb-2">
+                            <i class="fas fa-university text-primary me-2"></i>Your Bank Details
+                        </h6>
+                        <p class="mb-1"><strong>Bank:</strong> {{ $bankInfo['bank_name'] ?? 'N/A' }}</p>
+                        <p class="mb-1"><strong>Account:</strong> {{ $bankInfo['account_number'] ?? 'N/A' }}</p>
+                        <p class="mb-1"><strong>SWIFT:</strong> {{ $bankInfo['swift_code'] ?? 'N/A' }}</p>
+                        <p class="mb-3"><strong>Country:</strong> {{ $bankInfo['country'] ?? 'N/A' }}</p>
+
+                        <a href="{{ route('user.password.view') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit me-1"></i> Update Bank Info
+                        </a>
                     </div>
-                </div>
-                <a href="#" class="d-block mt-3 text-primary text-decoration-none">
-                    <i class="fas fa-plus-circle me-1"></i>
-                    Add other payout method
-                </a>
+
+                    {{-- ✅ Amount Field --}}
+                    <div class="form-group mb-3">
+    <label for="amount">Enter Amount to Withdraw</label>
+    <input type="number" step="0.01" min="1" max="{{ $referralStats['available_earnings'] }}" 
+           class="form-control" name="amount" id="amount" placeholder="Enter amount (USD)" required>
+    <small id="amountError" class="text-danger d-none"></small>
+</div>
+
+                @else
+                    {{-- ❌ No Bank Info Saved --}}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle"></i> You must set your bank details before requesting payout.
+                    </div>
+                    <a href="{{ route('user.password.view') }}" class="btn btn-primary w-100">
+                        <i class="fas fa-university me-1"></i> Set Bank Information
+                    </a>
+                @endif
+
             </div>
+
+            {{-- ✅ Footer (Disable if no bank info) --}}
             <div class="modal-footer border-0 p-4">
                 <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary px-4">
-                    <i class="fas fa-paper-plane me-2"></i>
-                    Continue
-                </button>
+                @if(!empty($bankInfo))
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-paper-plane me-2"></i> Request Payout
+                    </button>
+                @endif
             </div>
         </form>
     </div>
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const amountInput = document.getElementById("amount");
+    const amountError = document.getElementById("amountError");
+    const submitBtn = document.querySelector("#payoutModal button[type='submit']");
+    const maxAmount = parseFloat("{{ $referralStats['available_earnings'] - $referralStats['processing_fee'] }}");
+
+    if (amountInput) {
+        amountInput.addEventListener("input", function () {
+            let entered = parseFloat(this.value);
+
+            if (isNaN(entered) || entered < 1) {
+                amountError.textContent = "Amount must be at least $1.";
+                amountError.classList.remove("d-none");
+                submitBtn.disabled = true;
+            } 
+            else if (entered > maxAmount) {
+                amountError.textContent = "You cannot request more than $" + maxAmount.toFixed(2) + ".";
+                amountError.classList.remove("d-none");
+                submitBtn.disabled = true;
+            } 
+            else {
+                amountError.classList.add("d-none");
+                submitBtn.disabled = false;
+            }
+        });
+    }
+});
+</script>
 
 @endsection

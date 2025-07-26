@@ -3,8 +3,8 @@
 @section('content')
 <div class="container-fluid my-3">
     <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0">All Transactions</h4>
+        <div class="card-header bgc-primary d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0 bgc-primary-text">All Transactions</h4>
         </div>
 
         <div class="card-body">
@@ -31,31 +31,31 @@
                             <td>{{ $i + 1 }}</td>
                             <td>{{ $pay->referenceId }}</td>
                             <td>{{ $pay->user_email }}</td>
-                            <td>&#8358;{{ number_format($pay->amount, 2) }}</td>
+                            <td>{{ $pay->currency }}{{ number_format($pay->amount, 2) }}</td>
                             <td>{{ optional($pay->course_name)->title ?? 'N/A' }}</td>
                             <td>{{ $pay->payment }}</td>
                             
                             <td>
                                 @if($pay->admission_status === 'accepted')
-                                    <span class="badge badge-success">Accepted</span>
+                                    <span class="badge bg-success">Accepted</span>
                                 @else
-                                    <span class="badge badge-danger">Locked</span>
+                                    <span class="badge bg-danger">Locked</span>
                                 @endif
                             </td>
 
                             <td>
                                 @if($pay->payment_type === 'full')
-                                    <span class="badge badge-success">Full</span>
+                                    <span class="badge bg-success">Full</span>
                                 @else
-                                    <span class="badge badge-warning text-dark">{{ ucfirst($pay->payment_type) }}</span>
+                                    <span class="badge bg-warning text-dark">{{ ucfirst($pay->payment_type) }}</span>
                                 @endif
                             </td>
 
                             <td>
                                 @if($pay->status === 'paid')
-                                    <span class="badge badge-success text-white">Paid</span>
+                                    <span class="badge bg-success text-white">Paid</span>
                                 @else
-                                    <span class="badge badge-warning text-dark">{{ ucfirst($pay->status) }}</span>
+                                    <span class="badge bg-warning text-dark">{{ ucfirst($pay->status) }}</span>
                                 @endif
                             </td>
 

@@ -240,7 +240,7 @@
     </a>
     <ul class="pc-submenu">
         <li class="pc-item"><a class="pc-link" href="{{ route('user.badge') }}"><i class="fas fa-award me-2"></i>My Badges</a></li>
-        <li class="pc-item"><a class="pc-link" href="{{ route('user.leaderboard') }}"><i class="fas fa-chart-line me-2"></i>LeaderBoard</a></li>
+        {{-- <li class="pc-item"><a class="pc-link" href="{{ route('user.leaderboard') }}"><i class="fas fa-chart-line me-2"></i>LeaderBoard</a></li> --}}
         <li class="pc-item"><a class="pc-link" href="{{ route('user.certificates') }}"><i class="fas fa-certificate me-2"></i>Certificates</a></li>
     </ul>
 </li>
@@ -279,11 +279,17 @@
         <span class="pc-mtext">Transactions History</span>
     </a>
 </li>
+<li class="pc-item">
+    <a href="{{ route('user.payout') }}" class="pc-link">
+<span class="pc-micon"><i class="fa fa-credit-card"></i></span>
+        <span class="pc-mtext">PayOut History</span>
+    </a>
+</li>
 
 <li class="pc-item">
     <a href="{{ route('user.password.view') }}" class="pc-link">
-        <span class="pc-micon"><i class="fa fa-lock"></i></span>
-        <span class="pc-mtext">Change Password</span>
+        <span class="pc-micon"><i class="fa fa-user"></i></span>
+        <span class="pc-mtext">Profile</span>
     </a>
 </li>
 

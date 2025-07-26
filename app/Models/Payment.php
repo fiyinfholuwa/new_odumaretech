@@ -8,4 +8,9 @@ class Payment extends Model
 {
     protected $guarded = ['id'];
 
+    public function course_name()
+    {
+        return $this->hasOne(Course::class, 'id', 'course_id');
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Achievement;
 use App\Models\AppliedCourse;
 use App\Models\Assignment;
 use App\Models\Course;
@@ -9,15 +10,18 @@ use App\Models\FinalProject;
 use App\Models\GitHubLink;
 use App\Models\InstructorNotification;
 use App\Models\LiveSession;
+use App\Models\PayoutRequest;
 use App\Models\RecordLink;
+use App\Models\ReferralBonusHistory;
 use App\Models\Slide;
 use App\Models\SubmitAssignment;
 use App\Models\SubmitProject;
 use App\Models\User;
+// use Illuminate\Support\Facades\Auth;
+use App\Models\UserAchievement;
 use App\Models\UserChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Pdf;
@@ -350,7 +354,10 @@ class UserController extends Controller
 
     }
     public function user_password_view(){
-        return view('user.change_password');
+        $countries = getAllCountries(); // ✅ use global function
+        $user = Auth::user();
+        $bankInfo = $user->bank_info ? json_decode($user->bank_info, true) : [];
+        return view('user.change_password', ['user' => $user, 'bankInfo' => $bankInfo, 'countries' => $countries]);
     }
 
     public function user_password_change(Request $request){
@@ -404,14 +411,68 @@ public function transactions_user()
     }
 
 
-    public function user_reward(){
-        $rewards= User::where('referred_by', '=', Auth::user()->referral_code)->get();
-        $reward_bal= Auth::user()->referral_bonus ?? 0;
-        return view('user.reward', ['rewards'=>  $rewards,  'balance' => $reward_bal]);
-    }
-    public function user_badge(){
-        return view('user.badge');
-    }
+    public function user_reward()
+{
+    $user = Auth::user();
+
+    // Get all users referred by the logged-in user
+    $reward_count = User::where('referred_by', $user->referral_code)->count();
+
+    // Get the user's current referral bonus balance
+    $reward_bal = $user->referral_bonus ?? 0;
+
+    // Get referral bonus history with related details
+    $history = ReferralBonusHistory::where('referrer_id', $user->id)
+                ->with(['referredUser', 'course'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+    // Pass everything to the view
+    return view('user.reward', [
+        'rewards' => $history,
+        'reward_count' => $reward_count,
+        'balance' => $reward_bal,
+    ]);
+}
+
+public function user_badge()
+{
+    $userId = Auth::id();
+
+    // Fetch all achievements and user progress (including locked ones)
+    $achievements = Achievement::leftJoin('user_achievements', function ($join) use ($userId) {
+            $join->on('achievements.id', '=', 'user_achievements.achievement_id')
+                 ->where('user_achievements.user_id', '=', $userId);
+        })
+        ->select(
+            'achievements.id',
+            'achievements.code',
+            'achievements.title',
+            'achievements.description',
+            'achievements.color',
+            'achievements.icon',
+            'achievements.points',
+            'achievements.target',
+            'user_achievements.earned',
+            'user_achievements.progress',
+            'user_achievements.current',
+            'user_achievements.earned_at'
+        )
+        ->get();
+
+    // Calculate totals
+    $totalEarned   = $achievements->where('earned', 1)->count();
+    $totalPoints   = $achievements->where('earned', 1)->sum('points');
+
+
+    return view('user.badge', [
+        'achievements' => $achievements,
+        'user'         => Auth::user(),
+        'totalEarned'  => $totalEarned,
+        'totalPoints'  => $totalPoints,
+    ]);
+}
+
     public function user_leaderboard(){
         return view('user.leaderboard');
     }
@@ -444,5 +505,135 @@ public function transactions_user()
 
             return view('user.certificates', compact('certificates'));
     }
+
+
+    public function updateProfile(Request $request)
+{
+    // ✅ Validate inputs
+    $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name'  => 'required|string|max:255',
+        'phone'      => 'nullable|string|max:20',
+    ]);
+
+    // ✅ Get logged-in user
+    $user = Auth::user();
+
+    // ✅ Update user fields
+    $user->first_name = $request->first_name;
+    $user->last_name  = $request->last_name;
+    $user->phone      = $request->phone;
+
+    // ✅ Save changes
+    $user->save();
+
+    $notification = array(
+        'message' => 'Profile updated successfully.',
+        'alert-type' => 'success'
+    );
+    return redirect()->back()->with($notification);
+}
+
+public function updateBankInfo(Request $request)
+{
+    $request->validate([
+        'bank_name' => 'required|string|max:255',
+        'account_number' => 'required|string|max:255',
+        'swift_code' => 'required|string|max:50',
+        'country' => 'required|string|max:100',
+        'bank_address' => 'nullable|string|max:255',
+    ]);
+
+    $user = Auth::user();
+    $user->bank_info = json_encode($request->only('bank_name','account_number','swift_code','country','bank_address'));
+    $user->save();
+
+    $notification = array(
+        'message' => 'Bank information updated successfully.',
+        'alert-type' => 'success'
+    );
+    return redirect()->back()->with($notification);
+}
+
+
+public function myPayoutRequests()
+{
+    $payouts = PayoutRequest::where('user_id', Auth::id())
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+    return view('user.payout', compact('payouts'));
+}
+
+
+public function requestPayout(Request $request)
+{
+    $request->validate([
+        'amount' => 'required|numeric|min:1',
+    ]);
+
+    $user = Auth::user();
+
+    // ✅ Check if bank info exists
+    if (empty($user->bank_info)) {
+        return back()->with([
+            'message' => 'You must add bank information before requesting payout.',
+            'alert-type' => 'error'
+        ]);
+    }
+
+    $bankInfo = json_decode($user->bank_info, true);
+
+    // ✅ Ensure requested amount <= available bonus
+    if ($request->amount > $user->referral_bonus) {
+        return back()->with([
+            'message' => 'Requested amount exceeds your available earnings.',
+            'alert-type' => 'error'
+        ]);
+    }
+
+    DB::transaction(function () use ($user, $request, $bankInfo) {
+        // ✅ Insert payout request
+        DB::table('payout_requests')->insert([
+            'user_id'   => $user->id,
+            'amount'    => $request->amount,
+            'bank_info' => json_encode($bankInfo),
+            'status'    => 'pending',
+            'created_at'=> now(),
+            'updated_at'=> now(),
+        ]);
+
+        // ✅ Decrement referral bonus
+        $user->decrement('referral_bonus', $request->amount);
+    });
+
+    return back()->with([
+        'message' => 'Your payout request has been submitted successfully.',
+        'alert-type' => 'success'
+    ]);
+}
+
+
+public function updateUserAchievementByCode($userId, $code, $increment = 1)
+{
+    $achievement = Achievement::where('code', $code)->first();
+    if (!$achievement) return;
+
+    $userAchievement = UserAchievement::firstOrCreate(
+        ['user_id' => $userId, 'achievement_id' => $achievement->id],
+        ['current' => 0, 'progress' => 0, 'earned' => false]
+    );
+
+    $userAchievement->current += $increment;
+    $userAchievement->progress = min(100, ($userAchievement->current / $achievement->target) * 100);
+
+    if (!$userAchievement->earned && $userAchievement->current >= $achievement->target) {
+        $userAchievement->earned = true;
+        $userAchievement->earned_at = now();
+        $userAchievement->user->increment('points', $achievement->points);
+    }
+
+    $userAchievement->save();
+}
 
 }

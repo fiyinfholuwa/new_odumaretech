@@ -19,6 +19,7 @@ use App\Models\Innovation;
 use App\Models\Instructor;
 use App\Models\InstructorChat;
 use App\Models\MasterClass;
+use App\Models\PayoutRequest;
 use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -973,5 +974,15 @@ class AdminController extends Controller
         'Content-Disposition' => 'inline; filename="' . basename($filePath) . '"'
     ]);
 }
+
+public function allPayoutRequests()
+{
+    $payouts = PayoutRequest::with('user')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+    return view('admin.payouts', compact('payouts'));
+}
+
 
 }

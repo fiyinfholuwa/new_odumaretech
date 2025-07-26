@@ -35,7 +35,7 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
     Route::get('/user/github/', 'user_github')->name('user.github');
     Route::get('/user/records/view', 'record_user_view')->name('record.user.view');
     Route::get('/user/record/all/{id}/{co}', 'user_record')->name('records.user.all');
-    Route::get('/user/password/view/', 'user_password_view')->name('user.password.view');
+    Route::get('/user/profile/view/', 'user_password_view')->name('user.password.view');
     Route::post('/user/password/change/', 'user_password_change')->name('user.password.change');
     Route::get('/user/transactions/all', 'transactions_user')->name('transaction.user.all');
 
@@ -49,6 +49,13 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
     Route::get('/user/badge', 'user_badge')->name('user.badge');
     Route::get('/user/leaderboard', 'user_leaderboard')->name('user.leaderboard');
     Route::get('/user/certificates', 'user_certificates')->name('user.certificates');
+    Route::get('/user/payout', 'myPayoutRequests')->name('user.payout');
+    Route::post('/user/profile/update', 'updateProfile')->name('user.profile.update');
+    Route::post('/user/bankinfo/update', 'updateBankInfo')->name('user.bankinfo.update');
+
+    Route::post('/user/payout/request','requestPayout')
+        ->name('user.payout.request');
+    
 
 
 
