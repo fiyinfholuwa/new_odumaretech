@@ -36,23 +36,55 @@ if (!function_exists('getConvertedAfricanCurrencies')) {
         });
     }
 }
+if (!function_exists('getUserIPv4')) {
+    function getUserIPv4(): string
+    {
+        // Get the IP from Laravel's request helper
+        $ip = request()->ip();
+
+        // Handle localhost cases by using a default IPv4
+        if (in_array($ip, ['127.0.0.1', '::1'])) {
+            return '102.89.32.1'; // Default to a Nigerian IP for local testing
+        }
+
+        // If it's an IPv6 address, try to resolve to IPv4
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $resolved = gethostbyname($ip);
+            if ($resolved !== $ip) {
+                return $resolved; // Return resolved IPv4
+            }
+        }
+
+        // If it's already a valid IPv4, return as is
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            return $ip;
+        }
+
+        // Fallback to default IPv4 if all else fails
+        return '102.89.32.1';
+    }
+}
+
 
 
 if (!function_exists('getUserCountryCode')) {
     function getUserCountryCode($ip = null): ?string
     {
-        $ip = $ip ?? request()->ip();
-
-        if (app()->environment('local') && in_array($ip, ['127.0.0.1', '::1'])) {
-            $ip = '102.89.32.1'; // Nigerian IP
-        }
+        // $ip = $ip ?? request()->ip();
+        $ip = getUserIPv4();
 
         try {
-            $location = GeoIP::getLocation($ip);
-            return $location->iso_code ?? null;
+        
+            // ✅ Fallback to ipwho.is
+            $fallback = Http::timeout(10)->get("https://ipwho.is/{$ip}");
+            if ($fallback->successful() && ($data = $fallback->json()) && isset($data['country_code'])) {
+
+                return $data['country_code'];
+            }
         } catch (\Exception $e) {
-            return null;
         }
+
+        return null; // Return null if everything fails
     }
 }
 
