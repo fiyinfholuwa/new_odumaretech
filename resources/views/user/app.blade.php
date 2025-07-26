@@ -273,12 +273,12 @@
     </a>
 </li>
 
-{{-- <li class="pc-item">
+<li class="pc-item">
     <a href="{{ route('transaction.user.all') }}" class="pc-link">
         <span class="pc-micon"><i class="fa fa-exchange-alt"></i></span>
         <span class="pc-mtext">Transactions History</span>
     </a>
-</li> --}}
+</li>
 
 <li class="pc-item">
     <a href="{{ route('user.password.view') }}" class="pc-link">

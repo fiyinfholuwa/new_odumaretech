@@ -24,8 +24,14 @@
 
         </div>
 
+
     </section>
 
+<?php
+
+$conversion = getUserLocalCurrencyConversion($course->price);
+
+?>
     @php
         $sections = [
             [
@@ -42,7 +48,7 @@
             ],
             [
                 'details' => [
-                    ['label' => 'Application Fee', 'value' => '#' . $course->price],
+                    ['label' => 'Application Fee', 'value' => $conversion['currency_symbol'] . $conversion['converted_amount']],
                     ['label' => 'Location', 'value' => 'Virtual'],
                 ],
             ],
@@ -269,21 +275,21 @@
 
 
                     @php
-                        $actualPrice = floatval($course->price);
+                        $actualPrice = floatval($conversion['converted_amount']);
                         $installmentPercent = 40;
                         $installmentAmount = round($actualPrice * $installmentPercent / 100, 2);
 
                         $plans = [
                             [
                                 'title' => 'Installment',
-                                'price' => '₦' . number_format($installmentAmount),
+                                'price' => $conversion['currency_symbol'] . number_format($installmentAmount),
                                 'description' => 'Pay ₦' . number_format($installmentAmount) . ' upfront, then weekly until the full ₦' . number_format($actualPrice) . ' is covered.',
                                 'popular' => false,
                                 'background' => '#FFF3CF',
                             ],
                             [
                                 'title' => 'Full Payment',
-                                'price' => '₦' . number_format($actualPrice),
+                                'price' => $conversion['currency_symbol'] . number_format($actualPrice),
                                 'description' => 'Pay once and enjoy full access. Save more with a one-time payment.',
                                 'popular' => true,
                                 'background' => '#E9ECFF',
@@ -361,7 +367,7 @@
                     </section>
 
 
-                    @if(!is_null($course->outcome)))
+                    @if(!is_null($course->outcome))
                     <section style="background-color: #FFF3CF;">
                         <div class="container" style="padding: 30px; margin-top: -40px;">
                             <h3>Career Outcome</h3>
@@ -403,28 +409,27 @@
                 <div class="tab-pane fade" id="cost" role="tabpanel" aria-labelledby="cost-tab">
 
                     @php
-                        $actualPrice = floatval($course->price);
+                        $actualPrice = floatval($conversion['converted_amount']);
                         $installmentPercent = 40;
                         $installmentAmount = round($actualPrice * $installmentPercent / 100, 2);
 
                         $plans = [
                             [
                                 'title' => 'Installment',
-                                'price' => '₦' . number_format($installmentAmount),
+                                'price' => $conversion['currency_symbol'] . number_format($installmentAmount),
                                 'description' => 'Pay ₦' . number_format($installmentAmount) . ' upfront, then weekly until the full ₦' . number_format($actualPrice) . ' is covered.',
                                 'popular' => false,
                                 'background' => '#FFF3CF',
                             ],
                             [
                                 'title' => 'Full Payment',
-                                'price' => '₦' . number_format($actualPrice),
+                                'price' => $conversion['currency_symbol'] . number_format($actualPrice),
                                 'description' => 'Pay once and enjoy full access. Save more with a one-time payment.',
                                 'popular' => true,
                                 'background' => '#E9ECFF',
                             ],
                         ];
                     @endphp
-
                     <section class="py-5" style="background: #f8f9fa; margin-top: 60px;">
                         <div class="container">
                             <h2>Cost</h2>
@@ -667,93 +672,88 @@
 {{--            </div>--}}
 {{--        </div>--}}
 
-        @php
-            $installmentPercent = 40;
-            $installmentAmount = round($course->price * $installmentPercent / 100, 2);
-            $formattedFullPrice = '₦' . number_format($course->price);
-            $formattedInstallment = '₦' . number_format($installmentAmount);
-        @endphp
+      @php
+    $installmentPercent = 40;
 
-        <div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content border-0 shadow-lg rounded-4">
-                    <div class="modal-header border-0 pb-0">
-                        <h1 class="modal-title fs-4 fw-bold" id="enrollModalLabel">Enroll Now</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+    // Start with base price
+    $basePrice = $course->price;
+    $discountedPrice = $basePrice;
 
-                    <div class="modal-body">
-                        <div class="p-4 rounded-3 mb-4 text-center fw-semibold" style="background-color: #E9ECFF;">
-                            {{ $course->title }}
+    // Apply course discount if available
+    if ($course->discount) {
+        $discountedPrice -= $basePrice * ($course->discount / 100);
+    }
+
+    // Apply coupon if the user has one
+    if ($check_user_has_coupon) {
+        $discountedPrice -= $basePrice * ($coupon_check->discount / 100);
+    }
+$discountedPrice = getUserLocalCurrencyConversion($discountedPrice)['converted_amount'];
+
+
+    // Now use converted discounted amount (already done elsewhere)
+    $convertedAmount = floatval($conversion['converted_amount']);
+    $installmentAmount = round($convertedAmount * $installmentPercent / 100, 2);
+
+    // Format
+    $formattedFullPrice = $conversion['currency_symbol'] . number_format($convertedAmount, 2);
+    $formattedInstallment = $conversion['currency_symbol'] . number_format($installmentAmount, 2);
+@endphp
+
+<div class="modal fade" id="enrollModal" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-0 pb-0">
+                <h1 class="modal-title fs-4 fw-bold" id="enrollModalLabel">Enroll Now</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="p-4 rounded-3 mb-4 text-center fw-semibold" style="background-color: #E9ECFF;">
+                    {{ $course->title }}
+                </div>
+
+                <form method="POST" action="{{ route('pay') }}">
+                    @csrf
+                    <input type="hidden" name="course_id" value="{{ $course->id }}">
+                    <input type="hidden" name="cohort_id" value="{{ $cohort_name?->id ?? 1 }}">
+                    <input type="hidden" name="payment" value="flutterwave">
+                    <input type="hidden" name="currency" value="{{ $conversion['currency_code'] }}">
+
+                    @if(Auth::check())
+                        <input type="hidden" name="user_email" value="{{ Auth::user()->email }}">
+                        <input type="hidden" name="amount" value="{{ round($discountedPrice, 2) }}">
+
+                        <div class="mb-3">
+                            <label for="paymentType" class="form-label fw-semibold">Select Payment Type</label>
+                            <select class="form-select rounded-3" id="paymentType" name="payment_type" required>
+                                <option value="">-- Choose Payment Type --</option>
+                                <option value="installment">Installment ({{ $formattedInstallment }} upfront)</option>
+                                <option value="full">Full Payment ({{ $formattedFullPrice }})</option>
+                            </select>
                         </div>
 
-                        <form method="POST" action="{{ route('pay') }}">
-                            @csrf
-
-                            <input type="hidden" name="course_id" value="{{ $course->id }}">
-
-                            <div class="mb-3">
-                                <label for="paymentMethod" class="form-label fw-semibold">Select Payment Method</label>
-                                <select name="payment" required class="form-control" id="paymentSelect">
-                                    <option value="">Select Payment option</option>
-                                    <option value="paystack">Naira Payment (#)</option>
-                                    <option value="stripe">International Payment</option>
-                                    <option value="bank_transfer">International Bank Transfer</option>
-                                </select>
-
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="paymentType" class="form-label fw-semibold">Select Payment Type</label>
-                                <select class="form-select rounded-3" id="paymentType" name="payment_type" required>
-                                    <option value="">-- Choose Payment Type --</option>
-                                    <option value="installment">Installment ({{ $formattedInstallment }} upfront)</option>
-                                    <option value="full">Full Payment ({{ $formattedFullPrice }})</option>
-                                </select>
-                            </div>
-                            <input type="hidden" name="cohort_id"
-                                   value="{{$cohort_name != NULL ? $cohort_name->id : 1 }}"/>
-                            @if(Auth::check())
-                                <input type="hidden" name="user_email" value="{{Auth::user()->email}}"/>
-                                @if($course->discount == 0 || $course->discount == null)
-                                    @if($check_user_has_coupon)
-                                        <input type="hidden" name="amount"
-                                               value="{{$course->price - ($course->price * $coupon_check->discount /100)}}"/>
-                                    @else
-                                        <input type="hidden" name="amount" value="{{$course->price}}"/>
-                                    @endif
-
-                                @else
-                                    @if($check_user_has_coupon)
-                                        <input type="hidden" name="amount"
-                                               value="{{$course->price - ($course->price * $course->discount/100) - ($course->price * $coupon_check->discount /100)}}"/>
-                                    @else
-                                        <input type="hidden" name="amount"
-                                               value="{{$course->price - ($course->price * $course->discount/100)}}"/>
-                                    @endif
-
-                                @endif
-
-                                @if($has_pending)
-                                    <button id="myBtn" type="button"
-                                            class="btn cta-btn radius-xl text-uppercase">You Already
-                                        Registered for a course.
-                                    </button>
-                                @else
-                                    <button id="myBtn" type="submit"
-                                            class="btn  cta-btn radius-xl text-uppercase">Enroll
-                                    </button>
-                                @endif
-                            @else
-                                <a href="{{route('login')}}"
-                                   class="btn cta-btn  radius-xl text-uppercase">Enroll</a>
-                            @endif
-
-                        </form>
-                    </div>
-                </div>
+                        @if($has_pending)
+                            <button type="button" class="btn btn-danger cta-btn radius-xl">
+                                You Already Registered for a Course.
+                            </button>
+                        @else
+                            <button type="submit" class="btn btn-primary cta-btn radius-xl text-uppercase">
+                                Enroll
+                            </button>
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary cta-btn radius-xl text-uppercase">
+                            Enroll
+                        </a>
+                    @endif
+                </form>
             </div>
         </div>
+    </div>
+</div>
+
+
 
     </section>
 

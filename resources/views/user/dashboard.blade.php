@@ -4,13 +4,13 @@
               <?php
 // Demo data for dashboard
 $user_data = [
-    'name' => 'Sarah',
-    'active_courses' => 20,
-    'completed_courses' => 10,
-    'live_sessions' => 24,
-    'resources' => 1204,
-    'assignments' => 23,
-    'submitted_assignments' => 4,
+    'name' => Auth::user()->name,
+    'active_courses' => $active,
+    'completed_courses' => $complete,
+    'live_sessions' => $session,
+    'resources' => $slides,
+    'assignments' => $assignments,
+    'submitted_assignments' => $submitted_assignment,
     'grade' => 75,
     'hours_spent' => [
         'Mon' => 16,

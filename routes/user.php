@@ -61,6 +61,13 @@ Route::middleware(['auth'])->controller(PaymentController::class)->group(functio
     Route::get('/payment/callback/paystack', 'paymentCallbackPaystack')->name('pay.callback.paystack');
     Route::get('/payment/callback/stripe/success', 'paymentcallbackstripesuccess')->name('pay.callback.stripe.success');
     Route::get('/payment/callback/stripe/cancel', 'paymentCallbackStripeFailed')->name('pay.callback.stripe.failed');
+    Route::get('user/paypal/success', 'paypal_success')->name('paypal.success');
+
+    Route::get('/payment/flutterwave/success', 'flutterwaveSuccess')->name('flutterwave.success');
+    Route::get('/payment/complete/flutterwave/success', 'flutterwaveCompleteSuccess')->name('flutterwave.complete.success');
+    Route::get('/payment/flutterwave/failed','flutterwaveFailed')->name('flutterwave.failed');
+
+        Route::get('user/paypal/failed', 'paypal_failed')->name('paypal.failed');
 
     Route::get('/payment/callback/stripe/success/complete', 'user_complete_callback_stripe_complete')->name('pay.callback.stripe.success.complete');
 
@@ -83,12 +90,12 @@ Route::middleware(['auth'])->controller(CommunityController::class)->group(funct
 
     Route::get('/q&a', 'q_a')->name('q.a');
     Route::post('/add/questions', 'storeQuestion')->name('question.store');
-    Route::post('/threads', 'store')->name('threads.store');
     Route::post('/delete/threads/{id}',  'destroy')->name('threads.destroy');
+    Route::post('/question/solved/{id}',  'question_solved')->name('question.solved');
 
     Route::get('/question/{id}', 'q_a_detail')->name('question.show');
-    Route::post('/threads/{id}/reply','reply')->name('threads.reply');
-    Route::post('/replies/{id}/helpful','markHelpful')->name('replies.helpful');
+    Route::post('/question/{id}/reply','q_a_reply')->name('question.reply');
+    Route::post('/question/replies/{id}/helpful','QuestionmarkHelpful')->name('question.replies.helpful');
 });
 
 

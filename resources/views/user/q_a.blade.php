@@ -452,8 +452,8 @@
         @forelse($questions ?? [] as $question)
                             <a href="{{ route('question.show', $question['id']) }}">
 
-            <div class="question-card" data-status="{{ $question['status'] ?? 'unsolved' }}">
-                <div class="question-status status-{{ $question['status'] ?? 'unsolved' }}">
+            <div class="question-card" data-status="{{ $question['category'] ?? 'unsolved' }}">
+                <div class="question-status status-{{ $question['category'] ?? 'unsolved' }}">
                     {{ $question['status'] ?? 'Unsolved' }}
                 </div>
                 

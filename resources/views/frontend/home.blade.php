@@ -562,15 +562,16 @@
         </div>
     </section>
 
-    <!-- About Section -->
+
 
     <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Accelerate Your Workforce</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
-                    <a href="{{route('corporate_training')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Read More</a>
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Intensive BootCamp</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
+                        Let’s partner with you to train and develop your talent in areas of tech that will inturn transform your business                    </p>
+                    <a href="{{route('courses')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Our Courses</a>
                 </div>
             </div>
             <div class="row">
@@ -583,46 +584,16 @@
         </div>
     </section>
 
-    @if (count($innovations)  > 0)
-        <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
-        <div class="container">
-            <div class="row justify-content-center text-center mb-5">
-                <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Research and Innovation</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
-                        Our cutting-edge research at OdumareTech. Curiosity knows no bounds, and neither do we. Are you passionate about shaping the future? Join us in our pursuit of knowledge.                    </p>
-                    <a href="{{route('innovation')}}" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Learn More</a>
-                </div>
-            </div>
-            <div class="row">
 
-                
-                @foreach($innovations as $card)
-                    <div class="col-lg-4 mb-4">
-                    <a href="{{route('innovation.info',$card->id)}}">
-                        <div style="background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; text-align: ; height: 100%;">
-                            <img src="{{ asset($card['image']) }}" alt="{{ $card['image'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
-                            <h4 style="color: #333; font-weight: bold; margin-top: 20px;">{{ $card['name'] }}</h4>
-                        </div>
-                        </a>
-                    </div>
+    <!-- About Section -->
 
-                @endforeach
-            </div>
-
-        </div>
-    </section>
-
-    @endif
-    
     <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Intensive BootCamp</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
-                        Let’s partner with you to train and develop your talent in areas of tech that will inturn transform your business                    </p>
-                    <a href="{{route('courses')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Our Courses</a>
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Accelerate Your Workforce</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
+                    <a href="{{route('corporate_training')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Read More</a>
                 </div>
             </div>
             <div class="row">
@@ -677,6 +648,42 @@
         </div>
     </section>
 
+
+    @if (count($innovations)  > 0)
+        <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Research and Innovation</h2>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
+                        Our cutting-edge research at OdumareTech. Curiosity knows no bounds, and neither do we. Are you passionate about shaping the future? Join us in our pursuit of knowledge.                    </p>
+                    <a href="{{route('innovation')}}" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Learn More</a>
+                </div>
+            </div>
+            <div class="row">
+
+                
+                @foreach($innovations as $card)
+                    <div class="col-lg-4 mb-4">
+                    <a href="{{route('innovation.info',$card->id)}}">
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; text-align: ; height: 100%;">
+                            <img src="{{ asset($card['image']) }}" alt="{{ $card['image'] }}" class="img-fluid mb-3" style=" object-fit: cover;" />
+                            <h4 style="color: #333; font-weight: bold; margin-top: 20px;">{{ $card['name'] }}</h4>
+                        </div>
+                        </a>
+                    </div>
+
+                @endforeach
+            </div>
+
+        </div>
+    </section>
+
+    @endif
+    
+    
+
+    
 
     @if (count($testimonials) > 0)
        <section class="testimonial py-5">

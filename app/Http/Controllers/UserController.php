@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\AppliedCourse;
 use App\Models\Assignment;
 use App\Models\Course;
-use App\Models\User;
 use App\Models\FinalProject;
 use App\Models\GitHubLink;
 use App\Models\InstructorNotification;
@@ -14,10 +13,12 @@ use App\Models\RecordLink;
 use App\Models\Slide;
 use App\Models\SubmitAssignment;
 use App\Models\SubmitProject;
+use App\Models\User;
 use App\Models\UserChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Pdf;
 
@@ -415,7 +416,33 @@ public function transactions_user()
         return view('user.leaderboard');
     }
     public function user_certificates(){
-        return view('user.certificates');
+
+        $certificates = DB::table('applied_courses')
+    ->join('courses', 'courses.id', '=', 'applied_courses.course_id')
+    ->join('categories', 'categories.id', '=', 'courses.category')
+    ->select(
+        'courses.title',
+        'categories.name as category',
+        'applied_courses.status',
+        'applied_courses.updated_at'
+    )
+    ->where('applied_courses.user_id', Auth::id())
+    ->get()
+    ->map(function ($row) {
+        return [
+            'title'       => $row->title,
+            'category'    => $row->category ?? 'General',
+            'status'      => $row->status === 'pending' ? 'In Progress' : 'Issued',
+            'date_issued' => $row->status === 'completed' 
+                                ? \Carbon\Carbon::parse($row->updated_at)->format('m/d/Y') 
+                                : null,
+            'progress'    => $row->status === 'pending' ? rand(40, 95) : 100,
+            'action'      => $row->status === 'pending' ? 'Continue' : 'Download'
+        ];
+    })
+    ->toArray();
+
+            return view('user.certificates', compact('certificates'));
     }
 
 }

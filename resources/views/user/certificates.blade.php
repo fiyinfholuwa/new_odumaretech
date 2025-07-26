@@ -2,40 +2,7 @@
 
 @section('content')
 <?php
-$certificates = [
-    [
-        'title' => 'Introduction to React',
-        'status' => 'Issued',
-        'date_issued' => '11/20/2023',
-        'progress' => 100,
-        'action' => 'Download',
-        'category' => 'Frontend Development'
-    ],
-    [
-        'title' => 'Getting Started with HTML',
-        'status' => 'In Progress',
-        'date_issued' => null,
-        'progress' => 54,
-        'action' => 'Continue',
-        'category' => 'Web Development'
-    ],
-    [
-        'title' => 'JavaScript Fundamentals',
-        'status' => 'Issued',
-        'date_issued' => '10/15/2023',
-        'progress' => 100,
-        'action' => 'Download',
-        'category' => 'Programming'
-    ],
-    [
-        'title' => 'CSS Advanced Techniques',
-        'status' => 'In Progress',
-        'date_issued' => null,
-        'progress' => 78,
-        'action' => 'Continue',
-        'category' => 'Frontend Development'
-    ]
-];
+
 ?>
 
 <style>
@@ -261,7 +228,7 @@ $certificates = [
     <!-- Stats Cards -->
     <div class="container mb-4">
         <div class="row g-4">
-            <div class="col-md-3 col-6">
+            <div class="col-md-4 col-6">
                 <div class="stats-card">
                     <div class="stats-number text-success">
                         <?php echo count(array_filter($certificates, fn($cert) => $cert['status'] === 'Issued')); ?>
@@ -269,7 +236,7 @@ $certificates = [
                     <div class="stats-label">Completed</div>
                 </div>
             </div>
-            <div class="col-md-3 col-6">
+            <div class="col-md-4 col-6">
                 <div class="stats-card">
                     <div class="stats-number text-primary">
                         <?php echo count(array_filter($certificates, fn($cert) => $cert['status'] === 'In Progress')); ?>
@@ -277,7 +244,7 @@ $certificates = [
                     <div class="stats-label">In Progress</div>
                 </div>
             </div>
-            <div class="col-md-3 col-6">
+            <div class="col-md-4 col-6">
                 <div class="stats-card">
                     <div class="stats-number text-info">
                         <?php echo count($certificates); ?>
@@ -285,7 +252,7 @@ $certificates = [
                     <div class="stats-label">Total Courses</div>
                 </div>
             </div>
-            <div class="col-md-3 col-6">
+            {{-- <div class="col-md-3 col-6">
                 <div class="stats-card">
                     <div class="stats-number text-warning">
                         <?php 
@@ -295,7 +262,7 @@ $certificates = [
                     </div>
                     <div class="stats-label">Avg Progress</div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -338,12 +305,7 @@ $certificates = [
                                             </svg>
                                             In Progress
                                         </span>
-                                        <div class="progress-container">
-                                            <div class="custom-progress">
-                                                <div class="custom-progress-bar" style="width: <?= $cert['progress'] ?>%;"></div>
-                                            </div>
-                                            <div class="progress-text"><?= $cert['progress'] ?>% Complete</div>
-                                        </div>
+                                        {{--  --}}
                                     <?php endif; ?>
                                 </td>
                                 <td>

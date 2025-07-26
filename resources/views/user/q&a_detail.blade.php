@@ -304,9 +304,7 @@
         }
     </style>
 
-<?php var_export($question);
-exit;
-?>
+
 
     <!-- Breadcrumb Navigation -->
     <nav class="mb-4">
@@ -318,26 +316,67 @@ exit;
 
     <!-- Thread Header -->
     <div class="thread-header">
-        <h2 class="thread-title">{{ $thread['title'] }}</h2>
-        
-        <div class="thread-stats">
-            <div class="stat-item">
-                <i class="bi bi-eye"></i>
-                <span>{{ $thread['views'] }} Views</span>
-            </div>
-            <div class="stat-item">
-                <i class="bi bi-chat-dots"></i>
-                <span>{{ $thread['reply_count'] }} Replies</span>
-            </div>
+    <h2 class="thread-title">{{ $thread['title'] }}</h2>
+
+    <div class="thread-stats d-flex align-items-center flex-wrap gap-2">
+        <div class="stat-item">
+            <i class="bi bi-eye"></i>
+            <span>{{ $thread['views'] }} Views</span>
         </div>
 
-        <div class="user-info">
-            <div class="avatar">{{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}</div>
-            <div class="user-details">
-                <h6>{{ Auth::user()->name ?? 'Anonymous' }}</h6>
-                <small>{{ \Carbon\Carbon::parse($thread['created_at'])->format('d M Y h:i A') }}</small>
-            </div>
+        <div class="stat-item">
+            <i class="bi bi-chat-dots"></i>
+            <span>{{ $thread['reply_count'] }} Replies</span>
         </div>
+
+        <!-- ✅ Show category badge -->
+        @if($thread->category === 'solved')
+            <span class="badge bg-success">Solved</span>
+        @else
+            <span class="badge bg-warning text-white">Unsolved</span>
+        @endif
+
+        <!-- ✅ Show button only if owner & category is unsolved -->
+        @if(Auth::check() && Auth::id() === $thread->user_id && $thread->category === 'unsolved')
+            <button type="button" class="btn btn-success btn-sm ms-3" data-bs-toggle="modal" data-bs-target="#markSolvedModal">
+                Mark as Solved
+            </button>
+        @endif
+    </div>
+
+    <div class="user-info mt-3">
+        <div class="avatar">
+            {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
+        </div>
+
+        <div class="user-details">
+            <h6>{{ Auth::user()->name ?? 'Anonymous' }}</h6>
+            <small>{{ \Carbon\Carbon::parse($thread['created_at'])->format('d M Y h:i A') }}</small>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="markSolvedModal" tabindex="-1" aria-labelledby="markSolvedModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('question.solved', $thread->id) }}" method="POST" class="modal-content">
+            @csrf
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title text-white" id="markSolvedModalLabel">Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you are satisfied with the answers?  
+                <strong>This action will mark your question as solved.</strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success">Yes, Mark as Solved</button>
+            </div>
+        </form>
+    </div>
+</div>
+
     </div>
 
     <!-- Thread Content -->
@@ -359,7 +398,7 @@ exit;
             Replies
         </h4>
 
-        @forelse ($threads as $reply)
+        @forelse ($question_replies as $reply)
             <div class="reply-card">
                 <div class="user-info">
                     <div class="avatar">{{ strtoupper(substr($reply['user']['name'] ?? 'U', 0, 1)) }}</div>
@@ -383,7 +422,7 @@ exit;
                <button 
     class="helpful-btn btn btn-sm btn-outline-secondary" 
     data-id="{{ $reply['id'] }}"
-    data-url="{{ url('/replies/' . $reply['id'] . '/helpful') }}"
+    data-url="{{ url('/question/replies/' . $reply['id'] . '/helpful') }}"
 >
     <i class="bi bi-hand-thumbs-up me-1"></i>
     Helpful (<span class="helpful-count text-white">{{ $reply['helpful_count'] ?? 0 }}</span>)
@@ -395,7 +434,7 @@ exit;
             <div class="no-replies">
                 <i class="bi bi-chat-square-text"></i>
                 <h5>No replies yet</h5>
-                <p class="text-muted mb-0">Be the first to respond to this thread!</p>
+                <p class="text-muted mb-0">Be the first to respond to this Quesstion!</p>
             </div>
         @endforelse
     </div>
@@ -403,7 +442,7 @@ exit;
     <!-- Floating Action Buttons -->
     <div class="floating-actions">
         <button class="floating-btn btn btn-danger"
-        onclick="window.location.href='{{ route('forum') }}'"
+        onclick="window.location.href='{{ route('q.a') }}'"
         title="Go Back">
     <i class="fa fa-arrow-left"></i>
 </button>
@@ -421,7 +460,7 @@ exit;
     <input type="hidden" name="thread_id" value="{{ $thread['id'] }}">
     <div style="background:#FFF3CF;" class="modal-header">
         <h5 class="modal-title" id="replyModalLabel">
-            <i class="fa fa-reply me-2"></i> Reply to Thread
+            <i class="fa fa-reply me-2"></i> Reply to Question
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
@@ -476,7 +515,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formData = new FormData(replyForm);
         const threadId = formData.get('thread_id');
 
-        fetch(`/threads/${threadId}/reply`, {
+        fetch(`/question/${threadId}/reply`, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': formData.get('_token')

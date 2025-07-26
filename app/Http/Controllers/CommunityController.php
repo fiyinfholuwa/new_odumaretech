@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\QuestionForum;
+use App\Models\QuestionReply;
 use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Http\Request;
@@ -18,19 +19,21 @@ class CommunityController extends Controller
         $questions = QuestionForum::with('user')->orderByDesc('id')->get();
         return view('user.q_a', ['questions'  => $questions]);
     }
-    public function q_a_detail($id){
-        $question = QuestionForum::with('question_replies.user')->findOrFail($id);
-
+    public function q_a_detail($id) {
+        $thread = QuestionForum::with('question_replies.user')->findOrFail($id);
+    
         // Track unique view per user
         $sessionKey = 'viewed_thread_' . $id . '_by_user_' . Auth::id();
         if (!session()->has($sessionKey)) {
-            $question->increment('views');
+            $thread->increment('views');
             session()->put($sessionKey, true);
         }
-
-        return view('user.q&a_detail', compact('question'));
-        
+    
+        $question_replies = $thread->question_replies;
+    
+        return view('user.q&a_detail', compact('thread', 'question_replies'));
     }
+    
 
     public function storeQuestion(Request $request)
 {
@@ -188,6 +191,40 @@ public function reply(Request $request, $id)
 
     return response()->json(['message' => 'Reply posted successfully']);
 }
+public function q_a_reply(Request $request, $id)
+{
+    $request->validate([
+        'content' => 'required',
+        'attachment' => 'nullable|file|max:2048'
+    ]);
+
+    $filePath = null;
+
+    if ($request->hasFile('attachment')) {
+        $file = $request->file('attachment');
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '.' . $extension;
+        $directory = 'uploads/forum_replies/';
+
+        if (!file_exists(public_path($directory))) {
+            mkdir(public_path($directory), 0755, true);
+        }
+
+        $file->move(public_path($directory), $filename);
+        $filePath = $directory . $filename;
+    }
+
+    QuestionReply::create([
+        'question_forum_id' => $id,
+        'user_id' => Auth::user()->id,
+        'content' => $request->content,
+        'image' => $filePath,
+    ]);
+
+    QuestionForum::where('id', $id)->increment('reply_count');
+
+    return response()->json(['message' => 'Reply posted successfully']);
+}
 
 
 public function markHelpful($id)
@@ -201,6 +238,39 @@ public function markHelpful($id)
     }
 
     return response()->json(['helpful_count' => $reply->helpful_count]);
+}
+public function QuestionmarkHelpful($id)
+{
+    $reply = QuestionReply::findOrFail($id);
+    $key = 'q_a_helpful_' . $id . '_user_' . Auth::id();
+
+    if (!session()->has($key)) {
+        $reply->increment('helpful_count');
+        session()->put($key, true);
+    }
+
+    return response()->json(['helpful_count' => $reply->helpful_count]);
+}
+
+public function question_solved($id)
+{
+    $question = QuestionForum::findOrFail($id);
+
+    // Ensure only the owner can mark as solved
+    if (Auth::id() !== $question->user_id) {
+        return redirect()->back()->with([
+            'message' => 'You are not authorized to mark this question as solved.',
+            'alert-type' => 'error'
+        ]);
+    }
+
+    $question->category = 'solved';
+    $question->save();
+
+    return redirect()->back()->with([
+        'message' => 'Your question has been successfully marked as solved. Thank you for confirming!',
+        'alert-type' => 'success'
+    ]);
 }
 
 }
