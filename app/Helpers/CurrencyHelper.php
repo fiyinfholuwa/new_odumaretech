@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Torann\GeoIP\Facades\GeoIP;
+use GeoIp2\Database\Reader;
+
 
 if (!function_exists('getConvertedAfricanCurrencies')) {
     function getConvertedAfricanCurrencies($amount = 10): array
@@ -70,24 +72,23 @@ if (!function_exists('getUserIPv4')) {
 if (!function_exists('getUserCountryCode')) {
     function getUserCountryCode($ip = null): ?string
     {
-        // $ip = $ip ?? request()->ip();
-        $ip = getUserIPv4();
+        $ip = $ip ?? request()->ip();
 
-        try {
-        
-            // ✅ Fallback to ipwho.is
-            $fallback = Http::timeout(10)->get("https://ipwho.is/{$ip}");
-            if ($fallback->successful() && ($data = $fallback->json()) && isset($data['country_code'])) {
-
-                return $data['country_code'];
-            }
-        } catch (\Exception $e) {
+        if (app()->environment('local') && in_array($ip, ['127.0.0.1', '::1'])) {
+            $ip = '102.89.32.1'; // Test Nigeria IP
         }
 
-        return null; // Return null if everything fails
+        try {
+
+            $reader = new Reader(storage_path('app/geoip/GeoLite2-Country.mmdb'));
+            $record = $reader->country($ip);
+            return $record->country->isoCode; // e.g. "NG"
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return null;
+        }
     }
 }
-
 
 
 if (!function_exists('getUserLocalCurrencyConversion')) {
