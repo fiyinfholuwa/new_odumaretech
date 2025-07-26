@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 
 if (!function_exists('getConvertedAfricanCurrencies')) {
     function getConvertedAfricanCurrencies($amount = 10): array
@@ -37,23 +37,25 @@ if (!function_exists('getConvertedAfricanCurrencies')) {
     }
 }
 
+
 if (!function_exists('getUserCountryCode')) {
     function getUserCountryCode($ip = null): ?string
     {
-        $ip = $ip ?? request()->header('X-Forwarded-For') ?? request()->ip();
+        $ip = $ip ?? request()->ip();
 
-        if (app()->environment('local') && ($ip === '127.0.0.1' || $ip === '::1')) {
-            $ip = '102.89.32.1'; // Default Nigerian IP for local testing
+        if (app()->environment('local') && in_array($ip, ['127.0.0.1', '::1'])) {
+            $ip = '102.89.32.1'; // Nigerian IP
         }
 
         try {
-            $location = geoip()->getLocation($ip);
-            return $location->iso_code ?? null; // Returns e.g., "NG", "GH", etc.
+            $location = GeoIP::getLocation($ip);
+            return $location->iso_code ?? null;
         } catch (\Exception $e) {
             return null;
         }
     }
 }
+
 
 
 if (!function_exists('getUserLocalCurrencyConversion')) {
