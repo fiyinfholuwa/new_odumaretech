@@ -210,9 +210,6 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'category' => 'required|integer',
             'description' => 'required|string',
-//            'description_corp' => 'required|string',
-//            'certification' => 'required|string',
-//            'experience' => 'required|string',
             'level' => 'required|string',
             'duration' => 'required|integer',
             'language' => 'required|string|max:50',
@@ -221,7 +218,6 @@ class CourseController extends Controller
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric|min:0|max:100',
             'lecture' => 'required|string',
-//            'certificate' => 'nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 

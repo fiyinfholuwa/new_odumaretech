@@ -35,7 +35,11 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard');
             }elseif(Auth::user()->user_type=='instructor'){
              return redirect()->route('instructor.dashboard');
-            }else{
+            }
+             elseif(Auth::user()->user_type=='external_instructor'){
+                return redirect()->route('external.instructor.dashboard');
+             }
+            else{
                 $check_if_user_has_paid_course = AppliedCourse::where('user_id', '=', Auth::user()->id)->first();
                 if($check_if_user_has_paid_course){
                     return redirect()->route('user.dashboard');
@@ -119,6 +123,19 @@ class AuthController extends Controller
         // $session = LiveSession::whereIn('course_id', $course_ids)->count();
         // return view('instructor.dashboard', compact('students', 'assignment', 'course', 'slide', 'session'));
         return view('instructor.dashboard');
+
+    }
+    public function external_instructor_dashboard(){
+        // $user_id = Auth::user()->id;
+        // $instructor = ApprovedInstructor::where('user_id', '=', $user_id)->first();
+        // $course_ids = $instructor->course_ids;
+        // $students = AppliedCourse::whereIn('course_id', $course_ids)->count();
+        // $assignment = Assignment::whereIn('course_id', $course_ids)->count();
+        // $course = Course::whereIn('id', $course_ids)->count();
+        // $slide = Slide::whereIn('course_id', $course_ids)->count();
+        // $session = LiveSession::whereIn('course_id', $course_ids)->count();
+        // return view('instructor.dashboard', compact('students', 'assignment', 'course', 'slide', 'session'));
+        return view('external_instructor.dashboard');
 
     }
 

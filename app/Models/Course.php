@@ -20,4 +20,7 @@ class Course extends Model
     {
         return $this->hasOne(Cohort::class, 'id', 'cohort');
     }
+
+    
+
 }

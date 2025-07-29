@@ -30,6 +30,7 @@ return new class extends Migration
             $table->text('experience')->nullable();
             $table->text('certification')->nullable();
             $table->text('description')->nullable();
+            $table->bigInteger('student_count')->default(0);
             $table->text('description_corp')->nullable();
             $table->text('requirement')->nullable();
             $table->text('curriculum')->nullable();

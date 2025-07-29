@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\InstructorApply;
 use App\Models\AppliedCourse;
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\Cohort;
 use App\Models\Coupon;
 use App\Models\CouponUsed;
@@ -12,6 +13,7 @@ use App\Models\Course;
 use App\Models\Innovation;
 use App\Models\Instructor;
 use App\Models\Testimonial;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,13 +110,57 @@ class FrontendController extends Controller
         return view('frontend.corporate_training');
     }
     public function marketplace():View{
-        return view('frontend.marketplace');
+
+        $ext_courses  = Course::where('course_type', 'external')->count();
+        $ext_instructor = User::where('user_type', 'external_instructor')->count();
+        $student = User::where('user_type', 'user')->count();
+        $best_selling = Course::with('cat')
+        ->where('course_type', 'external')
+        ->orderBy('student_count', 'desc')
+        ->take(8)
+        ->get();
+            $featured_courses  = Course::with('cat')->where('course_type', 'external')->get();
+        $external_instructor = User::where('user_type', 'external_instructor')
+    ->orderBy('student_count', 'desc')
+    ->limit(8)
+    ->get();
+
+            $categories = Category::withCount('courses')->get();
+        $formatted = $categories->map(function ($cat) {
+            return [
+                'name' => $cat->name,
+                'courses' => $cat->courses_count
+            ];
+        })->toArray();
+        
+        
+        return view('frontend.marketplace',[
+            'ext_courses' => $ext_courses,
+            'ext_instructor' => $ext_instructor,
+            'student' =>$student,
+            'featured_courses' => $featured_courses,
+            'instructors' => $external_instructor,
+            'best_selling' => $best_selling,
+            'categories' => $formatted
+        ]);
     }
-    public function course_list():View{
+    public function course_list($name):View{
         return view('frontend.course_list');
     }
-    public function course_external_detail():View{
-        return view('frontend.course_external_detail');
+    public function course_external_detail($name):View{
+        $popular_courses = Course::with('cat')->where('course_type', 'external')->paginate(4);
+
+        $course = Course::with('cat')->where('course_url', $name)->first();
+
+        if(Auth::check()){
+            $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id','=', $course->id)->first();
+            $has_pending = AppliedCourse::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)
+                ->where('status' , '=' , "pending")->first();
+        }else{
+            $check_user_has_coupon = NULL;
+            $has_pending = NULL;
+        }
+        return view('frontend.course_external_detail', ['course' => $course, 'popular_courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending]);
     }
 
 

@@ -26,6 +26,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('profession');
+            $table->bigInteger('student_count')->default(0);
+            $table->string('image')->default('https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg');
+            $table->bigInteger('cummlative_earning')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

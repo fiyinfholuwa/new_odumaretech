@@ -29,7 +29,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/marketplace', 'marketplace')->name('marketplace');
     Route::get('/course/listing', 'course_list')->name('course_list');
     Route::get('/corporate/training', 'corporate_training')->name('corporate_training');
-    Route::get('/course/external/detail', 'course_external_detail')->name('course_external_detail');
+    Route::get('/course/external/detail/{name}', 'course_external_detail')->name('course_external_detail');
 });
 
 require __DIR__.'/auth.php';
