@@ -227,7 +227,7 @@
 
         <img src="{{asset('frontend/assets/img/hero.jpg')}}" alt="" data-aos="fade-in">
 
-<div class="cube-container">
+<div style="display:none;" class="cube-container">
             <div class="cube">
                 <div class="cube-face front">
                     <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=WEB" alt="Web Development">
