@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -85,6 +87,7 @@ class PaymentController extends Controller
         'cohort_id' => $request->cohort_id,
         'user_email' => $request->user_email,
         'currency' => $currency,
+        'course_type' => $request->course_type,
         'status' => "pending",
         'admission_status' => "pending",
         'course_id' => $request->course_id,
@@ -622,7 +625,11 @@ public function create_payment_flutterwave(
                     if($get_payment_details->payment_type ==='full'){
                         self::give_bonus($get_payment_details->course_id);
                     }
-                    
+
+                    if($get_payment_details->course_type =='external'){
+                        self::credit_external_instructor($get_payment_details->course_id);
+                    }
+                
                     $applied_course = new AppliedCourse;
                     $applied_course->user_id = Auth::id();
                     $applied_course->course_id = $get_payment_details->course_id;
@@ -682,6 +689,48 @@ public function create_payment_flutterwave(
     
         return false;
     }
+    public static function credit_external_instructor($course_id)
+{
+    $course_info = Course::find($course_id);
+    if (!$course_info || !is_numeric($course_info->price) || $course_info->price <= 0) {
+        return false;
+    }
+
+    $amount = $course_info->price * 0.7;
+
+    $external_course_owner = User::find($course_info->instructor);
+
+    $buyer_id = Auth::user()->id;
+    if ($external_course_owner) {
+        // Use DB transaction to ensure consistency
+        DB::transaction(function () use ($course_info, $external_course_owner, $amount, $course_id, $buyer_id) {
+            // Correct column name
+            $course_info->increment('student_count');
+
+            // Update instructor earnings
+            $external_course_owner->increment('referral_bonus', $amount);
+            $external_course_owner->increment('cumulative_earning', $amount);
+            $external_course_owner->increment('student_count');
+
+            $formattedAmount = number_format($amount, 2);
+            $message = "You earned \${$formattedAmount} because course {$course_info->title} was purchased.";
+
+            // Log bonus history
+            ReferralBonusHistory::create([
+                'referrer_id'      => $external_course_owner->id,
+                'referred_user_id' => $buyer_id, // the student who bought the course
+                'course_id'        => $course_id,
+                'bonus_amount'     => $amount,
+                'message'          => $message,
+            ]);
+        });
+
+        return true;
+    }
+
+    return false;
+}
+
     
  
 

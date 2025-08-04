@@ -17,6 +17,8 @@
     <div class="row g-4">
         @if(count($fetch_user_details) > 0)
             @foreach($fetch_user_details as $detail)
+                @if(optional($detail->course_name)->course_type !== 'external')
+
                 <div  class="col-sm-6 col-lg-4 col-xl-3">
                     <div style="background:#E9ECFF;" class="resource-card h-100">
                         <!-- Card Image Header -->
@@ -51,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             @endforeach
         @else
             <!-- Empty State -->

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('user_email', 50)->nullable();
             $table->string('status', 50)->nullable();
             $table->string('payment_type', 50)->nullable();
+            $table->string('course_type', 50)->nullable();
             $table->string('admission_status', 50)->nullable();
             $table->string('referenceId', 50)->nullable();
             $table->string('currency', 50)->nullable();

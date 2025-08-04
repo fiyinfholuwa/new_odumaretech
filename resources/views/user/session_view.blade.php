@@ -221,6 +221,8 @@
     @if(count($fetch_user_details) > 0)
         <div class="row">
             @foreach($fetch_user_details as $index => $detail)
+                @if(optional($detail->course_name)->course_type !== 'external')
+
                 <div class="col-sm-6 col-lg-4 col-xl-3 mb-4">
                     <div class="modern-card card-animation" style="animation-delay: {{ $index * 0.1 }}s;">
                         <div class="p-4">
@@ -248,6 +250,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
             @endforeach
         </div>
 

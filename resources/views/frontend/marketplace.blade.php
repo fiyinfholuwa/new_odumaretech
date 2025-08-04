@@ -161,7 +161,11 @@
             <div class="container">
                 <div class="row">
                     @foreach($best_selling as $index => $course)
-                        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 d-flex">
+                    <?php 
+                                $amount_info = getUserLocalCurrencyConversion($course['price']);
+
+                    ?>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex">
 
                             <a style="text-decoration: none; color: black;" href="{{route('course_external_detail', $course->course_url)}}">
                                 <div class="course-card w-100 shadow-sm">
@@ -169,7 +173,7 @@
 
                                     <div class="course-meta">
                                         <span style="background-color: #F5F5F5; padding: 4px 8px; border-radius: 4px;">{{ optional($course->cat)->name }}</span>
-                                        <strong>${{ $course['price'] }}</strong>
+                                        <strong>{{ $amount_info['currency_symbol'] }} {{ $amount_info['converted_amount'] }}</strong>
                                     </div>
 
                                     <div class="course-title mt-2">
@@ -214,6 +218,11 @@
             <h3 class="mb-4 fw-bold text-center">Featured Courses</h3>
 
             @foreach($featured_courses as $index => $course)
+            
+            <?php
+
+            $amount_info = getUserLocalCurrencyConversion($course['price']);
+            ?>
                 @if($index % 2 === 0)
                     <div class="row mb-4">
                         @endif
@@ -232,7 +241,7 @@
                                         <div class="mt-2 d-flex align-items-center">
                                             <img src="{{ asset(optional($course->instructor_name)->image) }}" style="height: 32px; width: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
                                             <small class="text-muted me-auto">{{ optional($course->instructor_name)->name }}</small>
-                                            <strong class="text-primary">${{ $course['price'] }}</strong>
+                                            <strong class="text-primary">{{ $amount_info['currency_symbol'] }} {{ $amount_info['converted_amount'] }}</strong>
                                         </div>
                                         <div class="mt-3 d-flex justify-content-between text-muted small">
                                             <span><i class="fa fa-users me-1"></i>{{ $course['student_count'] }} students</span>

@@ -4,6 +4,10 @@
 @section('content')
     <main class="main">
 
+<?php
+$amount_info = getUserLocalCurrencyConversion($course['price']);
+
+?>
         <!-- Hero Section -->
         <section style="
   height: 100vh;
@@ -42,7 +46,7 @@
                     <!-- Purchase Section -->
                     <div class="col-lg-4">
                         <div class="p-4 rounded" style="background-color: #FFF3CF;">
-                            <h3 class="fw-bold mb-3 " style="color: black;">${{ $course->price }}</h3>
+                            <h3 class="fw-bold mb-3 " style="color: black;"> {{ $amount_info['currency_symbol'] }} {{ $amount_info['converted_amount'] }}</h3>
 
                             <div class="d-flex justify-content-between mb-2">
                                 <span><i class="fa fa-clock me-2"></i>Course Duration</span>
@@ -89,45 +93,64 @@
                     </div>
 
                     <!-- Buy Now Modal -->
-                    <div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
-                        <div style="border-radius: 40px;" class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-light text-dark">
-                                    <h5  style="color: black;" class="modal-title" id="buyNowModalLabel">Purchase Course</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="fw-semibold">You are about to purchase:</p>
-                                    <h5 style="background-color: #E9ECFF; color: black; padding: 10px; border-radius: 10px;">Complete Website Responsive Design: from Figma to Webflow to Website Design</h5>
-                                    <p class="mb-2"><i class="fa fa-clock me-1"></i> Duration: 6 Months</p>
-                                    <p class="mb-2"><i class="fa fa-money-bill me-1"></i> Price: <strong>$14.00</strong></p>
-                                    <div class="mb-3">
-                                        <label for="paymentMethod" class="form-label fw-semibold">Select Payment Method</label>
-                                        <select class="form-select rounded-3" id="paymentMethod">
-                                            <option value="">-- Choose Payment Method --</option>
-                                            <option value="card">Card</option>
-                                            <option value="bank_transfer">Bank Transfer</option>
-                                            <option value="cash">Cash</option>
-                                            <option value="paypal">PayPal</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="paymentType" class="form-label fw-semibold">Select Payment Type</label>
-                                        <select class="form-select rounded-3" id="paymentType">
-                                            <option value="">-- Choose Payment Type --</option>
-                                            <option value="full">Full Payment</option>
-                                            <option value="installment">Installment</option>
-                                        </select>
-                                    </div>
-                                    <p class="text-muted">Proceeding will take you to the checkout page.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <a href="" class="btn btn-warning text-dark">Continue to Payment</a>
-                                </div>
-                            </div>
-                        </div>
+                   <div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
+    <div style="border-radius: 40px;" class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ route('pay') }}">
+                @csrf
+                <input type="hidden" name="course_id" value="{{ $course->id }}">
+                <input type="hidden" name="cohort_id" value="{{ $cohort_name?->id ?? 1 }}">
+                <input type="hidden" name="payment" value="flutterwave">
+                <input type="hidden" name="currency" value="{{ $amount_info['currency_code'] }}">
+                <input type="hidden" name="course_type" value="{{ $course->course_type ?? 'external' }}"> <!-- Added -->
+
+                @if(Auth::check())
+                    <input type="hidden" name="user_email" value="{{ Auth::user()->email }}">
+<input type="hidden" name="amount" value="{{ round($amount_info['converted_amount'], 2) }}">
+                    <input type="hidden" name="payment_type" value="full">
+
+                    <div class="modal-header bg-light text-dark">
+                        <h5 style="color: black;" class="modal-title" id="buyNowModalLabel">Purchase Course</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
+                    <div class="modal-body">
+                        <p class="fw-semibold">You are about to purchase:</p>
+                        <h5 style="background-color: #E9ECFF; color: black; padding: 10px; border-radius: 10px;">
+                            {{ $course->title }}
+                        </h5>
+                        <p class="mb-2"><i class="fa fa-clock me-1"></i> Duration: {{ $course->duration }}Hours</p>
+                        <p class="mb-2"><i class="fa fa-money-bill me-1"></i> Price:
+                            <strong>{{ $amount_info['currency_symbol'] }} {{ $amount_info['converted_amount'] }}</strong>
+                        </p>
+
+                    
+                        <p class="text-muted">Proceeding will take you to the checkout page.</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                        @if($has_pending)
+                            <button type="button" class="btn btn-danger cta-btn radius-xl">
+                                You Already Registered for a Course.
+                            </button>
+                        @else
+                            <button type="submit" class="btn btn-warning text-dark">Continue to Payment</button>
+                        @endif
+                    </div>
+                @else
+                    <div class="modal-body">
+                        <p>You need to log in to proceed with the payment.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ route('login') }}" class="btn btn-primary">Login to Continue</a>
+                    </div>
+                @endif
+            </form>
+        </div>
+    </div>
+</div>
 
                 </div>
             </div>
@@ -457,8 +480,12 @@
 
             <div class="container">
                 <div class="row">
-                    @foreach($popular_courses as $index => $course)
-                        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 d-flex">
+                   @foreach($popular_courses as $index => $course)
+                    <?php 
+                                $amount_info = getUserLocalCurrencyConversion($course['price']);
+
+                    ?>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex">
 
                             <a style="text-decoration: none; color: black;" href="{{route('course_external_detail', $course->course_url)}}">
                                 <div class="course-card w-100 shadow-sm">
@@ -466,7 +493,7 @@
 
                                     <div class="course-meta">
                                         <span style="background-color: #F5F5F5; padding: 4px 8px; border-radius: 4px;">{{ optional($course->cat)->name }}</span>
-                                        <strong>${{ $course['price'] }}</strong>
+                                        <strong>{{ $amount_info['currency_symbol'] }} {{ $amount_info['converted_amount'] }}</strong>
                                     </div>
 
                                     <div class="course-title mt-2">

@@ -36,17 +36,22 @@
                         <div class="card-content">
                             <div class="course-info mb-3">
                                 <h5 class="course-title">{{ optional($detail->course_name)->title ?? 'Course Resources' }}</h5>
+                                                            @if (optional($detail->course_name)->course_type !=='external')
+
                                 <span class="cohort-badge">Cohort : {{ optional($detail->cohort_name)->name }}</span>
+                                @endif
                             </div>
                             
-                            <div class="resource-stats mb-4">
-                                <div class="stat-item">
-                                    <i class="fas fa-file-alt text-primary"></i>
-                                    {{-- <span>Materials Available</span> --}}
-                                </div>
-                            </div>
                             
-                            <div class="card-actions d-flex gap-2 flex-wrap">
+                            @if (optional($detail->course_name)->course_type ==='external')
+                                 <a href="{{ route('assignment.user.all', ['id' => $detail->course_id, 'co' => $detail->cohort_id]) }}"
+       class="btn btn-primary flex-fill" style="background: #0E2293;">
+        <i class="fas fa-tasks me-2"></i>
+        Continue Learning
+    </a>
+
+                                @else
+                                 <div class="card-actions d-flex gap-2 flex-wrap">
     <!-- View Assignments -->
     <a href="{{ route('assignment.user.all', ['id' => $detail->course_id, 'co' => $detail->cohort_id]) }}"
        class="btn btn-primary flex-fill" style="background: #0E2293;">
@@ -61,6 +66,8 @@
         View Resources
     </a>
 </div>
+                            @endif
+                           
 
                         </div>
                     </div>
