@@ -19,7 +19,14 @@
             <span style="background: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; color: #0E2293;">Expert Curated Courses</span>
             <h2 style="margin-top: 20px;">Welcome to Odumare Tech</h2>
             <p style="margin: 15px 0;">
-                We are not just another tech company; we are your dedicated ally on the path to excellence. We go beyond theoretical concepts. We believe in the power of practical application, which is why we provide you with hands-on projects and real-world case studies. Your journey with us culminates in a prestigious certification that validates your comprehensive skills and expertise.            </p>
+
+At OdumareTech, we believe everyone deserves a chance to thrive in the digital world. That’s why we make
+tech education practical, accessible, and supportive—no matter your background or experience.
+Our programs are designed to help you learn by doing. You’ll work on real projects, get guidance from
+experienced mentors, and join a vibrant community that’s invested in your success. From your first lesson
+to your first job offer, we’re with you every step of the way.
+When you finish, you’ll have a globally recognized certification and the confidence to launch your tech
+career anywhere in the world.                 </p>
             <a href="{{ route('courses') }}" class="btn btn-warning" style="margin-bottom: 20px;">Get Started</a>
 
         </div>
@@ -28,7 +35,19 @@
     <section class="after_hero py-5">
         <div class="container">
             <p class="mb-4">
-                We understand that practical experience is invaluable, which is why we offer you the unique opportunity to join our exclusive Research and Innovation department and acquire the practical skills necessary to flourish in your domain. Even after you complete our program, our commitment to your success remains unwavering. We offer ongoing drop-in sessions where our team provides guidance, interview tips, and valuable insights, maximizing your chances of securing your first job in the competitive tech market.
+            We know real experience matters. That’s why you can join our exclusive Research and Innovation
+department to build practical skills that set you apart. Even after you finish your program, we’re still here
+for you—with ongoing drop-in sessions, interview tips, and expert advice to help you land your first tech
+job.
+            </p>
+            <p class="mb-4">
+Our mission is to empower you with the tech skills and real-world experience you need to grow—personally
+and professionally. We’re committed to making tech education accessible and supportive, so everyone has
+a fair chance to learn, develop, and succeed.
+Our vision is a world where everyone can pursue their passions, live fulfilling lives, and reach their full
+potential. We believe in equitable access to education, training, and real-world experience for all.
+Empowerment, Compassion, Innovation, Collaboration, Excellence and Inclusivity, Diversity,
+Creativity, Passion, Continuous improvement.
             </p>
             <div class="row">
 
@@ -197,8 +216,9 @@
             <div class="row justify-content-center text-center mb-5">
                 <div class="col-lg-8">
                     <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Join Our Team of Experts</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Ignite Minds and Inspire Others. Become an Instructor with Us Today!</p>
-                    <a href="{{ route('career') }}" class="btn btn-warning btn-lg text-white">Join The Team</a>
+                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
+Ignite minds. Inspire futures. Become an instructor with us today!                    </p>
+                    <a href="{{ route('career') }}" class="btn btn-warning btn-lg text-white">Apply Now</a>
                 </div>
             </div>
             <div class="row">

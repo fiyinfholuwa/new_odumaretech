@@ -68,218 +68,15 @@
     </section>
 
 
+    @if (count($courses) > 0)
+
+
     <section>
         <div class="container">
+            <h3 class="text-center"></h3>
 
             <?php
-            $courses = [
-                [
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],[
-                    'title' => 'Machine Learning A-Z™: Hands-On Python & R In Data...',
-                    'price' => '$14.00',
-                    'category' => 'Design',
-                    'students' => '265.7K',
-                    'instructor' => 'Kevin Gilbert',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-                [
-                    'title' => 'Complete Web Developer Bootcamp',
-                    'price' => '$19.00',
-                    'category' => 'Programming',
-                    'students' => '312K',
-                    'instructor' => 'Angela Yu',
-                    'course_img' => asset('frontend/assets/img/image-6.png'),
-                    'instructor_img' => asset('frontend/assets/img/image-6.png'),
-                ],
-            ];
-
+            
             ?>
 
             <style>
@@ -313,15 +110,20 @@
 
             <div class="container">
                 <div class="row">
-                    @foreach($courses as $index => $course)
-                        <div class="col-lg-3 col-md-6 col-sm-12 mb-4 d-flex">
-                            <a style="text-decoration: none; color: black;" href="{{route('course_external_detail')}}">
+                @foreach($courses as $index => $course)
+                    <?php 
+                                $amount_info = getUserLocalCurrencyConversion($course['price']);
+
+                    ?>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4 d-flex">
+
+                            <a style="text-decoration: none; color: black;" href="{{route('course_external_detail', $course->course_url)}}">
                                 <div class="course-card w-100 shadow-sm">
-                                    <img src="{{ $course['course_img'] }}" class="img-fluid mb-2" style="height: 160px; object-fit: cover; border-radius: 5px;" />
+                                    <img src="{{ asset($course['image']) }}" class="img-fluid mb-2" style="height: 160px; object-fit: cover; border-radius: 5px;" />
 
                                     <div class="course-meta">
-                                        <span style="background-color: #F5F5F5; padding: 4px 8px; border-radius: 4px;">{{ $course['category'] }}</span>
-                                        <strong>{{ $course['price'] }}</strong>
+                                        <span style="background-color: #F5F5F5; padding: 4px 8px; border-radius: 4px;">{{ optional($course->cat)->name }}</span>
+                                        <strong>{{ $amount_info['currency_symbol'] }} {{ $amount_info['converted_amount'] }}</strong>
                                     </div>
 
                                     <div class="course-title mt-2">
@@ -330,14 +132,14 @@
 
                                     <div class="row align-items-center mt-3 course-footer">
                                         <div class="col-2">
-                                            <img src="{{ $course['instructor_img'] }}" style="height: 30px; width: 30px; border-radius: 50%;" />
+                                            <img src="{{ asset(optional($course->instructor_name)->image) }}" style="height: 30px; width: 30px; border-radius: 50%;" />
                                         </div>
                                         <div class="col-5 ps-0">
                                             <small class="text-muted">Course By</small><br/>
-                                            <strong>{{ $course['instructor'] }}</strong>
+                                            <strong>{{ optional($course->instructor_name)->name }}</strong>
                                         </div>
                                         <div class="col-5 text-end">
-                                            <small class="text-muted">{{ $course['students'] }} Students</small>
+                                            <small class="text-muted">{{ $course['student_count'] }} Students</small>
                                         </div>
                                     </div>
                                 </div>
@@ -355,6 +157,7 @@
 
         </div>
     </section>
+    @endif
 
 
 </main>

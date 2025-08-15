@@ -18,7 +18,11 @@
         <div  class="text-center" style="max-width: 800px; margin-top: 150px;  padding: 20px;">
             <span style="background: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; color: #0E2293;">Expert Curated Courses</span>
             <h2 style="margin-top: 20px;">Unlock Your Potential with <br/> Expert-Led Courses</h2>
-            <p style="margin: 15px 0;">Our meticulously crafted curriculum, taught by industry professionals, ensures a seamless journey from beginner to pro, setting industry standards while maintaining beginner-friendly accessibility.</p>
+            <p style="margin: 15px 0;">
+            Our courses are designed and taught by industry professionals, making it easy for anyone—from beginners
+to aspiring pros—to master in-demand tech skills. With a curriculum that sets industry standards and stays
+accessible, you’ll gain real-world knowledge that opens doors.
+            </p>
             {{-- <a href="#" class="btn btn-warning" style="margin-bottom: 20px;">Start Learning</a> --}}
 
             <div style="position: relative; height: 100px; margin-top: 30px; display: flex; justify-content: center;">
@@ -34,7 +38,8 @@
                 </div>
             </div>
 
-            <span style="display: block; margin-top: 20px;">Over 110k+ professionals trained.</span>
+            <span style="display: block; margin-top: 20px;">
+Join over 110,000 professionals who have trained with us and taken their careers to the next level.            </span>
         </div>
     </section>
 

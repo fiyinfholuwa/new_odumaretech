@@ -144,8 +144,10 @@ class FrontendController extends Controller
             'categories' => $formatted
         ]);
     }
-    public function course_list($name):View{
-        return view('frontend.course_list');
+    public function course_list():View{
+        $courses  = Course::with('cat')->where('course_type', 'external')->get();
+
+        return view('frontend.course_list', ['courses' => $courses]);
     }
     public function course_external_detail($name):View{
         $popular_courses = Course::with('cat')->where('course_type', 'external')->paginate(4);

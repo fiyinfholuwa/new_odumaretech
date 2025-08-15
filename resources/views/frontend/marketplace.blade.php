@@ -6,7 +6,7 @@
 
     <!-- Hero Section -->
     <section style="
-  height: 60vh;
+  height: 70vh;
   background: linear-gradient(45deg, #041845, #0a3d62, #041845);
   background-size: 400% 400%;
   animation: animateBackground 10s ease infinite;
@@ -20,8 +20,10 @@
             </h2>
 
             <p style="margin: 15px 0;">
-                Browse thousands of courses from expert instructors or sell your own knowledge and skills            </p>
-                <a href="{{route('course_list')}}" class="btn btn-warning" style="margin-bottom: 20px;">View Courses</a>
+Browse a wide range of courses from expert instructors, or become a creator and share your own
+knowledge with the world. Whether you’re here to learn new skills or teach what you know, our marketplace
+is your gateway to growth.   </p>            
+ <a href="{{route('course_list')}}" class="btn btn-warning" style="margin-bottom: 20px;">View Courses</a>
 
             <?php
             $stats = [
@@ -160,7 +162,7 @@
 
             <div class="container">
                 <div class="row">
-                    @foreach($best_selling as $index => $course)
+                @foreach($best_selling as $index => $course)
                     <?php 
                                 $amount_info = getUserLocalCurrencyConversion($course['price']);
 

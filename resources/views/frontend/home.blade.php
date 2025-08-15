@@ -274,7 +274,7 @@
                     <span style="background-color: #FFC000; padding: 5px;  border-radius: 10px; font-size:10px;">Led by Professionals</span>
                     <h2 style="position: relative;">
                         <img class="decorative-line" style="position: relative; height: 100px; width: 100px; left: -80px; top: 50px;" src="{{ asset('frontend/assets/img/line.png') }}" alt="line" />
-                        Break Free With Tech Superpowers<span>.</span>
+Unlock Your Tech Superpowers for Tomorrow, Today                        <span>.</span>
                     </h2>
 
                     <style>
@@ -284,10 +284,12 @@
                             }
                         }
                     </style>
-                    <p>Embark on a thrilling expedition into the vast realm of technology, where innovation meets possibility and your digital potential awaits.</p>
+                    <p>
+Hands-on courses, real projects, and a community that’s got your back. Start your journey—no experience
+needed.                    </p>
                 </div>
                 <div style="margin-top: 30px;">
-                    <a href="{{route('courses')}}" class="btn  btn-primary">Explore Courses</a>
+                    <a href="{{route('courses')}}" class="btn  btn-primary">Get  Started</a>
                 </div>
             </div>
         </div>
@@ -441,7 +443,7 @@
         <div class="container">
             <div class="section-header text-center mb-5">
                 <h2 class="fw-bold" style="font-size: 2.5rem;">How you will learn</h2>
-                <p class="text-muted">Premium skills learning across the entire digital product lifecycle</p>
+                <p class="text-muted">Learn tech skills the way top professionals do—by doing, not just watching.</p>
             </div>
             <div class="learn_list row g-4">
                 <?php
@@ -449,37 +451,36 @@
                     [
                         'title' => 'Immerse Learning',
                         'points' => [
-                            'Robust Content and Videos.',
-                            'Interactive quizzes and assignments.',
-                            'Peer collaboration opportunities.',
-                            'Hands-on projects and real-world scenarios.',
+                            'Watch easy-to-follow videos and explore robust content.',
+                            'Test your knowledge with interactive quizzes and assignments.',
+                            'Team up with peers for group projects and discussions.',
+                            'Build real skills with hands-on projects and real-world scenarios.',
                         ],
                     ],
                     [
                         'title' => 'Mentor Support',
                         'points' => [
-                            'Direct access to industry experts.',
-                            'Weekly live Q&A sessions.',
-                            'Feedback on your projects.',
-                            'Career guidance and portfolio reviews.',
+                            'Get direct access to industry experts for advice and support.',
+                            'Join weekly live Q&A sessions to get your questions answered.',
+                            'Receive personalized feedback on your projects.',
+                            'Benefit from career guidance and portfolio reviews.',
                         ],
                     ],
                     [
                         'title' => 'Practical Approach',
                         'points' => [
-                            'Real company case studies.',
-                            'Problem-solving sessions.',
-                            'Capstone projects for real-world application.',
-                            'Internship and job opportunities after course.',
+                            'Work on real company case studies and solve real problems.',
+                            'Tackle capstone projects that showcase your skills.',
+                            'Unlock internship and job opportunities after your course.',
                         ],
                     ],
                     [
                         'title' => 'Career Pathways',
                         'points' => [
-                            'Guided learning journeys.',
-                            'Specialization tracks (frontend, backend, data, etc).',
-                            'Resume and LinkedIn support.',
-                            'Mock interviews and job prep.',
+                            'Follow guided learning journeys tailored to your goals.',
+                            'Choose specialization tracks like frontend, backend, or data.',
+                            'Get help with your resume and LinkedIn profile.',
+                            'Practice with mock interviews and job prep sessions.',
                         ],
                     ],
                 ];
@@ -514,8 +515,8 @@
 
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                    <h2 style="color: #0E2293;" class="fw-bold">More than just Another Educational Platform</h2>
-                    <p style="color: #5A5A5A;" class="">We are your dedicated partner in mastering digital skills. Our approach combines rigorous learning with practical experience, setting us apart.</p>
+                    <h2 style="color: #0E2293;" class="fw-bold">Not Just Another EdTech Platform</h2>
+                    <p style="color: #5A5A5A;" class="">We’re your dedicated partner in mastering digital skills. Our unique blend of hands-on learning and real-world experience sets us apart.</p>
                     <div class="ratio ratio-16x9">
                         <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF"
                                 title="YouTube video player"
@@ -531,18 +532,21 @@
                     $features = [
                         [
                             'icon' => 'fa-location',
-                            'title' => 'Learn at your Convenience',
-                            'desc' => 'Transform any space into your classroom. Whether you\'re at home, relaxing at the beach, working in your studio, or managing your business - your learning journey adapts to your lifestyle.',
+                            'title' => 'Learn on Your Terms',
+                            'desc' => 'Turn any place into your classroom. Whether you’re at home, on the go, or balancing work and life, our
+flexible programs fit your schedule and lifestyle.',
                         ],
                         [
                             'icon' => 'fa-champagne-glasses ',
-                            'title' => 'Learning that Sparks Joy',
-                            'desc' => 'Experience education reimagined for the modern learner. Our dynamic curriculum brings concepts to life through interactive lessons, engaging projects, and immersive content.',
+                            'title' => 'Learning That Inspires',
+                            'desc' => 'Say goodbye to boring lessons. Our interactive curriculum makes learning fun and practical, with engaging
+projects and content that bring tech to life.',
                         ],
                         [
                             'icon' => 'fa-certificate',
-                            'title' => 'Learn from Industry Leaders',
-                            'desc' => 'Our expert instructors are handpicked for their exceptional expertise and proven track record. Each brings extensive real-world experience, deep subject matter knowledge, and a passion for teaching.',
+                            'title' => 'Guidance from Industry Pros',
+                            'desc' => 'Learn from the best. Our instructors are real-world experts who are passionate about helping you succeed,
+sharing insights you won’t find in textbooks.',
                         ],
                     ];
                     foreach ($features as $feature):
@@ -564,59 +568,120 @@
 
 
 
-    <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
-        <div class="container">
-            <div class="row justify-content-center text-center mb-5">
-                <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Intensive BootCamp</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
-                        Let’s partner with you to train and develop your talent in areas of tech that will inturn transform your business                    </p>
-                    <a href="{{route('courses')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Our Courses</a>
-                </div>
+    <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate">
+    <div class="container">
+        <!-- Title & Description -->
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-3" style="font-size: 2.8rem; color: #0E2293;">
+                    Intensive BootCamp
+                </h2>
+                <h4 class="mb-3" style="color: #0E2293;">
+                    Empower Your Team. Transform Your Business.
+                </h4>
+                <p class="lead mb-4" style="font-size: 1.1rem; color: #333;">
+                    Partner with us to train and develop your talent in high-impact tech skills. 
+                    Our intensive bootcamps are designed to equip your team with the latest tools 
+                    and knowledge to drive real results for your business.
+                </p>
+                <h4 class="mb-4" style="color: #0E2293;">
+                    Ready to up-skill your workforce?
+                </h4>
+                <a href="{{ route('courses') }}" 
+                   style="background-color: #0E2293; border: none; padding: 12px 30px; font-size: 1.1rem; border-radius: 6px;" 
+                   class="btn btn-warning text-white fw-semibold">
+                    Get Started
+                </a>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>
-                    </div>
+        </div>
+
+        <!-- Video Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="ratio ratio-16x9">
+                    <iframe 
+                        src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" 
+                        title="YouTube video player" 
+                        allowfullscreen 
+                        style="border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    </iframe>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 
     <!-- About Section -->
 
-    <section style="background-color: #E9ECFF; padding: 60px 0;" class="accelerate text-white">
-        <div class="container">
-            <div class="row justify-content-center text-center mb-5">
-                <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Accelerate Your Workforce</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">Let’s partner with you to train and develop your talent in areas of tech that will in turn transform your business.</p>
-                    <a href="{{route('corporate_training')}}" style="background-color: #0E2293; border: none;" class="btn btn-warning btn-lg text-white">Read More</a>
-                </div>
+    <section style="background: linear-gradient(135deg, #E9ECFF 0%, #F4F6FF 100%); padding: 60px 0;" class="accelerate">
+    <div class="container">
+        <!-- Headline -->
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-3" style="font-size: 2.8rem; color: #0E2293;">
+                    Accelerate Your Workforce
+                </h2>
+                <p class="lead mb-3" style="font-size: 1.2rem; color: #333;">
+                    Unlock Your Team’s Tech Potential
+                </p>
+                <p style="color: #444; font-size: 1.05rem; line-height: 1.6;">
+                    Partner with us to train and develop your talent in the tech skills that matter most. 
+                    Our tailored programs empower your workforce to innovate, adapt, and drive your business forward.
+                </p>
+                <h4 class="mb-4" style="color: #0E2293; font-weight: 600;">
+                    Ready to future-proof your team?
+                </h4>
+                <a href="{{ route('corporate_training') }}" 
+                   class="btn btn-lg text-white fw-semibold"
+                   style="background-color: #0E2293; border: none; padding: 12px 30px; border-radius: 6px;">
+                    Partner With Us
+                </a>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>
-                    </div>
+        </div>
+
+        <!-- Video -->
+        <div class="row">
+            <div class="col-12">
+                <div class="ratio ratio-16x9">
+                    <iframe 
+                        src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" 
+                        title="YouTube video player" 
+                        allowfullscreen 
+                        style="border-radius: 10px; box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.08);">
+                    </iframe>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 
     <section style="background-color: #FFF3CF; padding: 60px 0;" class="accelerate text-white">
         <div class="container">
             <div class="row justify-content-center text-center mb-5">
-                <div class="col-lg-8">
-                    <h2  class="fw-bold mb-3" style="font-size: 2.8rem; color: ;">Free Masterclass</h2>
-                    <p class="lead mb-4" style="font-size: 1.2rem; color: black; ">
-                        Our Exclusive Free Masterclass Series – Your Gateway to Professional Knowledge. Seize the Opportunity to Learn Directly from Industry Experts. Reserve Your Spot Now! </p>
-                        <a href="{{route('masterclass')}}" style="background-color: #FFC000; border: none;" class="btn btn-warning btn-lg text-white">Join Masterclass</a>
-                </div>
-            </div>
+    <div class="col-lg-8">
+        <h2 class="fw-bold mb-3" style="font-size: 2.8rem; color: #0E2293;">
+            Free Masterclass
+        </h2>
+        <p style="color: #444; font-size: 1.15rem; font-weight: 500;">
+            Unlock Expert Insights — For Free!
+        </p>
+        <p class="lead mb-4" style="font-size: 1.15rem; color: #333; line-height: 1.6;">
+            Join our exclusive masterclass series and learn directly from industry leaders. 
+            Don’t miss this chance to boost your skills and grow your network.
+        </p>
+        <h4 class="mb-4" style="color: #0E2293; font-weight: 600;">
+            Reserve your spot today!
+        </h4>
+        <a href="{{ route('masterclass') }}" 
+           class="btn btn-lg fw-semibold text-white" 
+           style="background-color: #FFC000; border: none; padding: 12px 30px; border-radius: 6px;">
+            Sign Up Now
+        </a>
+    </div>
+</div>
+
             <div class="row">
 
                 <?php
