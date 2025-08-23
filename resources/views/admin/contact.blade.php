@@ -4,8 +4,8 @@
     <div class="row" style="margin:10px;">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-secondary d-flex justify-content-between align-items-center flex-wrap">
-                    <h4 class="card-title text-white mb-0">All Messages</h4>
+                <div class="card-header bgc-secondary d-flex justify-content-between align-items-center flex-wrap">
+                    <h4 class="card-title bgc-secondary-text mb-0">All Messages</h4>
 {{--                    <form method="post" action="{{ route('messages.export') }}" class="d-flex align-items-center gap-2 mt-2 mt-md-0">--}}
 {{--                        @csrf--}}
 {{--                        <input name="date_from" type="date" class="form-control form-control-sm" required style="max-width: 180px;" />--}}

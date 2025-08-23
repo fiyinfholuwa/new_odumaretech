@@ -6,8 +6,8 @@
 
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header bg-secondary">
-									<h4 class="card-title text-white">All Instructor Applications</h4>
+								<div class="card-header bgc-secondary">
+									<h4 class="card-title bgc-secondary-text">All Instructor Applications</h4>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
@@ -50,7 +50,7 @@
                                                 <a class="btn btn-dark btn-sm text-white" href="{{route('applicant.edit', $applicant->id)}}" >Assess Applicant</a>
                                                 @endif
 
-                                                <a href="#" data-toggle="modal" data-target="#applicant_{{$applicant->id}}" ><i style="color:red;" class="fa fa-trash"></i></a>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#applicant_{{$applicant->id}}" ><i style="color:red;" class="fa fa-trash"></i></a>
                                                 </td>
                                                 @include('admin.modal.deleteApplicant')
 											</tr>
