@@ -226,20 +226,20 @@
                         <li class="pc-item"><a class="pc-link" href="{{route('blog.all')}}">All Posts</a></li>
                     </ul>
                 </li>
+<li class="pc-item pc-hasmenu">
+    <a href="#!" class="pc-link">
+        <span class="pc-micon"><i class="fa fa-user"></i></span>
+        <span class="pc-mtext">Manage Accounts</span>
+        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+    </a>
+    <ul class="pc-submenu">
+        {{-- <li class="pc-item"><a class="pc-link" href="{{route('admin.user.view')}}">Add User</a></li> --}}
+        {{-- <li class="pc-item"><a class="pc-link" href="{{route('student.all')}}">All Users</a></li> --}}
+        {{-- <li class="pc-item"><a class="pc-link" href="{{route('instructor.all')}}">All Instructors</a></li> --}}
+        {{-- <li class="pc-item"><a class="pc-link" href="{{route('applied.view')}}">Manage Applied Students</a></li> --}}
+    </ul>
+</li>
 
-{{--                <li class="pc-item pc-hasmenu">--}}
-{{--                    <a href="#!" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fa fa-user"></i></span>--}}
-{{--                        <span class="pc-mtext">Manage Accounts</span>--}}
-{{--                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>--}}
-{{--                    </a>--}}
-{{--                    <ul class="pc-submenu">--}}
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('admin.user.view')}}">Add User</a></li>--}}
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('student.all')}}">All Users</a></li>--}}
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('instructor.all')}}">All Instructors</a></li>--}}
-{{--                        <li class="pc-item"><a class="pc-link" href="{{route('applied.view')}}">Manage Applied Students</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
 
                 <li class="pc-item">
                     <a href="{{route('company.all')}}" class="pc-link">
@@ -283,12 +283,13 @@
                     </a>
                 </li>
 
-{{--                <li class="pc-item">--}}
-{{--                    <a href="{{route('transaction.all')}}" class="pc-link">--}}
-{{--                        <span class="pc-micon"><i class="fas fa-exchange-alt"></i></span>--}}
-{{--                        <span class="pc-mtext">All Transactions</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+<li class="pc-item">
+    <a href="{{route('transaction.all')}}" class="pc-link">
+        <span class="pc-micon"><i class="fas fa-exchange-alt"></i></span>
+        <span class="pc-mtext">All Transactions</span>
+    </a>
+</li>
+
 
                 <li class="pc-item">
                     <a href="{{route('coupon.view')}}" class="pc-link">
