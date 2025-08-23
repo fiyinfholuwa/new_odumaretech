@@ -5,8 +5,8 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0 text-white">Add Testimonial</h5>
+                    <div class="card-header bgc-primary text-white">
+                        <h4 class="mb-0 bgc-primary-text">Add Testimonial</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('testimonial.add') }}" method="POST" enctype="multipart/form-data">

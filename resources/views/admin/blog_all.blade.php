@@ -6,8 +6,8 @@
 
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header bg-secondary">
-									<h4 class="card-title text-white">All Posts</h4>
+								<div class="card-header bgc-secondary">
+									<h4 class="card-title bgc-secondary-text">All Posts</h4>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">

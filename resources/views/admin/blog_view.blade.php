@@ -5,8 +5,8 @@
     <div class="row my-3 mx-2">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary">
-                    <h4 class="text-white mb-0">Add Post</h4>
+                <div class="card-header bgc-primary">
+                    <h4 class="bgc-primary-text mb-0">Add Post</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('blog.add') }}" method="POST" enctype="multipart/form-data" novalidate>

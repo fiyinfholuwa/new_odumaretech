@@ -6,8 +6,8 @@
 
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header  bg-secondary">
-									<h4 class="card-title text-white">All Corporate Training Requests</h4>
+								<div class="card-header  bgc-primary">
+									<h4 class="card-title bgc-primary-text">All Corporate Training Requests</h4>
 
                                     <form method="post" action="{{ route('company.export') }}">
                                         @csrf

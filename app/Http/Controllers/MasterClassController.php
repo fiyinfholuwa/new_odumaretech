@@ -100,35 +100,52 @@ class MasterClassController extends Controller
     }
 
 
-    public function masterclass_link_add(Request $request, $id=null):RedirectResponse{
-        if($request->id ==null || $request->id ==""){
-            $masterclass_link = new MasterClassLink;
-            $masterclass_link->link = $request->link;
-            $masterclass_link->date = $request->date;
-            $masterclass_link->time = $request->time;
-            $masterclass_link->title = $request->title;
-            $masterclass_link->visible = $request->visible;
-            $masterclass_link->save();
-            $notification = array(
-                'message' => 'MasterClass Link Sucessfully saved',
-                'alert-type' => 'success'
-            );
-            return redirect()->back()->with($notification);
-        }else{
-            $update_link =  MasterClassLink::findOrFail($request->id);
-            $update_link->link = $request->link;
-            $update_link->date = $request->date;
-            $update_link->time = $request->time;
-            $update_link->title = $request->title;
-            $update_link->visible = $request->visible;
-            $update_link->save();
-            $notification = array(
-                'message' => 'MasterClass Link Successfully updated',
-                'alert-type' => 'success'
-            );
-            return redirect()->back()->with($notification);
-        }
+    public function masterclass_link_add(Request $request, $id=null): RedirectResponse
+{
+    // ✅ Validation
+    $request->validate([
+        'link'    => 'required|string',
+        'date'    => 'required|date',
+        'time'    => 'required',
+        'title'   => 'required|string',
+        'visible' => 'required',
+        'image'   => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // optional
+    ]);
+
+    if ($request->id == null || $request->id == "") {
+        $masterclass_link = new MasterClassLink;
+    } else {
+        $masterclass_link = MasterClassLink::findOrFail($request->id);
     }
+
+    $masterclass_link->link = $request->link;
+    $masterclass_link->date = $request->date;
+    $masterclass_link->time = $request->time;
+    $masterclass_link->title = $request->title;
+    $masterclass_link->visible = $request->visible;
+    $masterclass_link->text_body = $request->text_body;
+
+    // ✅ File upload handling
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $destinationPath = public_path('uploads/masterclass');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        $file->move($destinationPath, $filename);
+        $masterclass_link->image = 'uploads/masterclass/'.$filename;
+    }
+
+    $masterclass_link->save();
+
+    $notification = [
+        'message' => $request->id ? 'MasterClass Link Successfully updated' : 'MasterClass Link Successfully saved',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->back()->with($notification);
+}
 
     public function github_link_add(Request $request, $id=null):RedirectResponse{
         if($request->id ==null || $request->id ==""){

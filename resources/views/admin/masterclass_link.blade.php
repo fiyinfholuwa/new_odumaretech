@@ -1,146 +1,146 @@
 @extends('admin.app')
 
 @section('content')
-    <div class="row" style="margin:10px">
-        <div class="col-md-5">
-            <div class="card">
-                <div class="card-header bg-primary">
-                    <div class="card-title"><h5 class="text-white">Manage Master Class Link </h5></div>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('masterclass.link.add') }}" method="post">
-                        @csrf
+<div class="row mx-2">
+    <div class="col-md-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bgc-primary">
+                <h4 class="card-title bgc-primary-text mb-0">Current Masterclass Link</h5>
+            </div>
+            <div class="card-body">
+    @if($masterclass_link)
+        <div class="d-flex align-items-center p-3 shadow-sm rounded bg-light">
+            
+            {{-- Facilitator Image --}}
+            <div class="me-3">
+                <img src="{{ asset(($masterclass_link->image ?? 'https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg')) }}"
+                     alt="Facilitator"
+                     class="rounded-circle border shadow-sm"
+                     width="90" height="90"
+                     style="object-fit: cover;">
+            </div>
 
-                        @if($masterclass_link != null)
-                            <input type="hidden" name="id" value="{{ $masterclass_link->id }}"/>
+            {{-- Masterclass Info --}}
+            <div class="flex-grow-1">
+                <h5 class="mb-1">{{ $masterclass_link->title }}</h5>
+                <p class="mb-1 text-muted">
+                    <i class="bi bi-calendar-event me-1"></i> 
+                    {{ \Carbon\Carbon::parse($masterclass_link->date)->format('d M Y') }}
+                    &nbsp; | &nbsp;
+                    <i class="bi bi-clock me-1"></i> 
+                    {{ \Carbon\Carbon::parse($masterclass_link->time)->format('h:i A') }}
+                </p>
+                <p class="mb-1">
+                    <span class="badge {{ $masterclass_link->visible == 'on' ? 'bg-success' : 'bg-danger' }}">
+                        {{ $masterclass_link->visible == 'on' ? 'Visible' : 'Hidden' }}
+                    </span>
+                </p>
+                @if(!empty($masterclass_link->info))
+                    <p class="small text-muted mb-1">
+                        {{ Str::limit($masterclass_link->info, 100) }}
+                    </p>
+                @endif
+            </div>
 
-                            <div class="form-group">
-                                <label for="link">Master Class Link</label>
-                                <input type="text" class="form-control" id="link" name="link" value="{{ $masterclass_link->link }}" required placeholder="Enter Master Class Link">
-                                <small style="color:red; font-weight:500">@error('link') {{ $message }} @enderror</small>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="title">Master Class Title</label>
-                                <input type="text" class="form-control" id="title" name="title" value="{{ $masterclass_link->title }}" required placeholder="Enter Master Class Title">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="date">Date</label>
-                                <input type="date" class="form-control" id="date" name="date" value="{{ $masterclass_link->date }}" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="time">Time</label>
-                                <input type="time" class="form-control" id="time" name="time" value="{{ $masterclass_link->time }}" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="visible">Visibility</label>
-                                <select class="form-control" name="visible" required>
-                                    <option value="">Select Option</option>
-                                    <option value="on" {{ $masterclass_link->visible == 'on' ? 'selected' : '' }}>Yes</option>
-                                    <option value="off" {{ $masterclass_link->visible == 'off' ? 'selected' : '' }}>No</option>
-                                </select>
-                            </div>
-
-                            <div class="card-action">
-                                <button class="btn btn-primary">Update Link</button>
-                            </div>
-
-                        @else
-
-                            <div class="form-group">
-                                <label for="link">Master Class Link</label>
-                                <input type="text" class="form-control" id="link" name="link" required placeholder="Enter Master Class Link">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="title">Master Class Title</label>
-                                <input type="text" class="form-control" id="title" name="title" required placeholder="Enter Master Class Title">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="date">Date</label>
-                                <input type="date" class="form-control" id="date" name="date" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="time">Time</label>
-                                <input type="time" class="form-control" id="time" name="time" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="visible">Visibility</label>
-                                <select class="form-control" name="visible" required>
-                                    <option value="">Select Option</option>
-                                    <option value="on">Yes</option>
-                                    <option value="off">No</option>
-                                </select>
-                            </div>
-
-                            <div class="card-action">
-                                <button class="btn btn-success">Add Link</button>
-                            </div>
-
-                        @endif
-                    </form>
-                </div>
+            {{-- Action --}}
+            <div>
+                <a target="_blank" href="{{ $masterclass_link->link }}" 
+                   class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-box-arrow-up-right"></i> View
+                </a>
             </div>
         </div>
+    @else
+        <p class="text-center text-muted">No Masterclass Link Found</p>
+    @endif
+</div>
 
-        <div class="col-md-7">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header bg-secondary">
-                            <h5 class="card-title text-white">Test Master Class Link</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="basic-datatables" class="display table table-striped table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>S/N</th>
-                                        <th>Title</th>
-                                        <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Visibility</th>
-                                        <th>Master Class URL</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @php $i = 1; @endphp
-                                    @if($masterclass_link)
-                                        <tr>
-                                            <td>{{ $i++ }}</td>
-                                            <td>{{ $masterclass_link->title }}</td>
-                                            <td>{{ $masterclass_link->date }}</td>
-                                            <td>{{ $masterclass_link->time }}</td>
-                                            <td>
-                                                @if($masterclass_link->visible == 'on')
-                                                    <span class="btn btn-success">Yes</span>
-                                                @else
-                                                    <span class="btn btn-danger">No</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a target="_blank" class="btn btn-info" href="{{ $masterclass_link->link }}">View</a>
-                                            </td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td colspan="6" class="text-center">No Master Class Link Found</td>
-                                        </tr>
-                                    @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bgc-primary">
+            <h4 class="card-title bgc-primary-text mb-0">
+                {{ $masterclass_link ? 'Update Masterclass Link' : 'Add Masterclass Link' }}
+            </h5>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('masterclass.link.add') }}" method="post" enctype="multipart/form-data">
+                @csrf
+
+                @if($masterclass_link)
+                    <input type="hidden" name="id" value="{{ $masterclass_link->id }}">
+                @endif
+
+                {{-- Masterclass Link --}}
+                <div class="form-group mb-3">
+                    <label for="link">Master Class Link</label>
+                    <input type="text" class="form-control" id="link" name="link"
+                        value="{{ $masterclass_link->link ?? '' }}"
+                        placeholder="Enter Master Class Link" required>
+                    <small class="text-danger">@error('link') {{ $message }} @enderror</small>
+                </div>
+
+                {{-- Title + Date + Time in a row --}}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="title">Master Class Title</label>
+                        <input type="text" class="form-control" id="title" name="title"
+                            value="{{ $masterclass_link->title ?? '' }}"
+                            placeholder="Enter Title" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" id="date" name="date"
+                            value="{{ $masterclass_link->date ?? '' }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="time">Time</label>
+                        <input type="time" class="form-control" id="time" name="time"
+                            value="{{ $masterclass_link->time ?? '' }}" required>
                     </div>
                 </div>
-            </div>
-        </div>
 
+                {{-- Visibility + Facilitator Image in a row --}}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="visible">Visibility</label>
+                        <select class="form-control" name="visible" required>
+                            <option value="">Select Option</option>
+                            <option value="on" {{ isset($masterclass_link) && $masterclass_link->visible == 'on' ? 'selected' : '' }}>Yes</option>
+                            <option value="off" {{ isset($masterclass_link) && $masterclass_link->visible == 'off' ? 'selected' : '' }}>No</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="facilitator_image">Facilitator Image</label>
+                        <input type="file" class="form-control" id="facilitator_image" name="image" accept="image/*">
+                        @if(isset($masterclass_link->image))
+                            <div class="mt-2">
+                                <img src="{{ asset($masterclass_link->image) }}" 
+                                     alt="Facilitator" class="img-thumbnail" width="120">
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- Info/Description --}}
+                <div class="form-group mb-3">
+                    <label for="info">Masterclass Info</label>
+                    <textarea class="form-control" id="myTextarea" name="text_body" rows="4" placeholder="Enter details about the masterclass...">{{ $masterclass_link->text_body ?? '' }}</textarea>
+                </div>
+
+                {{-- Submit --}}
+                <div class="card-action">
+                    <button class="btn {{ $masterclass_link ? 'btn-primary' : 'btn-success' }}">
+                        {{ $masterclass_link ? 'Update Link' : 'Add Link' }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
     </div>
+</div>
+
+</div>
 @endsection

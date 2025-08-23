@@ -103,16 +103,25 @@ class AuthController extends Controller
 
         return view('user.dashboard');
     }
-    public function admin_dashboard(){
+    public function admin_dashboard()
+{
+    $users       = User::where('user_type', 'user')->count();
+    $instructors = ApprovedInstructor::count();
+    $payments    = Payment::where('status', 'paid')->sum('amount');
+    $courses     = Course::count();
+    $testimonial = Testimonial::count();
+    $contacts    = Contact::count();
 
-        // $users = User::where('user_type', '=', '0')->count();
-        // $instructors = ApprovedInstructor::count();
-        // $payments = Payment::where('status', '=', 'paid')->sum('amount');
-        // $courses = Course::count();
-        // $testimonial = Testimonial::count();
-        // $contacts = Contact::count();
-        return view('admin.dashboard');
-    }
+    return view('admin.dashboard', compact(
+        'users',
+        'instructors',
+        'payments',
+        'courses',
+        'testimonial',
+        'contacts'
+    ));
+}
+
     public function instructor_dashboard(){
         // $user_id = Auth::user()->id;
         $instructor = ApprovedInstructor::where('user_id', '=', Auth::user()->id)->first();

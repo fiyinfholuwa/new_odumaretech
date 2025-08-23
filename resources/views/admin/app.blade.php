@@ -17,6 +17,8 @@
           content="Bootstrap admin template, Dashboard UI Kit, Dashboard Template, Backend Panel, react dashboard, angular dashboard">
     <meta name="author" content="Phoenixcoded">
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- [Favicon] icon -->
     <link rel="icon" href="{{asset('https://odumaretech.com/frontend/img/img/logo.png')}}" type="image/x-icon"> <!-- [Font] Family -->
     <link rel="stylesheet" href="{{asset('backend/assets/fonts/inter/inter.css')}}" id="main-font-link"/>
@@ -92,6 +94,24 @@
     </script>
 
 </head>
+
+<style>
+.bgc-primary{
+    background-color:#E9ECFF  !important;
+
+}
+.bgc-primary-text{
+    color:#0E2293 !important;
+}
+.bgc-secondary{
+    background-color:#FFF3CF !important;
+
+}
+.bgc-secondary-text{
+    color:#FFC000 !important;
+}
+</style>
+
 <!-- [Head] end -->
 <!-- [Body] Start -->
 
@@ -700,20 +720,36 @@
         // Adjust columns and redraw table after initialization
         table.columns.adjust().draw();
     });
+    $(document).ready(function () {
+        var table = $('#basic-datatables').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            responsive: true // optional but recommended for responsive tables
+        });
+
+        // Adjust columns and redraw table after initialization
+        table.columns.adjust().draw();
+    });
 </script>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
-<script> var editor = new FroalaEditor('#myTextarea'); </script>
+{{-- <script> var editor = new FroalaEditor('#myTextarea'); </script> --}}
 
 
 <script>
     ClassicEditor
-        .create(document.querySelector('#myTextarea'))
+        .create(document.querySelector('#myTextarea'), {
+            ckfinder: {
+                uploadUrl: "{{ route('ckeditor.upload') }}?_token={{ csrf_token() }}"
+            }
+        })
         .catch(error => {
             console.error(error);
         });
 </script>
+
 <script>
     ClassicEditor
         .create(document.querySelector('#myTextarea2'))

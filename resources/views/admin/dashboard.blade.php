@@ -147,14 +147,21 @@
     <body>
 
     <?php
+
+    {{-- 'users',
+        'instructors',
+        'payments',
+        'courses',
+        'testimonial',
+        'contacts' --}}
 // Dummy PHP data - you can replace with your actual data
     $stats = [
-        'students' => 20,
-        'instructors' => 10,
-        'courses' => 24,
+        'students' =>  $users ,
+        'instructors' =>  $instructors ,
+        'courses' => $courses ,
         'total_revenue' => 120482,
         'revenue_growth' => 12,
-        'testimonials' => 1204,
+        'testimonials' => $testimonial ,
         'master_class' => 23
     ];
 
@@ -263,7 +270,7 @@
         </div>
 
         <!-- Stats Cards Row 2 -->
-        <div class="row mb-4">
+        <div style="display:none;" class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="card stat-card stat-card-yellow">
                     <div class="row">
@@ -274,7 +281,7 @@
                         </div>
                         <div class="col-8">
                             <div>
-                                <p class="stat-label">Total Revenue <span class="revenue-trend">+<?php echo $stats['revenue_growth']; ?>%</span></p>
+                                <p class="stat-label">Total Revenue </p>
                                 <p class="stat-number">$<?php echo number_format($stats['total_revenue']); ?></p>
                             </div>
                         </div>

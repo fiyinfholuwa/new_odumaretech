@@ -4,8 +4,8 @@
     <div class="row" style="margin:10px">
         <div class="col-md-11">
             <div class="card">
-                <div class="card-header  bg-primary">
-                    <div class="card-title"><h3 class="text-white" style="text-align: left;">Edit Course</h3></div>
+                <div class="card-header  bgc-primary">
+                    <div class="card-title"><h3 class="bgc-primary-text" style="text-align: left;">Edit Course</h3></div>
                 </div>
                 <div class="card-body">
                     <form action="{{route('course.update', $course->id)}}" method="post" enctype="multipart/form-data">

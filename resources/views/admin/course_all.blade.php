@@ -4,8 +4,8 @@
     <div class="row my-3">
         <div class="col-md-12">
             <div class="card shadow-sm">
-                <div class="card-header  bg-secondary">
-                    <h3 class="card-title mb-0 text-white">All Courses</h3>
+                <div class="card-header  bgc-secondary">
+                    <h3 class="card-title mb-0 bgc-secondary-text">All Courses</h3>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

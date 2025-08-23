@@ -985,4 +985,26 @@ public function allPayoutRequests()
 }
 
 
+public function uploadImage(Request $request)
+{
+    if ($request->hasFile('upload')) {
+        $file     = $request->file('upload');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $path     = public_path('uploads/');
+
+        if (!file_exists($path)) {
+            mkdir($path, 0755, true);
+        }
+
+        $file->move($path, $filename);
+
+        // CKEditor expects { "url": "http://..." }
+        return response()->json([
+            'default' => asset('uploads/' . $filename)
+        ]);
+        
+    }
+
+    return response()->json(['error' => 'No file uploaded.'], 400);
+}
 }

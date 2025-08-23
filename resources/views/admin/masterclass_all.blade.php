@@ -25,8 +25,8 @@
     <div class="row my-3">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-secondary">
-                    <h4 class="card-title text-white">All Free Master Class Attendees</h4>
+                <div class="card-header bgc-primary">
+                    <h4 class="card-title bgc-primary-text">All Free Master Class Attendees</h4>
 
                     <form method="post" action="{{ route('masterclass.export') }}">
                         @csrf

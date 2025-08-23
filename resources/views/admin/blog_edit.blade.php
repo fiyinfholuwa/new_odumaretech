@@ -5,9 +5,9 @@
     <div class="row" style="margin:10px">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header bgc-primary">
                     <div class="card-title">
-                        <h4 class="text-white">Edit Post</h4>
+                        <h4 class="bgc-primary-text">Edit Post</h4>
                         </div>
                 </div>
                 <div class="card-body">

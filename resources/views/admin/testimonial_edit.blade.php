@@ -5,8 +5,8 @@
     <div class="row" style="margin:10px">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-primary">
-                    <div class="card-title"><h5 class="text-white">Edit Testimonial</h5></div>
+                <div class="card-header bgc-primary">
+                    <div class="card-title"><h4 class="bgc-primary-text">Edit Testimonial</h5></div>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('testimonial.update', $testimonial->id) }}" method="POST" enctype="multipart/form-data">

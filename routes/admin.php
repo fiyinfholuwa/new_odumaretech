@@ -234,3 +234,5 @@ Route::middleware(['auth', 'is_admin'])->controller(ExportController::class)->gr
     Route::post('/export/innovation/application', 'innovation_export')->name('innovation.export');
 });
 
+
+Route::post('/upload-image', [AdminController::class, 'uploadImage'])->name('ckeditor.upload');

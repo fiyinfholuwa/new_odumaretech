@@ -5,9 +5,9 @@
     <div class="row" style="margin:10px">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header bgc-primary">
                     <div class="card-title">
-                        <h4 class="text-white">Edit Innovation
+                        <h4 class="bgc-primary-text">Edit Innovation
                         </h4>
                     </div>
                 </div>
