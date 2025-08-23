@@ -37,6 +37,11 @@ Route::middleware(['auth'])->controller(ExternalController::class)->group(functi
     Route::get('/in/revenue/',  'in_revenue')->name('in.revenue');
 
     Route::post('/in/course/{id}/save-curriculum',  'in_saveCurriculum')->name('in.course.saveCurriculum');
+    Route::get('/in/profile/view/', 'in_password_view')->name('in.password.view');
+    Route::get('/in/payout', 'myPayoutRequests')->name('in.payout');
+
+    Route::post('/in/password/change/', 'in_user_password_change')->name('in.password.change');
+
 
 });
 

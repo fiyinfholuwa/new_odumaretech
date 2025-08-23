@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\PayoutRequest;
 use App\Models\ReferralBonusHistory;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -254,5 +255,23 @@ class ExternalController extends Controller
         'balance' => $reward_bal,
     ]);
     }
+
+
+    public function in_password_view(){
+        $countries = getAllCountries(); // ✅ use global function
+        $user = Auth::user();
+        $bankInfo = $user->bank_info ? json_decode($user->bank_info, true) : [];
+        return view('external_instructor.profile', ['user' => $user, 'bankInfo' => $bankInfo, 'countries' => $countries]);
+    }
+
+
+    public function myPayoutRequests()
+{
+    $payouts = PayoutRequest::where('user_id', Auth::id())
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+    return view('external_instructor.payout', compact('payouts'));
+}
 
 }

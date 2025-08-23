@@ -236,7 +236,7 @@ $referralStats = [
                             </div>
                             <div>
                                 <h6 class="mb-1 opacity-90">Total Course(s) Sold</h6>
-                                <div class="stats-number bgc-primary-text"><?= $referralStats['total_referrals'] ?></div>
+                                <div class="stats-number bgc-primary-text"><?= Auth::user()->student_count ?></div>
                             </div>
                         </div>
                     </div>
@@ -386,7 +386,7 @@ $referralStats = [
                     <div class="col-md-4">
                         <div class="text-center p-3 bg-light rounded">
                             <h6 class="text-muted mb-1">Processing Fee</h6>
-                            <h4 class="text-warning mb-0">${{ $referralStats['processing_fee'] }}</h4>
+                            <h4 class="text-warning mb-0">$0.00</h4>
                         </div>
                     </div>
                     <div class="col-md-4">

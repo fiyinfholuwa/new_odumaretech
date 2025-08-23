@@ -149,9 +149,9 @@
     <?php
 // Dummy PHP data - you can replace with your actual data
     $stats = [
-        'students' => 20,
+        'students' => Auth::user()->student_count,
         'instructors' => 10,
-        'courses' => 24,
+        'courses' => '$'. Auth::user()->cumulative_earning.'.00',
         'total_revenue' => 120482,
         'revenue_growth' => 12,
         'testimonials' => 1204,
@@ -202,7 +202,7 @@
         <!-- Welcome Header -->
         <div class="row mb-4">
             <div class="col-12">
-                <h1 class="welcome-title">Welcome 👋</h1>
+                <h1 class="welcome-title">Welcome 👋 {{ Auth::user()->first_name }}</h1>
             </div>
         </div>
 
@@ -237,7 +237,7 @@
                         <div class="col-8">
                             <div>
                                 <p class="stat-label text-muted">Total Courses</p>
-                                <p class="stat-number"><?php echo $stats['instructors']; ?></p>
+                                <p class="stat-number"><?php echo $courses; ?></p>
                             </div>
                         </div>
                     </div>
@@ -268,14 +268,13 @@
             <div class="col-md-8 mb-3">
                 <div class="card section-card">
                     <div class="section-title">
-                        <i class="fas fa-play-circle me-2"></i>Recent Masterclass
+                        <i class="fas fa-play-circle me-2"></i>Recent Courses
                     </div>
                     <hr/>
-                    <?php foreach($recent_masterclass as $class): ?>
+                    <?php foreach($recent_courses as $class): ?>
                     <div class="list-item">
                         <div>
-                            <div class="fw-semibold"><?php echo $class['name']; ?></div>
-                            <small class="text-muted"><?php echo $class['instructor']; ?></small>
+                            <div class="fw-semibold"><?php echo $class['title']; ?></div>
                         </div>
                     </div>
                     <?php endforeach; ?>

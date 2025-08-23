@@ -166,7 +166,20 @@
         <span class="pc-mtext">Revenue</span>
     </a>
 </li>
+
 <li class="pc-item">
+    <a href="{{ route('in.payout') }}" class="pc-link">
+<span class="pc-micon"><i class="fa fa-credit-card"></i></span>
+        <span class="pc-mtext">PayOut History</span>
+    </a>
+</li>
+<li class="pc-item">
+    <a href="{{route('in.password.view')}}" class="pc-link">
+        <span class="pc-micon"><i class="fas fa-user"></i></span>
+        <span class="pc-mtext">Profile</span>
+    </a>
+</li>
+{{-- <li class="pc-item">
     <a href="{{route('admin.dashboard')}}" class="pc-link">
         <span class="pc-micon"><i class="fas fa-comments"></i></span>
         <span class="pc-mtext">Chats</span>
@@ -177,7 +190,7 @@
         <span class="pc-micon"><i class="fas fa-bell"></i></span>
         <span class="pc-mtext">Notifications</span>
     </a>
-</li>
+</li> --}}
 
                 
                 
@@ -576,6 +589,17 @@
 <script>
     $(document).ready(function () {
         var table = $('#my-table').DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            responsive: true // optional but recommended for responsive tables
+        });
+
+        // Adjust columns and redraw table after initialization
+        table.columns.adjust().draw();
+    });
+    $(document).ready(function () {
+        var table = $('#basic-datatables').DataTable({
             paging: true,
             searching: true,
             ordering: true,

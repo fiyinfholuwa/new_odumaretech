@@ -508,31 +508,56 @@ public function user_badge()
 
 
     public function updateProfile(Request $request)
-{
-    // ✅ Validate inputs
-    $request->validate([
-        'first_name' => 'required|string|max:255',
-        'last_name'  => 'required|string|max:255',
-        'phone'      => 'nullable|string|max:20',
-    ]);
-
-    // ✅ Get logged-in user
-    $user = Auth::user();
-
-    // ✅ Update user fields
-    $user->first_name = $request->first_name;
-    $user->last_name  = $request->last_name;
-    $user->phone      = $request->phone;
-
-    // ✅ Save changes
-    $user->save();
-
-    $notification = array(
-        'message' => 'Profile updated successfully.',
-        'alert-type' => 'success'
-    );
-    return redirect()->back()->with($notification);
-}
+    {
+        // ✅ Validate inputs
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'phone'      => 'nullable|string|max:20',
+            'about_me'   => 'nullable|string|max:1000',
+            'image'      => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // 2MB max
+        ]);
+    
+        // ✅ Get logged-in user
+        $user = Auth::user();
+    
+        // ✅ Update user fields
+        $user->first_name = $request->first_name;
+        $user->last_name  = $request->last_name;
+        $user->phone      = $request->phone;
+        $user->about_me   = $request->about_me;
+    
+        // ✅ Handle image upload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $ext  = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $ext;
+            $path = public_path('uploads/profile/');
+    
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true); // create directory if not exists
+            }
+    
+            $file->move($path, $filename);
+    
+            // delete old image if exists
+            if ($user->image && file_exists($path . $user->image)) {
+                unlink($path . $user->image);
+            }
+    
+            $user->image = "uploads/profile/".$filename;
+        }
+    
+        // ✅ Save changes
+        $user->save();
+    
+        $notification = array(
+            'message' => 'Profile updated successfully.',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+    
 
 public function updateBankInfo(Request $request)
 {

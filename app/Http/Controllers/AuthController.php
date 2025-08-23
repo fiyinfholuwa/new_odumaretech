@@ -131,11 +131,12 @@ class AuthController extends Controller
         // $course_ids = $instructor->course_ids;
         // $students = AppliedCourse::whereIn('course_id', $course_ids)->count();
         // $assignment = Assignment::whereIn('course_id', $course_ids)->count();
-        // $course = Course::whereIn('id', $course_ids)->count();
+        $course = Course::where('instructor', Auth::user()->id)->count();
+        $recent_courses = Course::where('instructor', Auth::user()->id)->paginate(3);
         // $slide = Slide::whereIn('course_id', $course_ids)->count();
         // $session = LiveSession::whereIn('course_id', $course_ids)->count();
         // return view('instructor.dashboard', compact('students', 'assignment', 'course', 'slide', 'session'));
-        return view('external_instructor.dashboard');
+        return view('external_instructor.dashboard', ['courses' => $course, 'recent_courses' => $recent_courses]);
 
     }
 

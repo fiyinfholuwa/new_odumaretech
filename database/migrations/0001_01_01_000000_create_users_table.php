@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('referral_bonus')->nullable();
             $table->text('user_role')->nullable();
             $table->text('bank_info')->nullable();
+            $table->text('about_me')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
