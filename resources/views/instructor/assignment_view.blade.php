@@ -4,8 +4,8 @@
 <div class="row my-4">
     <div class="col-md-11">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="card-title mb-0">Add Assignment</h5>
+            <div class="card-header bgc-primary text-white">
+                <h4 class="card-title mb-0 bgc-primary-text">Add Assignment</h5>
             </div>
             <div class="card-body">
                 <form action="{{ route('assignment.add') }}" method="POST" enctype="multipart/form-data">

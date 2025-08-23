@@ -53,8 +53,8 @@
 <div class="row my-4">
     <div class="col-md-10">
         <div class="card ">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white">Add Slide</h4>
+            <div class="card-header bgc-primary ">
+                <h4 class="mb-0 bgc-primary-text">Add Slide</h4>
             </div>
             <div class="card-body p-4">
                 <form action="{{ route('slide.add') }}" method="post" enctype="multipart/form-data">

@@ -41,8 +41,8 @@
 <div class="row my-4">
     <div class="col-md-10">
         <div class="card shadow-sm">
-            <div class="card-header bg-secondary text-white">
-                <h4 class="mb-0 text-white">Edit Assignment</h4>
+            <div class="card-header bgc-secondary text-white">
+                <h4 class="mb-0 bgc-secondary-text">Edit Assignment</h4>
             </div>
             <div class="card-body p-4">
                 <form action="{{ route('assignment.update', $assignment->id) }}" method="POST" enctype="multipart/form-data">

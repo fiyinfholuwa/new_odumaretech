@@ -4,8 +4,8 @@
 <div class="row my-4">
     <div class="col-md-11">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Add Live Session</h5>
+            <div class="card-header bgc-primary text-white">
+                <h3 class="card-title mb-0 bgc-primary-text">Add Live Session</h5>
             </div>
             <div class="card-body">
                 <form action="{{ route('session.add') }}" method="POST" enctype="multipart/form-data">

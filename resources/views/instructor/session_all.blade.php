@@ -4,8 +4,8 @@
 <div class="row my-4">
     <div class="col-md-12">
         <div class="card ">
-            <div class="card-header bg-primary text-white">
-                <h4 class="card-title mb-0">All Sessions</h4>
+            <div class="card-header bgc-secondary text-white">
+                <h4 class="card-title mb-0 bgc-secondary-text">All Sessions</h4>
             </div>
 
             <div class="card-body">

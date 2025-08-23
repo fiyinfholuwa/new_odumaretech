@@ -5,8 +5,8 @@
 <div class="row" style="margin:10px">
     <div class="col-md-12">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                <h4 class="card-title mb-0">All Final Projects</h4>
+            <div class="card-header bgc-secondary text-white d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0 bgc-secondary-text">All Final Projects</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

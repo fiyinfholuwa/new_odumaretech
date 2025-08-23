@@ -7,6 +7,7 @@ use App\Models\ApprovedInstructor;
 use App\Models\Assignment;
 use App\Models\Contact;
 use App\Models\Course;
+use App\Models\FinalProject;
 use App\Models\LiveSession;
 use App\Models\Payment;
 use App\Models\Slide;
@@ -114,15 +115,17 @@ class AuthController extends Controller
     }
     public function instructor_dashboard(){
         // $user_id = Auth::user()->id;
-        // $instructor = ApprovedInstructor::where('user_id', '=', $user_id)->first();
-        // $course_ids = $instructor->course_ids;
-        // $students = AppliedCourse::whereIn('course_id', $course_ids)->count();
-        // $assignment = Assignment::whereIn('course_id', $course_ids)->count();
-        // $course = Course::whereIn('id', $course_ids)->count();
-        // $slide = Slide::whereIn('course_id', $course_ids)->count();
-        // $session = LiveSession::whereIn('course_id', $course_ids)->count();
-        // return view('instructor.dashboard', compact('students', 'assignment', 'course', 'slide', 'session'));
-        return view('instructor.dashboard');
+        $instructor = ApprovedInstructor::where('user_id', '=', Auth::user()->id)->first();
+        $course_ids = $instructor->course_ids;
+        $course_ids = is_array($course_ids) ? $course_ids : json_decode($course_ids, true);
+        $students = AppliedCourse::whereIn('course_id', $course_ids)->count();
+        $assignment = Assignment::whereIn('course_id', $course_ids)->count();
+        $course = Course::whereIn('id', $course_ids)->count();
+        $slide = Slide::whereIn('course_id', $course_ids)->count();
+        $projects = FinalProject::whereIn('course_id', $course_ids)->count();
+        $session = LiveSession::whereIn('course_id', $course_ids)->count();
+        return view('instructor.dashboard', compact('students', 'assignment', 'course', 'slide', 'session', 'projects'));
+        // return view('instructor.dashboard');
 
     }
     public function external_instructor_dashboard(){

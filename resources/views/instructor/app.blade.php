@@ -103,6 +103,23 @@
         <div class="loader-fill"></div>
     </div>
 </div>
+
+<style>
+.bgc-primary{
+    background-color:#E9ECFF  !important;
+
+}
+.bgc-primary-text{
+    color:#0E2293 !important;
+}
+.bgc-secondary{
+    background-color:#FFF3CF !important;
+
+}
+.bgc-secondary-text{
+    color:#FFC000 !important;
+}
+</style>
 <!-- [ Pre-loader ] End -->
 <!-- [ Sidebar Menu ] start -->
 <nav class="pc-sidebar">
@@ -166,8 +183,8 @@
         <li class="pc-item"><a class="pc-link" href="{{ route('session.view.instructor') }}">Add Live Session</a></li>
         <li class="pc-item"><a class="pc-link" href="{{ route('session.all.instructor') }}">All Sessions</a></li>
     </ul>
-</li>
-
+</li> 
+{{-- 
 <li class="pc-item pc-hasmenu">
     <a href="#!" class="pc-link">
         <span class="pc-micon"><i class="fa fa-bookmark"></i></span>
@@ -178,14 +195,14 @@
         <li class="pc-item"><a class="pc-link" href="{{ route('notification.view_instructor') }}">Add Notification</a></li>
         <li class="pc-item"><a class="pc-link" href="{{ route('notification.all.instructor') }}">All Notifications</a></li>
     </ul>
-</li>
+</li> --}}
 
-<li class="pc-item">
+{{-- <li class="pc-item">
     <a href="{{ route('instructor.chat.view') }}" class="pc-link">
         <span class="pc-micon"><i class="fas fa-comments"></i></span>
         <span class="pc-mtext">Chat Admin</span>
     </a>
-</li>
+</li> --}}
 
 
 

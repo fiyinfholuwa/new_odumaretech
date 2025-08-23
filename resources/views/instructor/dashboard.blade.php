@@ -204,7 +204,7 @@
                             <div class="stat-icon">
                                 <i style="background:#0E2293;padding:20px;border-radius:5px;"  class="fas fa-users"></i>
                             </div>
-                            <div class="stat-number text-dark" id="studentsCount">20</div>
+                            <div class="stat-number text-dark" id="studentsCount">0</div>
                             <div class="stat-label text-muted">Students</div>
                         </div>
                     </div>
@@ -213,7 +213,7 @@
                             <div class="stat-icon">
                                 <i style="background:#0E2293;padding:20px;border-radius:5px;"  class="fas fa-tasks"></i>
                             </div>
-                            <div class="stat-number text-dark" id="assignmentsCount">10</div>
+                            <div class="stat-number text-dark" id="assignmentsCount">0</div>
                             <div class="stat-label text-muted">Assignments</div>
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                             <div class="stat-icon">
                                 <i style="background:#0E2293;padding:20px;border-radius:5px;" class="fas fa-book"></i>
                             </div>
-                            <div class="stat-number text-dark" id="coursesCount">24</div>
+                            <div class="stat-number text-dark" id="coursesCount">0</div>
                             <div class="stat-label text-muted">Courses</div>
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                                 <i style="background:#FFC000;padding:20px;border-radius:5px;"  class="fas fa-users"></i>
                             </div>
                             <div class="stat-number text-dark" id="slidesCount">20</div>
-                            <div class="stat-label text-muted">Students</div>
+                            <div class="stat-label text-muted">Slides</div>
                         </div>
                     </div>
                     <div class="col-md-4 mb-3">
@@ -244,20 +244,20 @@
                             <div class="stat-icon">
                                 <i style="background:#FFC000;padding:20px;border-radius:5px;"  class="fas fa-tasks"></i>
                             </div>
-                            <div class="stat-number text-dark" id="projectsCount">10</div>
-                            <div class="stat-label text-muted">Assignments</div>
+                            <div class="stat-number text-dark" id="projectsCount">0</div>
+                            <div class="stat-label text-muted">Projects</div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div tyle="display:none;" class="col-md-4 mb-3">
                         <div style="background:#FFF3CF;" class="stat-card green">
                             <div class="stat-icon">
                                 <i style="background:#FFC000;padding:20px;border-radius:5px;"  class="fas fa-book"></i>
                             </div>
-                            <div class="stat-number text-dark" id="coursesCount">24</div>
-                            <div class="stat-label text-muted">Courses</div>
+                            <div class="stat-number text-dark" id="coursesCount">0</div>
+                            <div class="stat-label text-muted">Live</div>
                         </div>
                     </div>
-                    <div style="display:none;" class="col-md-3 mb-3">
+                    <div style="display:none;" class="col-md-4 mb-3">
                         <div class="stat-card yellow">
                             <div class="stat-icon">
                                 <i class="fas fa-video"></i>
@@ -314,7 +314,7 @@
                 </div>
                 
                 <!-- Charts -->
-                <div class="row mt-4">
+                <div style="display:none;" class="row mt-4">
                     <div class="col-md-6">
                         <div class="chart-container">
                             <h5 class="mb-3">Hours Spent</h5>
@@ -336,14 +336,15 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
+    //students', 'assignment', 'course', 'slide', 'session'
         // Dashboard data
         let dashboardData = {
-            students: 20,
-            assignments: 10,
-            courses: 24,
-            liveSessions: 1204,
-            slides: 23,
-            projects: 23,
+            students: '{{ $students }}',
+            assignments: '{{ $assignment }}',
+            courses: '{{ $course }}',
+            liveSessions: '{{ $session }}',
+            slides: '{{ $slide }}',
+            projects: '{{ $projects }}',
             recentCourses: [
                 { name: "Web Development (Frontend)", type: "Frontend" },
                 { name: "Web Development (Frontend)", type: "Frontend" },

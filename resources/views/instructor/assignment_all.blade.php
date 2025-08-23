@@ -13,8 +13,8 @@
 <div class="row my-4">
     <div class="col-md-12">
         <div class="card shadow-sm">
-            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 text-white">All Assignments</h4>
+            <div class="card-header bgc-secondary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0 bgc-secondary-text">All Assignments</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

@@ -593,9 +593,14 @@ public function view_submitted_project($id){
 
 
     public function instructor_password_view(){
-        return view('instructor.change_password');
+        $countries = getAllCountries(); // ✅ use global function
+        $user = Auth::user();
+        $bankInfo = $user->bank_info ? json_decode($user->bank_info, true) : [];
+        return view('instructor.change_password', ['user' => $user, 'bankInfo' => $bankInfo, 'countries' => $countries]);
     }
 
+
+    
     public function instructor_password_change(Request $request){
     $user = Auth::user();
     $request->validate([

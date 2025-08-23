@@ -52,8 +52,8 @@
 <div class="row my-4">
     <div class="col-md-10 ">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white">Edit Slide</h4>
+            <div class="card-header bgc-primary text-white">
+                <h4 class="mb-0 bgc-primary-text">Edit Slide</h4>
             </div>
             <div class="card-body p-4">
                 <form action="{{ route('slide.update', $slide->id) }}" method="POST" enctype="multipart/form-data">

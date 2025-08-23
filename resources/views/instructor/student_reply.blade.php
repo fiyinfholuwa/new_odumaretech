@@ -26,10 +26,16 @@
                                 </small>
                             </div>
                         </div>
-                        <div class="card-action">
-                            <button class="btn btn-primary">Reply Message</button>
-                
-                        </div>
+                        <<div class="card-action d-flex justify-content-between">
+    <a href="{{ url()->previous() }}" class="btn btn-secondary">
+        Go Back
+    </a>
+
+    <button type="submit" class="btn btn-primary">
+        Reply Message
+    </button>
+</div>
+
                         </form>
                     </div>
                     

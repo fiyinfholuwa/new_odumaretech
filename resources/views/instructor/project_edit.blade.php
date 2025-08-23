@@ -5,8 +5,8 @@
 <div class="row" style="margin:10px">
     <div class="col-md-11">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-primary  text-white">
-                <h4 class="card-title mb-0 text-white">Edit Final Project</h4>
+            <div class="card-header bgc-primary  text-white">
+                <h4 class="card-title mb-0 bgc-primary-text">Edit Final Project</h4>
             </div>
             <div class="card-body">
                 <form action="{{ route('project.update', $project->id) }}" method="post" enctype="multipart/form-data">
