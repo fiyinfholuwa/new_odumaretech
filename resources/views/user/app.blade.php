@@ -345,9 +345,9 @@
                         </svg>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
-                        <a href="" class="dropdown-item">
+                        <a href="{{ route('home') }}" class="dropdown-item">
                             <i class="ti ti-user"></i>
-                            <span>My Account</span>
+                            <span>Go to Website</span>
                         </a>
 
                         <a href="{{route('logout')}}" class="dropdown-item">
@@ -357,7 +357,7 @@
                     </div>
                 </li>
 
-                <li class="dropdown pc-h-item">
+                {{-- <li class="dropdown pc-h-item">
                     <a
                         class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown"
@@ -394,7 +394,6 @@
                                                            class="ph-duotone ph-note-pencil"></i>
                                                     </div>
                                                     <div class="flex-grow-1 ms-3">
-                                                        {{--                                                        <span class="float-end text-sm text-muted">1 hour ago</span>--}}
                                                         <h5 class="text-body mb-2">hello</h5>
                                                         <p>i just applied for a new application, please respond
                                                             promptly, thank you.</p>
@@ -418,8 +417,8 @@
                         </div>
 
                     </div>
-                </li>
-                <li class="dropdown pc-h-item header-user-profile">
+                </li> --}}
+                {{-- <li class="dropdown pc-h-item header-user-profile">
                     <a
                         class="pc-head-link dropdown-toggle arrow-none me-0"
                         data-bs-toggle="dropdown"
@@ -432,7 +431,7 @@
                         <img src="{{asset('backend/assets/images/user/avatar-2.jpg')}}" alt="user-image"
                              class="user-avtar"/>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

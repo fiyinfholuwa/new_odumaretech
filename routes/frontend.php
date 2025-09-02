@@ -29,6 +29,8 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/marketplace', 'marketplace')->name('marketplace');
     Route::get('/course/listing', 'course_list')->name('course_list');
     Route::get('/corporate/training', 'corporate_training')->name('corporate_training');
+    Route::post('/company-training', 'corporate_training_store')->name('company.training.store');
+
     Route::get('/course/external/detail/{name}', 'course_external_detail')->name('course_external_detail');
 });
 

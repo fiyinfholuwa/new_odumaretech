@@ -25,33 +25,42 @@
             </p>
         </div>
 
-        <div style="max-width: 1000px;" class="container my-5">
-            <div class="card shadow-sm p-3 rounded-2 bg-light">
-    <form method="GET" class="row gx-2 gy-2 align-items-center justify-content-center">
-        <div class="col-12 col-md-6 col-lg-6">
-            <input name="keyword" type="text"
-                   class="form-control form-control-lg bg-primary-subtle border-0"
-                   placeholder="🔍 Search by title or description"
-                   value="{{ request('keyword') }}">
-        </div>
-
-        <div class="col-6 col-md-auto">
-            <button type="submit" class="btn btn-primary btn-lg w-100">
-                Search
-            </button>
-        </div>
-
-        @if(request('keyword'))
-            <div class="col-6 col-md-auto">
-                <a href="{{ route('blog') }}" class="btn btn-secondary btn-lg w-100">
-                    Clear
-                </a>
+        <div class="container my-5" style="max-width: 900px;">
+    <div class="card shadow-sm p-4 rounded-3 bg-light border-0">
+        <form method="GET" class="row g-3 align-items-center justify-content-center">
+            
+            <!-- Search Input -->
+            <div class="col-12 col-md-8">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text bg-primary text-white border-0 rounded-start-3">
+                        🔍
+                    </span>
+                    <input name="keyword" type="text"
+                           class="form-control border-0 shadow-sm"
+                           placeholder="Search by title or description..."
+                           value="{{ request('keyword') }}">
+                </div>
             </div>
-        @endif
-    </form>
+
+            <!-- Search Button -->
+            <div class="col-6 col-md-auto">
+                <button type="submit" class="btn btn-primary btn-lg shadow-sm px-4 rounded-3">
+                    Search
+                </button>
+            </div>
+
+            <!-- Clear Button (only if searching) -->
+            @if(request('keyword'))
+                <div class="col-6 col-md-auto">
+                    <a href="{{ route('blog') }}" class="btn btn-outline-secondary btn-lg shadow-sm px-4 rounded-3">
+                        Clear
+                    </a>
+                </div>
+            @endif
+        </form>
+    </div>
 </div>
 
-        </div>
     </section>
 
     <!-- Blog Posts Section -->

@@ -44,13 +44,42 @@
 
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="{{route('home')}}" class="active">Home<br></a></li>
-                <li><a href="{{route('courses')}}">Courses</a></li>
-                <li><a href="{{route('marketplace')}}">MarketPlace</a></li>
-                <li><a href="{{route('blog')}}">Blog</a></li>
-                <li><a href="{{route('about')}}">About</a></li>
-                <li><a href="{{route('contact')}}">Contact Us</a></li>
-                <li><a href="{{route('career')}}">Career</a></li>
+                <li>
+    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+        Home
+    </a>
+</li>
+<li>
+    <a href="{{ route('courses') }}" class="{{ request()->routeIs('courses') ? 'active' : '' }}">
+        Courses
+    </a>
+</li>
+<li>
+    <a href="{{ route('marketplace') }}" class="{{ request()->routeIs('marketplace') ? 'active' : '' }}">
+        MarketPlace
+    </a>
+</li>
+<li>
+    <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'active' : '' }}">
+        Blog
+    </a>
+</li>
+<li>
+    <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">
+        About
+    </a>
+</li>
+<li>
+    <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+        Contact Us
+    </a>
+</li>
+<li>
+    <a href="{{ route('career') }}" class="{{ request()->routeIs('career') ? 'active' : '' }}">
+        Career
+    </a>
+</li>
+
 
                 <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
@@ -124,7 +153,7 @@
 {{--                        <li><a href="#"> Services</a></li>--}}
                         <li> <a href="{{route('corporate_training')}}"> Corporate Trainings</a></li>
                         <li> <a href="#">Support Us</a></li>
-                        <li> <a href="{{route('hire_grad')}}">Hire our Grad</a></li>
+                        {{-- <li> <a href="{{route('hire_grad')}}">Hire our Grad</a></li> --}}
                     </ul>
                 </div>
 
@@ -513,9 +542,16 @@ Add this to your existing page - it's designed to work with any existing CSS
 }
 </style>
 
-<!-- STEP 2: Add these modal HTML structures before closing </body> -->
+<?php
+// STEP 1: Setup PHP conditions
+// You can control these flags from DB/session/etc.
+$showCookies      = false;   // e.g. show if cookies not yet accepted
+$showRecommender  = false;  // e.g. show only if user has no recommendations
+$showMasterclass  = false;   // always true if you want last modal to show
+?>
 
-<!-- Cookies Modal -->
+<!-- STEP 2: Modals -->
+<?php if ($showCookies): ?>
 <div class="bfmodal-overlay bfmodal-cookies" id="bfCookiesModal">
     <div class="bfmodal-container">
         <div class="bfmodal-header">
@@ -545,8 +581,9 @@ Add this to your existing page - it's designed to work with any existing CSS
         </div>
     </div>
 </div>
+<?php endif; ?>
 
-<!-- Course Recommender Modal -->
+<?php if ($showRecommender): ?>
 <div class="bfmodal-overlay bfmodal-recommender" id="bfRecommenderModal">
     <div class="bfmodal-container">
         <div class="bfmodal-header">
@@ -577,8 +614,9 @@ Add this to your existing page - it's designed to work with any existing CSS
         </div>
     </div>
 </div>
+<?php endif; ?>
 
-<!-- Master Class Modal -->
+<?php if ($showMasterclass): ?>
 <div class="bfmodal-overlay bfmodal-masterclass" id="bfMasterclassModal">
     <div class="bfmodal-container">
         <div class="bfmodal-header">
@@ -610,230 +648,119 @@ Add this to your existing page - it's designed to work with any existing CSS
         </div>
     </div>
 </div>
+<?php endif; ?>
 
-<!-- STEP 3: Add this JavaScript before closing </body> -->
+
+<!-- STEP 3: Navy Blue Theme -->
+<style>
+.bfmodal-btn-primary {
+    background-color: #001f3f; /* deep navy */
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.bfmodal-btn-primary:hover {
+    background-color: #003366; /* lighter navy */
+}
+.bfmodal-btn-secondary {
+    background-color: #f0f0f0;
+    color: #001f3f;
+    border: 1px solid #001f3f;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.bfmodal-progress-dot.active {
+    background-color: #001f3f;
+}
+</style>
+
+<!-- STEP 4: JS Modal System -->
 <script>
-// Bulletproof Modal System
 window.BFModal = (function() {
     'use strict';
-    
     let modalQueue = [];
     let currentModalIndex = 0;
-    let isInitialized = false;
-
-    // Utility functions
-    function log(message, data) {
-        console.log('[BFModal]', message, data || '');
-    }
-
-    function checkStorage() {
-        try {
-            const cookiesShown = localStorage.getItem('bf_cookies_shown') === 'true';
-            const recommenderShown = localStorage.getItem('bf_recommender_shown') === 'true';
-            
-            log('Storage check:', { cookiesShown, recommenderShown });
-            return { cookiesShown, recommenderShown };
-        } catch (e) {
-            log('LocalStorage not available, using session data');
-            return { cookiesShown: false, recommenderShown: false };
-        }
-    }
-
-    function setStorage(key, value) {
-        try {
-            localStorage.setItem(key, value);
-        } catch (e) {
-            log('Cannot save to localStorage:', key);
-        }
-    }
 
     function showModal(modalId) {
         const modal = document.getElementById(modalId);
-        if (!modal) {
-            log('Modal not found:', modalId);
-            return false;
-        }
-        
-        // Hide all other modals first
-        const allModals = document.querySelectorAll('.bfmodal-overlay');
-        allModals.forEach(m => m.classList.remove('bfmodal-show'));
-        
-        // Show target modal
+        if (!modal) return;
+        document.querySelectorAll('.bfmodal-overlay').forEach(m => m.classList.remove('bfmodal-show'));
         modal.classList.add('bfmodal-show');
-        
-        // Prevent body scrolling
         document.body.style.overflow = 'hidden';
-        
-        log('Showing modal:', modalId);
-        return true;
     }
 
     function hideModal(modalId) {
         const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('bfmodal-show');
-            
-            // Restore body scrolling if no modals are open
-            const visibleModals = document.querySelectorAll('.bfmodal-overlay.bfmodal-show');
-            if (visibleModals.length === 0) {
-                document.body.style.overflow = '';
-            }
-            
-            log('Hiding modal:', modalId);
+        if (modal) modal.classList.remove('bfmodal-show');
+        if (!document.querySelector('.bfmodal-overlay.bfmodal-show')) {
+            document.body.style.overflow = '';
         }
     }
 
     function showNextModal() {
         if (currentModalIndex < modalQueue.length) {
-            const modalId = modalQueue[currentModalIndex];
-            showModal(modalId);
-        } else {
-            log('All modals completed');
+            showModal(modalQueue[currentModalIndex]);
         }
     }
 
     function closeAndNext(modalId) {
         hideModal(modalId);
         currentModalIndex++;
-        
-        // Small delay for smooth transition
-        setTimeout(() => {
-            showNextModal();
-        }, 200);
+        setTimeout(showNextModal, 200);
     }
 
-    // Public API
     return {
         init: function() {
-            if (isInitialized) {
-                log('Already initialized');
-                return;
-            }
-
-            const { cookiesShown, recommenderShown } = checkStorage();
-            
-            // Build modal queue
-            modalQueue = [];
-            
-            if (!cookiesShown) {
-                modalQueue.push('bfCookiesModal');
-            }
-            
-            if (!recommenderShown) {
-                modalQueue.push('bfRecommenderModal');
-            }
-            
-            // Always add masterclass
-            modalQueue.push('bfMasterclassModal');
-
-            log('Modal queue built:', modalQueue);
-
-            // Start sequence if we have modals to show
+            modalQueue = Array.from(document.querySelectorAll('.bfmodal-overlay')).map(m => m.id);
             if (modalQueue.length > 0) {
                 currentModalIndex = 0;
-                setTimeout(() => {
-                    showNextModal();
-                }, 800); // Small delay after page load
+                setTimeout(showNextModal, 800);
             }
 
-            // Event listeners
-            this.setupEventListeners();
-            isInitialized = true;
-            
-            log('Modal system initialized');
-        },
-
-        setupEventListeners: function() {
-            // ESC key handler
-            document.addEventListener('keydown', (e) => {
+            document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
-                    const activeModal = document.querySelector('.bfmodal-overlay.bfmodal-show');
-                    if (activeModal) {
-                        this.close(activeModal.id);
-                    }
+                    const active = document.querySelector('.bfmodal-overlay.bfmodal-show');
+                    if (active) this.close(active.id);
                 }
             });
 
-            // Click outside handler
-            document.addEventListener('click', (e) => {
+            document.addEventListener('click', e => {
                 if (e.target.classList.contains('bfmodal-overlay')) {
                     this.close(e.target.id);
                 }
             });
         },
-
-        close: function(modalId) {
-            log('Close requested for:', modalId);
-            closeAndNext(modalId);
-        },
-
+        close: closeAndNext,
         handleCookies: function(action) {
-            log('Cookies action:', action);
-            setStorage('bf_cookies_shown', 'true');
-            
             if (action === 'accept') {
-                log('Cookies accepted - you can add analytics code here');
-                // Add your analytics initialization code here
+                console.log('Cookies accepted');
+            } else {
+                console.log('Cookies rejected');
             }
-            
             this.close('bfCookiesModal');
         },
-
         handleRecommender: function(action) {
-            log('Recommender action:', action);
-            setStorage('bf_recommender_shown', 'true');
-            
             if (action === 'accept') {
-                log('Redirect to recommendations - add your URL here');
-                 window.location.href = 'https://ai-advise.streamlit.app/';
+                window.location.href = 'https://ai-advise.streamlit.app/';
             }
-            
             this.close('bfRecommenderModal');
         },
-
         handleMasterclass: function(action) {
-            log('Masterclass action:', action);
-            
             if (action === 'go') {
-                log('Redirecting to masterclass');
+                console.log('Redirecting to Masterclass');
             }
-            
             this.close('bfMasterclassModal');
-        },
-
-        // Debug functions
-        reset: function() {
-            try {
-                localStorage.removeItem('bf_cookies_shown');
-                localStorage.removeItem('bf_recommender_shown');
-                log('Storage reset - refresh page to see all modals again');
-            } catch (e) {
-                log('Cannot reset storage');
-            }
-        },
-
-        show: function(modalId) {
-            showModal(modalId);
         }
     };
 })();
 
-// Auto-initialize when DOM is ready
-(function() {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            BFModal.init();
-        });
-    } else {
-        BFModal.init();
-    }
-})();
-
-// Expose reset function for debugging
-window.resetBFModals = function() {
-    BFModal.reset();
-};
+document.addEventListener('DOMContentLoaded', () => BFModal.init());
 </script>
+
 </body>
 
 </html>

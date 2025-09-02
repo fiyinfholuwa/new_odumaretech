@@ -34,7 +34,7 @@ career anywhere in the world.                 </p>
 
     <section class="after_hero py-5">
         <div class="container">
-            <p class="mb-4">
+            {{-- <p class="mb-4">
             We know real experience matters. That’s why you can join our exclusive Research and Innovation
 department to build practical skills that set you apart. Even after you finish your program, we’re still here
 for you—with ongoing drop-in sessions, interview tips, and expert advice to help you land your first tech
@@ -48,7 +48,7 @@ Our vision is a world where everyone can pursue their passions, live fulfilling 
 potential. We believe in equitable access to education, training, and real-world experience for all.
 Empowerment, Compassion, Innovation, Collaboration, Excellence and Inclusivity, Diversity,
 Creativity, Passion, Continuous improvement.
-            </p>
+            </p> --}}
             <div class="row">
 
                 <?php

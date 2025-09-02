@@ -62,16 +62,7 @@
                             @enderror
                         </div>
 
-                        <!-- Course Outline -->
-                        <div class="form-group">
-                            <label for="certification">Course Outline</label>
-                            <textarea rows="5" class="form-control" id="myTextarea"  name="course_outline"
-                                      placeholder="Enter Course Outline">{{ old('course_outline') }}</textarea>
-                            @error('course_outline')
-                            <small style="color:red; font-weight:500">{{ $message }}</small>
-                            @enderror
-                        </div>
-
+                        
                         <!-- Career Outcome -->
                         <div class="form-group">
                             <label for="experience">Career Outcome</label>
@@ -101,7 +92,7 @@
 
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="duration">Course Duration (weeks)</label>
+                                    <label for="duration">Course Duration (Hours)</label>
                                     <input class="form-control" type="number" name="duration" id="duration" required
                                            placeholder="Course Duration" value="{{ old('duration') }}"/>
                                     @error('duration')
@@ -185,7 +176,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="price">Course Price (Naira)</label>
+                                    <label for="price">Course Price (Dollar)</label>
                                     <input class="form-control" type="number" name="price" id="price" required
                                            placeholder="Course Price" value="{{ old('price') }}"/>
                                     @error('price')

@@ -55,6 +55,7 @@
 
             <div class="tab-content" id="faqTabContent">
                 <?php
+
                 $cards = [
                     [
                         'title' => 'Suicide Model Predictor',
@@ -77,20 +78,24 @@
                     <!-- All Tab -->
                 <div class="tab-pane fade show active" id="all" role="tabpanel">
                     <div class="row">
-                        @foreach($cards as $card)
+                        @foreach($innovations as $card)
                             <div class="col-lg-4 mb-4">
+                                                    <a href="">
+
                                 <div style="background: #E9ECFF; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; height: 100%; position: relative;">
                                 <span style="position: absolute; top: 10px; right: 10px;" class="badge
-                                    @if($card['status'] === 'completed') bg-success
-                                    @elseif($card['status'] === 'running') bg-warning text-dark
-                                    @elseif($card['status'] === 'upcoming') bg-primary
+                                    @if(strtolower($card['status']) === 'completed') bg-success
+                                    @elseif(strtolower($card['status']) === 'running') bg-warning text-dark
+                                    @elseif(strtolower($card['status']) === 'upcoming') bg-primary
                                     @endif
                                 ">
                                     {{ ucfirst($card['status']) }}
                                 </span>
-                                    <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
-                                    <h4 style="color: #333; font-weight: bold;">{{ $card['title'] }}</h4>
+                                    <img src="{{ asset($card['image']) }}" alt="{{ $card['name'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
+                                    <h4 style="color: #333; font-weight: bold;">{{ $card['name'] }}</h4>
                                 </div>
+                                                            </a>
+
                             </div>
                         @endforeach
                     </div>
@@ -99,14 +104,17 @@
                 <!-- Completed Tab -->
                 <div class="tab-pane fade" id="completed" role="tabpanel">
                     <div class="row">
-                        @foreach($cards as $card)
-                            @if($card['status'] === 'completed')
+                        @foreach($innovations as $card)
+                            @if(strtolower($card['status']) === 'completed')
                                 <div class="col-lg-4 mb-4">
+                                                                                    <a href="">
+
                                     <div style="background: #E9ECFF; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; height: 100%; position: relative;">
                                         <span style="position: absolute; top: 10px; right: 10px;" class="badge bg-success">Completed</span>
                                         <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
                                         <h4 style="color: #333; font-weight: bold;">{{ $card['title'] }}</h4>
                                     </div>
+                                    </a>
                                 </div>
                             @endif
                         @endforeach
@@ -116,13 +124,13 @@
                 <!-- Running Tab -->
                 <div class="tab-pane fade" id="running" role="tabpanel">
                     <div class="row">
-                        @foreach($cards as $card)
-                            @if($card['status'] === 'running')
+                        @foreach($innovations as $card)
+                            @if(strtolower($card['status']) === 'running')
                                 <div class="col-lg-4 mb-4">
                                     <div style="background: #E9ECFF; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; height: 100%; position: relative;">
                                         <span style="position: absolute; top: 10px; right: 10px;" class="badge bg-warning text-dark">Running</span>
-                                        <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
-                                        <h4 style="color: #333; font-weight: bold;">{{ $card['title'] }}</h4>
+                                        <img src="{{ asset($card['image']) }}" alt="{{ $card['name'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
+                                        <h4 style="color: #333; font-weight: bold;">{{ $card['name'] }}</h4>
                                     </div>
                                 </div>
                             @endif
@@ -133,14 +141,16 @@
                 <!-- Upcoming Tab -->
                 <div class="tab-pane fade" id="upcoming" role="tabpanel">
                     <div class="row">
-                        @foreach($cards as $card)
-                            @if($card['status'] === 'upcoming')
+                        @foreach($innovations as $card)
+                            @if(strtolower($card['status']) === 'upcoming')
                                 <div class="col-lg-4 mb-4">
+                                <a>
                                     <div style="background: #E9ECFF; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 10px; height: 100%; position: relative;">
                                         <span style="position: absolute; top: 10px; right: 10px;" class="badge bg-primary">Upcoming</span>
-                                        <img src="{{ asset($card['image']) }}" alt="{{ $card['title'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
-                                        <h4 style="color: #333; font-weight: bold;">{{ $card['title'] }}</h4>
+                                        <img src="{{ asset($card['image']) }}" alt="{{ $card['name'] }}" class="img-fluid mb-3" style="object-fit: cover;" />
+                                        <h4 style="color: #333; font-weight: bold;">{{ $card['name'] }}</h4>
                                     </div>
+                                    </a>
                                 </div>
                             @endif
                         @endforeach

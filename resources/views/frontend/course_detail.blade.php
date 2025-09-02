@@ -332,12 +332,12 @@ $conversion = getUserLocalCurrencyConversion($course->price);
 
                             @php
                                 $instructor = [
-                                    'name' => 'Dianne Russell',
+                                    'name' => optional($course->instructor_name)->first_name . " ". optional($course->instructor_name)->last_name,
                                     'role' => 'Entrepreneur & Designer • Founder of ShiftRide',
-                                    'students' => 5324,
-                                    'courses' => 1,
-                                    'bio' => "I'm an entrepreneur & designer with a high passion for building products of all sorts and seeing ideas come to life. As a serial entrepreneur, I've designed and built projects in fields ranging from fashion to technology.",
-                                    'image' => asset('frontend/assets/img/Ellipse 124.png'),
+                                    'students' => optional($course->instructor_name)->student_count,
+                                    'courses' => optional($course->instructor_name)->student_count,
+                                    'bio' => optional($course->instructor_name)->about_me,
+                                    'image' => asset(optional($course->instructor_name)->image),
                                 ];
                             @endphp
 
@@ -350,15 +350,15 @@ $conversion = getUserLocalCurrencyConversion($course->price);
 
                                     <div class="col-lg-9">
                                         <h3>{{ $instructor['name'] }}</h3>
-                                        <p>{{ $instructor['role'] }}</p>
+                                        {{-- <p>{{ $instructor['role'] }}</p> --}}
 
                                         <p>
                                             <i style="color: #0E2293;" class="fa fa-users"></i> {{ number_format($instructor['students']) }} Students
                                             &nbsp;
-                                            <i style="color: #FFF3CF;" class="fa fa-book"></i> {{ str_pad($instructor['courses'], 2, '0', STR_PAD_LEFT) }} Courses
+                                            {{-- <i style="color: #FFF3CF;" class="fa fa-book"></i> {{ str_pad($instructor['courses'], 2, '0', STR_PAD_LEFT) }} Courses --}}
                                         </p>
 
-                                        <p>{{ $instructor['bio'] }}</p>
+                                        <p>{!! $instructor['bio'] !!}</p>
                                     </div>
 
                                 </div>

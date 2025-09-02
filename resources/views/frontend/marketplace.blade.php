@@ -284,7 +284,7 @@ is your gateway to growth.   </p>
                                     </div>
                                     <hr/>
                                     <div>
-                                        <strong style="color: green;">${{ $instructor['cummlative_earning'] }}</strong><br>
+                                        <strong style="color: green;">${{ $instructor['cumulative_earning'] }}</strong><br>
                                         <small class="text-muted">Earnings</small>
                                     </div>
                                 </div>

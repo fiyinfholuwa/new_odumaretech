@@ -29,9 +29,8 @@
 <td>{{ $tx->created_at->format('d M Y, h:i A') }}</td>
                     </tr>
                 @empty
-                    <tr>
-                        <td colspan="3" class="text-center text-muted">No payout history available.</td>
-                    </tr>
+                <div class="text-center">No payout history available.</div>
+                    
                 @endforelse
             </tbody>
         </table>

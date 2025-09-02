@@ -7,6 +7,7 @@ use App\Models\AppliedCourse;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Cohort;
+use App\Models\CompanyTraining;
 use App\Models\Coupon;
 use App\Models\CouponUsed;
 use App\Models\Course;
@@ -23,15 +24,14 @@ use Illuminate\View\View;
 class FrontendController extends Controller
 {
     public function home():View{
-
-        $popular_courses = Course::with('cat')->paginate(3);
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(3);
         $testimonials= Testimonial::paginate(8);
         $innovations= Innovation::paginate(3);
         return view('frontend.home',['popular_courses'=> $popular_courses,'testimonials' => $testimonials,'innovations'=>$innovations]);
     }
 
     public function courses():View{
-        $popular_courses = Course::with('cat')->paginate(4);
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(4);
         $testimonials= Testimonial::paginate(8);
         return view('frontend.courses', ['courses'=> $popular_courses,'testimonials' => $testimonials]);
     }
@@ -83,7 +83,8 @@ class FrontendController extends Controller
         return view('frontend.course_detail', ['course' => $course, 'courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending, 'cohort_name' => $cohort_name]);
     }
     public function innovation():View{
-        return view('frontend.innovation');
+        $innovations= Innovation::paginate(3);
+        return view('frontend.innovation', ['innovations' => $innovations]);
     }
     public function masterclass():View{
         return view('frontend.masterclass');
@@ -104,10 +105,12 @@ class FrontendController extends Controller
         return view('frontend.hire');
     }
     public function consultation():View{
-        return view('frontend.consultation');
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->get();
+        return view('frontend.consultation', ['courses' => $popular_courses]);
     }
     public function corporate_training():View{
-        return view('frontend.corporate_training');
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(6);
+        return view('frontend.corporate_training', ['courses' => $popular_courses]);
     }
     public function marketplace():View{
 
@@ -144,11 +147,59 @@ class FrontendController extends Controller
             'categories' => $formatted
         ]);
     }
-    public function course_list():View{
-        $courses  = Course::with('cat')->where('course_type', 'external')->get();
+    public function course_list(Request $request): View
+{
+    $categories = Category::all();
+    $query = Course::with('cat')
+        ->where('course_type', 'external');
 
-        return view('frontend.course_list', ['courses' => $courses]);
+    // 🔍 Search by title
+    if ($request->filled('search')) {
+        $query->where('title', 'LIKE', '%' . $request->search . '%');
     }
+
+    // 🎯 Filter
+    if ($request->filled('filter')) {
+        if ($request->filter === 'free') {
+            $query->where('price', 0);
+        } elseif ($request->filter === 'paid') {
+            $query->where('price', '>', 0);
+        } elseif ($request->filter === 'beginner') {
+            $query->where('level', 'beginner');
+        }
+    }
+
+    // 🔄 Sort
+    if ($request->filled('sort')) {
+        switch ($request->sort) {
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            case 'popular':
+                $query->orderBy('student_count', 'desc');
+                break;
+            case 'top_rated':
+                // you’d need a rating column to make this meaningful
+                $query->orderBy('id', 'desc');
+                break;
+            case 'trending':
+            default:
+                $query->orderBy('student_count', 'desc');
+                break;
+        }
+    }
+
+    $courses = $query->paginate(6);
+
+    return view('frontend.course_list', [
+        'courses' => $courses,
+        'search'  => $request->search,
+        'filter'  => $request->filter,
+        'sort'    => $request->sort,
+        'categories' => $categories
+    ]);
+}
+
     public function course_external_detail($name):View{
         $popular_courses = Course::with('cat')->where('course_type', 'external')->paginate(4);
 
@@ -249,5 +300,32 @@ public function instructor_add(Request $request): RedirectResponse
     return redirect()->back()->with($notification);
 }
 
+
+public function corporate_training_store(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name'       => 'required|string|max:100',
+            'email'           => 'required|email|max:100',
+            'company_name'    => 'required|string|max:100',
+            'phone_number'    => 'required|string|max:20',
+            'team_size'       => 'required|integer',
+            'course_name'     => 'nullable|string|max:100',
+            'engagement_type' => 'required|string|max:50',
+            'message'         => 'required|string|max:500',
+        ]);
+
+        CompanyTraining::create([
+            'name'          => $validated['full_name'],
+            'email'         => $validated['email'],
+            'phone'         => $validated['phone_number'],
+            'company_name'  => $validated['company_name'],
+            'team_size'     => $validated['team_size'],
+            'course_name'   => $validated['course_name'] ?? null,
+            'intrested_in'  => $validated['engagement_type'],
+            'message'       => $validated['message'],
+        ]);
+
+        return back()->with('success', 'Your request has been submitted successfully!');
+    }
 
 }

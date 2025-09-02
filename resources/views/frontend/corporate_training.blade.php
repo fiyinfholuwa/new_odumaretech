@@ -168,32 +168,26 @@
                 <h3>High-Demand Professional Capabilities</h3>
                 <p>The most requested training programs that forward-thinking organizations are leveraging for team development</p>
             </div>
-            @php
-                $services = [
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Programming', 'title' => 'Web Development (Frontend)'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Design', 'title' => 'UI/UX Design'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Marketing', 'title' => 'Digital Marketing'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Writing', 'title' => 'Content Writing'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Business', 'title' => 'Business Consulting'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Tech', 'title' => 'AI Development'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'IT', 'title' => 'System Admin'],
-                    ['image' => 'frontend/assets/img/services.jpg', 'category' => 'Data', 'title' => 'Data Analysis'],
-                ];
-            @endphp
+          
 
-            @foreach (collect($services)->chunk(4) as $row)
-                <div class="row mb-4">
-                    @foreach ($row as $service)
-                        <div class="col-lg-3 col-md-6 mb-3">
-                            <div style="background-color: #F5F5F5; padding: 10px; border-radius: 20px;">
-                                <img src="{{ asset($service['image']) }}" class="img-fluid" alt="Service Image">
-                                <span style="background-color: #E9ECFF; display: inline-block; padding: 5px 10px; margin-top: 10px;">{{ $service['category'] }}</span>
-                                <h5 style="margin-top: 10px;">{{ $service['title'] }}</h5>
-                            </div>
-                        </div>
-                    @endforeach
+@foreach ($courses->chunk(3) as $row)
+    <div class="row mb-4">
+        @foreach ($row as $service)
+            <div class="col-lg-4 col-md-6 mb-3">
+                <div style="background-color: #F5F5F5; padding: 10px; border-radius: 20px;">
+                    <a href="{{ url('consultation?course_url=' . $service->course_url) }}" style="text-decoration: none; color: inherit;">
+                        <img src="{{ asset($service->image) }}" class="img-fluid" alt="Service Image">
+                        <span style="background-color: #E9ECFF; display: inline-block; padding: 5px 10px; margin-top: 10px;">
+                            {{ $service->cat->name ?? '' }}
+                        </span>
+                        <h5 style="margin-top: 10px;">{{ $service->title }}</h5>
+                    </a>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
+    </div>
+@endforeach
+
 
         </div>
     </section>

@@ -301,44 +301,44 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
 
                     <div class="tab-pane fade" id="instructor" role="tabpanel" aria-labelledby="instructor-tab">
                         <section>
-                            <div class="container">
-                                <h3>Course Instructor</h3>
+                        <div class="container">
+                            <h3>Course Instructor</h3>
 
-                                @php
-                                    $instructor = [
-                                        'name' => 'Dianne Russell',
-                                        'role' => 'Entrepreneur & Designer • Founder of ShiftRide',
-                                        'students' => 5324,
-                                        'courses' => 1,
-                                        'bio' => "I'm an entrepreneur & designer with a high passion for building products of all sorts and seeing ideas come to life. As a serial entrepreneur, I've designed and built projects in fields ranging from fashion to technology.",
-                                        'image' => asset('frontend/assets/img/Ellipse 124.png'),
-                                    ];
-                                @endphp
+                            @php
+                                $instructor = [
+                                    'name' => optional($course->instructor_name)->first_name . " ". optional($course->instructor_name)->last_name,
+                                    'role' => 'Entrepreneur & Designer • Founder of ShiftRide',
+                                    'students' => optional($course->instructor_name)->student_count,
+                                    'courses' => optional($course->instructor_name)->student_count,
+                                    'bio' => optional($course->instructor_name)->about_me,
+                                    'image' => asset(optional($course->instructor_name)->image),
+                                ];
+                            @endphp
 
-                                <div style="background-color: #E9ECFF; border-radius: 40px;">
-                                    <div class="row" style="padding: 20px; align-items: center;">
+                            <div style="background-color: #E9ECFF; border-radius: 40px;">
+                                <div class="row" style="padding: 20px; align-items: center;">
 
-                                        <div class="col-lg-3 text-center">
-                                            <img src="{{ $instructor['image'] }}" alt="Instructor Image" style="max-width: 100%; border-radius: 50%;">
-                                        </div>
-
-                                        <div class="col-lg-9">
-                                            <h3>{{ $instructor['name'] }}</h3>
-                                            <p>{{ $instructor['role'] }}</p>
-
-                                            <p>
-                                                <i style="color: #0E2293;" class="fa fa-users"></i> {{ number_format($instructor['students']) }} Students
-                                                &nbsp;
-                                                <i style="color: #FFF3CF;" class="fa fa-book"></i> {{ str_pad($instructor['courses'], 2, '0', STR_PAD_LEFT) }} Courses
-                                            </p>
-
-                                            <p>{{ $instructor['bio'] }}</p>
-                                        </div>
-
+                                    <div class="col-lg-3 text-center">
+                                        <img src="{{ $instructor['image'] }}" alt="Instructor Image" style="max-width: 100%; border-radius: 50%;">
                                     </div>
+
+                                    <div class="col-lg-9">
+                                        <h3>{{ $instructor['name'] }}</h3>
+                                        {{-- <p>{{ $instructor['role'] }}</p> --}}
+
+                                        <p>
+                                            <i style="color: #0E2293;" class="fa fa-users"></i> {{ number_format($instructor['students']) }} Students
+                                            &nbsp;
+                                            {{-- <i style="color: #FFF3CF;" class="fa fa-book"></i> {{ str_pad($instructor['courses'], 2, '0', STR_PAD_LEFT) }} Courses --}}
+                                        </p>
+
+                                        <p>{!! $instructor['bio'] !!}</p>
+                                    </div>
+
                                 </div>
                             </div>
-                        </section>
+                        </div>
+                    </section>
 
                     </div>
 
