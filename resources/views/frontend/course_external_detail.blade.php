@@ -165,7 +165,7 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                 <ul class="nav nav-tabs nav-fill container" id="courseTab" role="tablist" style="background-color: #E9ECFF; padding: 15px; border-radius: 10px; width: 800px;">
 
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">Reviews <sup class="badge bg-danger">3</sup></button>
+                        <button class="nav-link active" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">Reviews <sup class="badge bg-danger">{{ $reviews->count() }}</sup></button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link " id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
