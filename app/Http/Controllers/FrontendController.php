@@ -8,6 +8,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Cohort;
 use App\Models\CompanyTraining;
+use App\Models\ContentCreator;
 use App\Models\Coupon;
 use App\Models\CouponUsed;
 use App\Models\Course;
@@ -26,17 +27,19 @@ use Illuminate\View\View;
 
 class FrontendController extends Controller
 {
-    public function home():View{
+    public function home(): View
+    {
         $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(3);
-        $testimonials= Testimonial::paginate(8);
-        $innovations= Innovation::paginate(3);
-        return view('frontend.home',['popular_courses'=> $popular_courses,'testimonials' => $testimonials,'innovations'=>$innovations]);
+        $testimonials = Testimonial::paginate(8);
+        $innovations = Innovation::paginate(3);
+        return view('frontend.home', ['popular_courses' => $popular_courses, 'testimonials' => $testimonials, 'innovations' => $innovations]);
     }
 
-    public function courses():View{
+    public function courses(): View
+    {
         $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(4);
-        $testimonials= Testimonial::paginate(8);
-        return view('frontend.courses', ['courses'=> $popular_courses,'testimonials' => $testimonials]);
+        $testimonials = Testimonial::paginate(8);
+        return view('frontend.courses', ['courses' => $popular_courses, 'testimonials' => $testimonials]);
     }
     public function blog(Request $request): View
     {
@@ -46,7 +49,7 @@ class FrontendController extends Controller
             $keyword = $request->keyword;
             $query->where(function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', '%' . $keyword . '%')
-                  ->orWhere('desc', 'LIKE', '%' . $keyword . '%');
+                    ->orWhere('desc', 'LIKE', '%' . $keyword . '%');
             });
         }
 
@@ -55,29 +58,34 @@ class FrontendController extends Controller
     }
 
 
-    public function about():View{
+    public function about(): View
+    {
         return view('frontend.about');
     }
-    public function faq():View{
+    public function faq(): View
+    {
         return view('frontend.faq');
     }
-    public function contact():View{
+    public function contact(): View
+    {
         return view('frontend.contact');
     }
-    public function career():View{
+    public function career(): View
+    {
         $courses = Course::all();
         return view('frontend.career', ['courses' => $courses]);
     }
-    public function course_detail($name):View{
+    public function course_detail($name): View
+    {
         $popular_courses = Course::with('cat')->paginate(3);
 
         $course = Course::with('cat')->where('course_url', $name)->first();
 
-        if(Auth::check()){
-            $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id','=', $course->id)->first();
+        if (Auth::check()) {
+            $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)->first();
             $has_pending = AppliedCourse::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)
-                ->where('status' , '=' , "pending")->first();
-        }else{
+                ->where('status', '=', "pending")->first();
+        } else {
             $check_user_has_coupon = NULL;
             $has_pending = NULL;
         }
@@ -85,66 +93,80 @@ class FrontendController extends Controller
         $coupon_check = Coupon::where('course_id', '=', $course->id)->first();
         return view('frontend.course_detail', ['course' => $course, 'courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending, 'cohort_name' => $cohort_name]);
     }
-    public function innovation():View{
-        $innovations= Innovation::paginate(3);
+    public function innovation(): View
+    {
+        $innovations = Innovation::paginate(3);
         return view('frontend.innovation', ['innovations' => $innovations]);
     }
-    public function masterclass():View{
+    public function masterclass(): View
+    {
         $master_class = MasterClassLink::first();
         return view('frontend.masterclass', compact('master_class'));
     }
-    public function hire_grad():View{
+    public function hire_grad(): View
+    {
         return view('frontend.hire_grad');
     }
-    public function privacy():View{
+    public function privacy(): View
+    {
         return view('frontend.privacy');
     }
-    public function terms():View{
+    public function terms(): View
+    {
         return view('frontend.terms');
     }
-    public function community():View{
+    public function sell_course(): View
+    {
+        return view('frontend.sell_course');
+    }
+    public function community(): View
+    {
         return view('frontend.community');
     }
-    public function hire():View{
+    public function hire(): View
+    {
         return view('frontend.hire');
     }
-    public function consultation():View{
+    public function consultation(): View
+    {
         $popular_courses = Course::with('cat')->where('course_type', 'internal')->get();
         return view('frontend.consultation', ['courses' => $popular_courses]);
     }
-    public function corporate_training():View{
+    public function corporate_training(): View
+    {
         $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(6);
         return view('frontend.corporate_training', ['courses' => $popular_courses]);
     }
-    public function marketplace():View{
+    public function marketplace(): View
+    {
 
         $ext_courses  = Course::where('course_type', 'external')->count();
         $ext_instructor = User::where('user_type', 'external_instructor')->count();
         $student = User::where('user_type', 'user')->count();
         $best_selling = Course::with('cat')
-        ->where('course_type', 'external')
-        ->orderBy('student_count', 'desc')
-        ->take(8)
-        ->get();
-            $featured_courses  = Course::with('cat')->where('course_type', 'external')->get();
+            ->where('course_type', 'external')
+            ->orderBy('student_count', 'desc')
+            ->take(8)
+            ->get();
+        $featured_courses  = Course::with('cat')->where('course_type', 'external')->get();
         $external_instructor = User::where('user_type', 'external_instructor')
-    ->orderBy('student_count', 'desc')
-    ->limit(8)
-    ->get();
+            ->orderBy('student_count', 'desc')
+            ->limit(8)
+            ->get();
 
-            $categories = Category::withCount('courses')->get();
+        $categories = Category::withCount('courses')->get();
         $formatted = $categories->map(function ($cat) {
             return [
                 'name' => $cat->name,
                 'courses' => $cat->courses_count
             ];
         })->toArray();
-        
-        
-        return view('frontend.marketplace',[
+
+
+        return view('frontend.marketplace', [
             'ext_courses' => $ext_courses,
             'ext_instructor' => $ext_instructor,
-            'student' =>$student,
+            'student' => $student,
             'featured_courses' => $featured_courses,
             'instructors' => $external_instructor,
             'best_selling' => $best_selling,
@@ -152,59 +174,59 @@ class FrontendController extends Controller
         ]);
     }
     public function course_list(Request $request): View
-{
-    $categories = Category::all();
-    $query = Course::with('cat')
-        ->where('course_type', 'external');
+    {
+        $categories = Category::all();
+        $query = Course::with('cat')
+            ->where('course_type', 'external');
 
-    // 🔍 Search by title
-    if ($request->filled('search')) {
-        $query->where('title', 'LIKE', '%' . $request->search . '%');
-    }
-
-    // 🎯 Filter
-    if ($request->filled('filter')) {
-        if ($request->filter === 'free') {
-            $query->where('price', 0);
-        } elseif ($request->filter === 'paid') {
-            $query->where('price', '>', 0);
-        } elseif ($request->filter === 'beginner') {
-            $query->where('level', 'beginner');
+        // 🔍 Search by title
+        if ($request->filled('search')) {
+            $query->where('title', 'LIKE', '%' . $request->search . '%');
         }
-    }
 
-    // 🔄 Sort
-    if ($request->filled('sort')) {
-        switch ($request->sort) {
-            case 'newest':
-                $query->orderBy('created_at', 'desc');
-                break;
-            case 'popular':
-                $query->orderBy('student_count', 'desc');
-                break;
-            case 'top_rated':
-                // you’d need a rating column to make this meaningful
-                $query->orderBy('id', 'desc');
-                break;
-            case 'trending':
-            default:
-                $query->orderBy('student_count', 'desc');
-                break;
+        // 🎯 Filter
+        if ($request->filled('filter')) {
+            if ($request->filter === 'free') {
+                $query->where('price', 0);
+            } elseif ($request->filter === 'paid') {
+                $query->where('price', '>', 0);
+            } elseif ($request->filter === 'beginner') {
+                $query->where('level', 'beginner');
+            }
         }
+
+        // 🔄 Sort
+        if ($request->filled('sort')) {
+            switch ($request->sort) {
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'popular':
+                    $query->orderBy('student_count', 'desc');
+                    break;
+                case 'top_rated':
+                    // you’d need a rating column to make this meaningful
+                    $query->orderBy('id', 'desc');
+                    break;
+                case 'trending':
+                default:
+                    $query->orderBy('student_count', 'desc');
+                    break;
+            }
+        }
+
+        $courses = $query->paginate(6);
+
+        return view('frontend.course_list', [
+            'courses' => $courses,
+            'search'  => $request->search,
+            'filter'  => $request->filter,
+            'sort'    => $request->sort,
+            'categories' => $categories
+        ]);
     }
 
-    $courses = $query->paginate(6);
-
-    return view('frontend.course_list', [
-        'courses' => $courses,
-        'search'  => $request->search,
-        'filter'  => $request->filter,
-        'sort'    => $request->sort,
-        'categories' => $categories
-    ]);
-}
-
-public function store_review(Request $request, $courseId)
+    public function store_review(Request $request, $courseId)
     {
         $request->validate([
             'message' => 'required|string|max:1000',
@@ -224,115 +246,116 @@ public function store_review(Request $request, $courseId)
         ];
         return redirect()->back()->with($notification);
     }
-    
 
-    public function course_external_detail($name):View{
+
+    public function course_external_detail($name): View
+    {
         $popular_courses = Course::with('cat')->where('course_type', 'external')->paginate(4);
 
         $course = Course::with('cat')->where('course_url', $name)->first();
         $reviews = CourseReview::with('user')
-        ->where('course_id', $course->id)
-        ->latest()
-        ->get();
+            ->where('course_id', $course->id)
+            ->latest()
+            ->get();
 
-        if(Auth::check()){
-            
-            $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id','=', $course->id)->first();
+        if (Auth::check()) {
+
+            $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)->first();
             $has_pending = AppliedCourse::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)
-                ->where('status' , '=' , "pending")->first();
-        }else{
+                ->where('status', '=', "pending")->first();
+        } else {
             $check_user_has_coupon = NULL;
             $has_pending = NULL;
         }
-        return view('frontend.course_external_detail', ['course' => $course, 'popular_courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending, 'reviews'=> $reviews]);
+        return view('frontend.course_external_detail', ['course' => $course, 'popular_courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending, 'reviews' => $reviews]);
     }
 
 
-//     public function instructor_add(Request $request):RedirectResponse
-//     {
-//         $instructor= new Instructor;
-//         $check_email_exist = Instructor::where('email', '=', $request->email)->first();
-//         if($check_email_exist){
-//             $notification = array(
-//                 'message' => 'You have initially sent application, thank you',
-//                 'alert-type' => 'error'
-//             );
-//             return redirect()->back()->with($notification);
-//         }
-//         $resume = $request->file('resume');
-//         $extension = $resume->getClientOriginalName();
-//         $filename = $extension;
-//         $resume->storeAs( '/resume' , "/" . $request->first_name . "_odumare" . "." .$filename, 'public');
-//         $path = "storage/resume/" . $request->first_name . "_odumare" . "." .$filename;
+    //     public function instructor_add(Request $request):RedirectResponse
+    //     {
+    //         $instructor= new Instructor;
+    //         $check_email_exist = Instructor::where('email', '=', $request->email)->first();
+    //         if($check_email_exist){
+    //             $notification = array(
+    //                 'message' => 'You have initially sent application, thank you',
+    //                 'alert-type' => 'error'
+    //             );
+    //             return redirect()->back()->with($notification);
+    //         }
+    //         $resume = $request->file('resume');
+    //         $extension = $resume->getClientOriginalName();
+    //         $filename = $extension;
+    //         $resume->storeAs( '/resume' , "/" . $request->first_name . "_odumare" . "." .$filename, 'public');
+    //         $path = "storage/resume/" . $request->first_name . "_odumare" . "." .$filename;
 
-//         $instructor->first_name = $request->first_name;
-//         $instructor->last_name= $request->last_name;
-//         $instructor->gender = $request->gender;
-//         $instructor->email = $request->email;
-//         $instructor->career = $request->career;
-//         $instructor->resume= $path;
-//         $instructor->course_ids = $request->course_ids;
-//         $instructor->save();
-//         $notification = array(
-//             'message' => 'Application Successfully sent, we will get back to you shortly',
-//             'alert-type' => 'success'
-//         );
+    //         $instructor->first_name = $request->first_name;
+    //         $instructor->last_name= $request->last_name;
+    //         $instructor->gender = $request->gender;
+    //         $instructor->email = $request->email;
+    //         $instructor->career = $request->career;
+    //         $instructor->resume= $path;
+    //         $instructor->course_ids = $request->course_ids;
+    //         $instructor->save();
+    //         $notification = array(
+    //             'message' => 'Application Successfully sent, we will get back to you shortly',
+    //             'alert-type' => 'success'
+    //         );
 
-//         $mailData = [
-//             'name' => $request->last_name
-//         ];
-// //        Mail::to($request->email)->send(new InstructorApply($mailData));
+    //         $mailData = [
+    //             'name' => $request->last_name
+    //         ];
+    // //        Mail::to($request->email)->send(new InstructorApply($mailData));
 
-//         return redirect()->route('home')->with($notification);
+    //         return redirect()->route('home')->with($notification);
 
-//     }
+    //     }
 
 
-public function instructor_add(Request $request): RedirectResponse
-{
-    $request->validate([
-        'first_name' => 'required|string',
-        'last_name' => 'required|string',
-        'email' => 'required|email|unique:instructors,email',
-        'gender' => 'required|string',
-        'career_level' => 'required|string',
-        'courses' => 'required|array',
-        'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
-    ]);
+    public function instructor_add(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email|unique:instructors,email',
+            'gender' => 'required|string',
+            'career_level' => 'required|string',
+            'courses' => 'required|array',
+            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
+        ]);
 
-    // Handle resume upload
-    $resume = $request->file('resume');
-    $folder = public_path('storage/custom_resumes');
+        // Handle resume upload
+        $resume = $request->file('resume');
+        $folder = public_path('storage/custom_resumes');
 
-    if (!File::exists($folder)) {
-        File::makeDirectory($folder, 0755, true);
+        if (!File::exists($folder)) {
+            File::makeDirectory($folder, 0755, true);
+        }
+
+        $filename = $request->first_name . "_odumare_" . time() . '.' . $resume->getClientOriginalExtension();
+        $resume->move($folder, $filename);
+        $resumePath = "storage/custom_resumes/" . $filename;
+
+        // Save instructor
+        $instructor = new Instructor();
+        $instructor->first_name = $request->first_name;
+        $instructor->last_name = $request->last_name;
+        $instructor->email = $request->email;
+        $instructor->gender = $request->gender;
+        $instructor->career = $request->career_level;
+        $instructor->course_ids = json_encode($request->courses);
+        $instructor->resume = $resumePath;
+        $instructor->save();
+
+        $notification = [
+            'message' => 'Application successfully submitted!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
     }
 
-    $filename = $request->first_name . "_odumare_" . time() . '.' . $resume->getClientOriginalExtension();
-    $resume->move($folder, $filename);
-    $resumePath = "storage/custom_resumes/" . $filename;
 
-    // Save instructor
-    $instructor = new Instructor();
-    $instructor->first_name = $request->first_name;
-    $instructor->last_name = $request->last_name;
-    $instructor->email = $request->email;
-    $instructor->gender = $request->gender;
-    $instructor->career = $request->career_level;
-    $instructor->course_ids = json_encode($request->courses);
-    $instructor->resume = $resumePath;
-    $instructor->save();
-
-    $notification = [
-        'message' => 'Application successfully submitted!',
-        'alert-type' => 'success'
-    ];
-
-    return redirect()->back()->with($notification);
-}
-
-
-public function corporate_training_store(Request $request)
+    public function corporate_training_store(Request $request)
     {
         $validated = $request->validate([
             'full_name'       => 'required|string|max:100',
@@ -356,7 +379,42 @@ public function corporate_training_store(Request $request)
             'message'       => $validated['message'],
         ]);
 
-        return back()->with('success', 'Your request has been submitted successfully!');
+        $notification = [
+            'message' => 'Your request has been submitted successfully!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
     }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name'    => 'required|string|max:255',
+            'email'        => 'required|email|max:255',
+            'phone_number' => 'required|string|max:20',
+            'about'        => 'required|string',
+            'course_name'  => 'required|string|max:255',
+            'message'      => 'required|string',
+            'attachment'   => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,jpg,jpeg,png,mp4|max:20480',
+        ]);
+
+        // Handle file upload
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/content_creators'), $filename);
+            $validated['attachment'] = 'uploads/content_creators/' . $filename;
+        }
+
+        ContentCreator::create($validated);
+
+        $notification = [
+            'message' => 'Your application has been submitted successfully!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
+
+    }
 }

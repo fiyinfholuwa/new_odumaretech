@@ -27,9 +27,11 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/hire', 'hire')->name('hire');
     Route::get('/consultation', 'consultation')->name('consultation');
     Route::get('/marketplace', 'marketplace')->name('marketplace');
+    Route::get('/sell/course', 'sell_course')->name('sell.course');
     Route::get('/course/listing', 'course_list')->name('course_list');
     Route::get('/corporate/training', 'corporate_training')->name('corporate_training');
     Route::post('/company-training', 'corporate_training_store')->name('company.training.store');
+    Route::post('/content/creator/store', 'store')->name('content.creator.store');
 
     Route::post('/courses/{course}/reviews', 'store_review')
         ->name('reviews.store');

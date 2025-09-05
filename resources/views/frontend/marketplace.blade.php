@@ -353,7 +353,7 @@ is your gateway to growth.   </p>
                         </div>
                     </div>
                     <?php endforeach; ?>
-                    <a style="background-color: #0E2293;" class="btn btn-primary border-0">Sell Your Course</a>
+                    <a href="{{ route('sell.course') }}" style="background-color: #0E2293;" class="btn btn-primary border-0">Sell Your Course</a>
 
                 </div>
             </div>
