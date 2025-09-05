@@ -308,20 +308,7 @@ needed.                    </p>
                     Our organization has earned internationally recognized certifications, 
                     demonstrating our commitment to excellence and trust.
                 </p>
-                <div class="trust-badges">
-                    <div class="badge">
-                        <span class="badge-icon">🏆</span>
-                        <span>ISO Certified</span>
-                    </div>
-                    <div class="badge">
-                        <span class="badge-icon">✓</span>
-                        <span>Verified Quality</span>
-                    </div>
-                    <div class="badge">
-                        <span class="badge-icon">🌟</span>
-                        <span>Excellence Award</span>
-                    </div>
-                </div>
+               
             </div>
             <div class="certification-logos">
                 <div class="logo-wrapper">

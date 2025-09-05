@@ -31,6 +31,9 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/corporate/training', 'corporate_training')->name('corporate_training');
     Route::post('/company-training', 'corporate_training_store')->name('company.training.store');
 
+    Route::post('/courses/{course}/reviews', 'store_review')
+        ->name('reviews.store');
+
     Route::get('/course/external/detail/{name}', 'course_external_detail')->name('course_external_detail');
 });
 

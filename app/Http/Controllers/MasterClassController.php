@@ -17,9 +17,7 @@ use Illuminate\View\View;
 
 class MasterClassController extends Controller
 {
-    public function masterclass(){
-        return view('frontend.masterclass');
-    }
+    
     public function masterclass_link():View{
         $masterclass_link = MasterClassLink::first();
         return view('admin.masterclass_link', compact('masterclass_link'));

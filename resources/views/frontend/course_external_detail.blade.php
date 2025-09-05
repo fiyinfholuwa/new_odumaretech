@@ -165,7 +165,10 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                 <ul class="nav nav-tabs nav-fill container" id="courseTab" role="tablist" style="background-color: #E9ECFF; padding: 15px; border-radius: 10px; width: 800px;">
 
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
+                        <button class="nav-link active" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">Reviews <sup class="badge bg-danger">3</sup></button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link " id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">Description</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="requirement-tab" data-bs-toggle="tab" data-bs-target="#requirement" type="button" role="tab">Requirement</button>
@@ -200,7 +203,98 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                     <!-- Overview -->
 
                     <!-- Description -->
-                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+    
+    {{-- ✅ Review Form Section --}}
+    <div class="container mb-4">
+        
+        <div class="card-body">
+            @auth
+                {{-- Logged in users can submit reviews --}}
+                <form action="{{ route('reviews.store', $course->id) }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-bold">
+                            <i class="bi bi-chat-dots me-1"></i>
+                            Your Review
+                        </label>
+                        <textarea name="message" id="message" class="form-control" 
+                                  rows="4" placeholder="Share your thoughts about this course..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="rating" class="form-label fw-bold">
+                            <i class="bi bi-star-half me-1"></i>
+                            Rating
+                        </label>
+                        <select name="rating" id="rating" class="form-select" required>
+                            <option value="">Select your rating</option>
+                            @for($i=1; $i<=5; $i++)
+                                <option value="{{ $i }}">
+                                    {{ str_repeat('⭐', $i) }} {{ $i }} Star{{ $i > 1 ? 's' : '' }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send me-2"></i>
+                            Submit Review
+                        </button>
+                    </div>
+                </form>
+            @else
+                {{-- Guest users see login prompt --}}
+                <div class="text-center py-4">
+                    <i class="bi bi-lock display-6 text-muted"></i>
+                    <h5 class="text-muted mt-3">Login Required</h5>
+                    <p class="text-muted">You need to be logged in to write a review.</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{{ route('login') }}" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Login
+                        </a>
+                        <a href="{{ route('register') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus me-1"></i> Sign Up
+                        </a>
+                    </div>
+                </div>
+            @endauth
+        </div>
+    </div>
+
+    {{-- ✅ Reviews Display Section --}}
+    <div class="container">
+        
+        <div class="card-body">
+            @forelse($reviews as $review)
+                <div class="border rounded p-3 mb-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="mb-1">{{ $review->user->name }}</h6>
+                            <div class="text-warning small">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <i class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                @endfor
+                                <span class="text-muted ms-1">({{ $review->rating }}/5)</span>
+                            </div>
+                        </div>
+                        <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
+                    </div>
+                    <p class="mb-0 mt-2">{{ $review->message }}</p>
+                </div>
+            @empty
+                <div class="text-center py-4">
+                    <i class="bi bi-chat-dots display-6 text-muted"></i>
+                    <h5 class="text-muted mt-2">No Reviews Yet</h5>
+                    <p class="text-muted">Be the first to review this course!</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
+
+                    <div class="tab-pane fade show " id="description" role="tabpanel" aria-labelledby="description-tab">
 
 
                     @if(!is_null($course->description))

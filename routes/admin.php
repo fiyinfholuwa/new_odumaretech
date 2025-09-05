@@ -140,7 +140,6 @@ Route::middleware(['auth', 'is_admin'])->controller(CourseController::class)->gr
 
 
 Route::middleware(['auth', 'is_admin'])->controller(MasterClassController::class)->group(function () {
-    Route::get('/masterclass', 'masterclass')->name('masterclass');
     Route::get('/admin/masterclass/link', 'masterclass_link')->name('masterclass.link');
     Route::get('/admin/github/link', 'github_link')->name('github.link');
     Route::post('/admin/github/link/add', 'github_link_add')->name('github.link.add');
@@ -183,7 +182,6 @@ Route::middleware(['auth', 'is_admin'])->controller(ContactController::class)->g
 });
 
 Route::controller(MasterClassController::class)->group(function () {
-    Route::get('/masterclass', 'masterclass')->name('masterclass');
     Route::get('/admin/masterclass/link', 'masterclass_link')->name('masterclass.link');
     Route::get('/admin/github/link', 'github_link')->name('github.link');
     Route::post('/admin/github/link/add', 'github_link_add')->name('github.link.add');

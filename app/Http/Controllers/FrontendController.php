@@ -11,8 +11,11 @@ use App\Models\CompanyTraining;
 use App\Models\Coupon;
 use App\Models\CouponUsed;
 use App\Models\Course;
+use App\Models\CourseReview;
 use App\Models\Innovation;
 use App\Models\Instructor;
+use App\Models\MasterClass;
+use App\Models\MasterClassLink;
 use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -87,7 +90,8 @@ class FrontendController extends Controller
         return view('frontend.innovation', ['innovations' => $innovations]);
     }
     public function masterclass():View{
-        return view('frontend.masterclass');
+        $master_class = MasterClassLink::first();
+        return view('frontend.masterclass', compact('master_class'));
     }
     public function hire_grad():View{
         return view('frontend.hire_grad');
@@ -200,12 +204,39 @@ class FrontendController extends Controller
     ]);
 }
 
+public function store_review(Request $request, $courseId)
+    {
+        $request->validate([
+            'message' => 'required|string|max:1000',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        CourseReview::create([
+            'user_id' => Auth::id(),
+            'course_id' => $courseId,
+            'message' => $request->message,
+            'rating' => $request->rating,
+        ]);
+
+        $notification = [
+            'message' => 'Review successfully submitted!',
+            'alert-type' => 'success'
+        ];
+        return redirect()->back()->with($notification);
+    }
+    
+
     public function course_external_detail($name):View{
         $popular_courses = Course::with('cat')->where('course_type', 'external')->paginate(4);
 
         $course = Course::with('cat')->where('course_url', $name)->first();
+        $reviews = CourseReview::with('user')
+        ->where('course_id', $course->id)
+        ->latest()
+        ->get();
 
         if(Auth::check()){
+            
             $check_user_has_coupon = CouponUsed::where('user_id', '=', Auth::user()->id)->where('course_id','=', $course->id)->first();
             $has_pending = AppliedCourse::where('user_id', '=', Auth::user()->id)->where('course_id', '=', $course->id)
                 ->where('status' , '=' , "pending")->first();
@@ -213,7 +244,7 @@ class FrontendController extends Controller
             $check_user_has_coupon = NULL;
             $has_pending = NULL;
         }
-        return view('frontend.course_external_detail', ['course' => $course, 'popular_courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending]);
+        return view('frontend.course_external_detail', ['course' => $course, 'popular_courses' => $popular_courses, 'check_user_has_coupon' => $check_user_has_coupon, 'has_pending' => $has_pending, 'reviews'=> $reviews]);
     }
 
 
