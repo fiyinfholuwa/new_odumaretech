@@ -60,8 +60,8 @@
     </a>
 </li>
 <li>
-    <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'active' : '' }}">
-        Blog
+    <a href="{{ route('sell_a_course') }}" class="{{ request()->routeIs('sell_a_course') ? 'active' : '' }}">
+        Sell A Course
     </a>
 </li>
 <li>
@@ -152,8 +152,8 @@
                         <li> <a href="{{route('masterclass')}}">Masterclass</a></li>
 {{--                        <li><a href="#"> Services</a></li>--}}
                         <li> <a href="{{route('corporate_training')}}"> Corporate Trainings</a></li>
-                        <li> <a href="#">Support Us</a></li>
-                        {{-- <li> <a href="{{route('hire_grad')}}">Hire our Grad</a></li> --}}
+                        {{-- <li> <a href="#">Support Us</a></li> --}}
+                        <li> <a href="{{route('blog')}}">Blogs</a></li>
                     </ul>
                 </div>
 

@@ -180,9 +180,9 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="instructor-tab" data-bs-toggle="tab" data-bs-target="#instructor" type="button" role="tab">Instructor</button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    {{-- <li class="nav-item" role="presentation">
                         <button class="nav-link" id="outcome-tab" data-bs-toggle="tab" data-bs-target="#outcome" type="button" role="tab">Career Outcome</button>
-                    </li>
+                    </li> --}}
 
                 </ul>
 
@@ -196,6 +196,19 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                     .nav-tabs .nav-link {
                         color: #000000;
                     }
+
+                    @media (max-width: 768px) {
+  #courseTab {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  #courseTab .nav-item {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
+
 
                 </style>
                 <!-- Tab Content -->
@@ -245,20 +258,7 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                     </div>
                 </form>
             @else
-                {{-- Guest users see login prompt --}}
-                <div class="text-center py-4">
-                    <i class="bi bi-lock display-6 text-muted"></i>
-                    <h5 class="text-muted mt-3">Login Required</h5>
-                    <p class="text-muted">You need to be logged in to write a review.</p>
-                    <div class="d-flex justify-content-center gap-2">
-                        <a href="{{ route('login') }}" class="btn btn-primary">
-                            <i class="bi bi-box-arrow-in-right me-1"></i> Login
-                        </a>
-                        <a href="{{ route('register') }}" class="btn btn-outline-primary">
-                            <i class="bi bi-person-plus me-1"></i> Sign Up
-                        </a>
-                    </div>
-                </div>
+                
             @endauth
         </div>
     </div>

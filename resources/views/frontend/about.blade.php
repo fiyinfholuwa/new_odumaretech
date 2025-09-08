@@ -21,7 +21,7 @@
             <p style="margin: 15px 0;">
 
 At OdumareTech, we believe everyone deserves a chance to thrive in the digital world. That’s why we make
-tech education practical, accessible, and supportive—no matter your background or experience.
+tech education practical, accessible, and supportive no matter your background or experience.
 Our programs are designed to help you learn by doing. You’ll work on real projects, get guidance from
 experienced mentors, and join a vibrant community that’s invested in your success. From your first lesson
 to your first job offer, we’re with you every step of the way.

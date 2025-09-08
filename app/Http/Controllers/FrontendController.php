@@ -24,6 +24,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
+
 
 class FrontendController extends Controller
 {
@@ -107,6 +111,16 @@ class FrontendController extends Controller
     {
         return view('frontend.hire_grad');
     }
+    public function sell_a_course(): View
+    {
+
+        $external_instructor = User::where('user_type', 'external_instructor')
+            ->orderBy('student_count', 'desc')
+            ->limit(8)
+            ->get();
+        return view('frontend.sell_a_course',['instructors' => $external_instructor,
+    ]);
+    }
     public function privacy(): View
     {
         return view('frontend.privacy');
@@ -149,11 +163,7 @@ class FrontendController extends Controller
             ->take(8)
             ->get();
         $featured_courses  = Course::with('cat')->where('course_type', 'external')->get();
-        $external_instructor = User::where('user_type', 'external_instructor')
-            ->orderBy('student_count', 'desc')
-            ->limit(8)
-            ->get();
-
+        
         $categories = Category::withCount('courses')->get();
         $formatted = $categories->map(function ($cat) {
             return [
@@ -168,7 +178,6 @@ class FrontendController extends Controller
             'ext_instructor' => $ext_instructor,
             'student' => $student,
             'featured_courses' => $featured_courses,
-            'instructors' => $external_instructor,
             'best_selling' => $best_selling,
             'categories' => $formatted
         ]);
@@ -387,34 +396,88 @@ class FrontendController extends Controller
         return redirect()->back()->with($notification);
     }
 
-    public function store(Request $request)
+    public function sell_course_store(Request $request)
     {
-        $validated = $request->validate([
-            'full_name'    => 'required|string|max:255',
-            'email'        => 'required|email|max:255',
-            'phone_number' => 'required|string|max:20',
-            'about'        => 'required|string',
-            'course_name'  => 'required|string|max:255',
-            'message'      => 'required|string',
-            'attachment'   => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,jpg,jpeg,png,mp4|max:20480',
-        ]);
+        try {
+            // ✅ Validation
+            $validated = $request->validate([
+                'first_name'   => 'required|string|max:100',
+                'last_name'    => 'required|string|max:100',
+                'email'        => 'required|email|max:150',
+                'phone_number' => 'required|string|regex:/^\d{7,15}$/',
+                'about'        => 'required|string|max:2000',
 
-        // Handle file upload
-        if ($request->hasFile('attachment')) {
-            $file = $request->file('attachment');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/content_creators'), $filename);
-            $validated['attachment'] = 'uploads/content_creators/' . $filename;
+                'linkedin'     => 'required|url',
+
+                'course_name'  => 'required|string|max:200',
+                'message'      => 'required|string|max:5000',
+
+                'twitter'      => 'nullable|url',
+                'instagram'    => 'nullable|url',
+                'youtube'      => 'nullable|url',
+                'tiktok'       => 'nullable|url',
+                'portfolio'    => 'nullable|url',
+                'github'       => 'nullable|url',
+                'other_work'   => 'nullable|url',
+                'sample_link'  => 'nullable|url',
+            ]);
+
+
+            $check_email = ContentCreator::where('email', $request->email)->first();
+            if($check_email){
+
+
+            }
+
+            // ✅ Generate Reference ID
+            $reference = strtoupper(Str::random(10));
+
+
+            // ✅ Insert into DB
+            DB::table('content_creators')->insert([
+                'reference'     => $reference,
+                'first_name'    => $validated['first_name'],
+                'last_name'     => $validated['last_name'],
+                'email'         => $validated['email'],
+                'phone_number'  => $validated['phone_number'],
+                'about'         => $validated['about'],
+
+                'linkedin'      => $validated['linkedin'],
+                'twitter'       => $request->twitter,
+                'instagram'     => $request->instagram,
+                'youtube'       => $request->youtube,
+                'tiktok'        => $request->tiktok,
+                'portfolio'     => $request->portfolio,
+                'github'        => $request->github,
+                'other_work'    => $request->other_work,
+
+                'course_name'   => $validated['course_name'],
+                'description'   => $validated['message'],
+                'sample_link'   => $request->sample_link,
+
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+
+            // ✅ Notification
+            $notification = [
+                'message' => 'Application successfully submitted! Reference: ' . $reference,
+                'alert-type' => 'success'
+            ];
+
+            return redirect()->back()->with($notification);
+
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator)->withInput();
+        } catch (\Exception $e) {
+            $notification = [
+                'message' => 'Something went wrong, please try again later.',
+                'alert-type' => 'error'
+            ];
+            return redirect()->back()->with($notification);
         }
-
-        ContentCreator::create($validated);
-
-        $notification = [
-            'message' => 'Your application has been submitted successfully!',
-            'alert-type' => 'success'
-        ];
-
-        return redirect()->back()->with($notification);
-
     }
+
+
+
 }

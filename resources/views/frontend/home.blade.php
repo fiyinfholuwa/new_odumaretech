@@ -223,79 +223,93 @@
         }
     </style>
     <!-- Hero Section -->
-    <section id="hero" class="hero section dark-background">
+   <section id="hero" class="hero section dark-background">
 
-        <img src="{{asset('frontend/assets/img/hero.jpg')}}" alt="" data-aos="fade-in">
+    <img src="{{asset('frontend/assets/img/hero.jpg')}}" alt="" data-aos="fade-in">
 
-<div style="display:none;" class="cube-container">
-            <div class="cube">
-                <div class="cube-face front">
-                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=WEB" alt="Web Development">
-                    <h3>Web Dev</h3>
-                    <p>Master modern web technologies</p>
-                </div>
-                <div class="cube-face back">
-                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=AI" alt="AI & ML">
-                    <h3>AI & ML</h3>
-                    <p>Explore artificial intelligence</p>
-                </div>
-                <div class="cube-face right">
-                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=DATA" alt="Data Science">
-                    <h3>Data Science</h3>
-                    <p>Unlock insights from data</p>
-                </div>
-                <div class="cube-face left">
-                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=CYBER" alt="Cybersecurity">
-                    <h3>Cybersecurity</h3>
-                    <p>Protect digital assets</p>
-                </div>
-                <div class="cube-face top">
-                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=CLOUD" alt="Cloud Computing">
-                    <h3>Cloud Tech</h3>
-                    <p>Scale with cloud solutions</p>
-                </div>
-                <div class="cube-face bottom">
-                    <img src="https://via.placeholder.com/60x60/FFC000/FFFFFF?text=MOBILE" alt="Mobile Development">
-                    <h3>Mobile Dev</h3>
-                    <p>Build mobile experiences</p>
-                </div>
-            </div>
-            
-            <!-- Floating particles -->
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-        </div>
+    <!-- Rain container -->
+    <div class="rain"></div>
 
+    <div class="container">
+        <div style="margin-top:-100px;" class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-xl-6 col-lg-8">
+                <span style="background-color: #FFC000; padding: 5px; border-radius: 10px; font-size:10px;">Led by Professionals</span>
+                <h2 style="position: relative;">
+                    <img class="decorative-line" style="position: relative; height: 100px; width: 100px; left: -80px; top: 50px;" src="{{ asset('frontend/assets/img/line.png') }}" alt="line" />
+                    Unlock Your Tech Superpowers for Tomorrow, Today <span>.</span>
+                </h2>
 
-        <div class="container">
-
-            <div style="margin-top:-100px;" class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
-                <div class="col-xl-6 col-lg-8">
-                    <span style="background-color: #FFC000; padding: 5px;  border-radius: 10px; font-size:10px;">Led by Professionals</span>
-                    <h2 style="position: relative;">
-                        <img class="decorative-line" style="position: relative; height: 100px; width: 100px; left: -80px; top: 50px;" src="{{ asset('frontend/assets/img/line.png') }}" alt="line" />
-Unlock Your Tech Superpowers for Tomorrow, Today                        <span>.</span>
-                    </h2>
-
-                    <style>
-                        @media (max-width: 768px) {
-                            .decorative-line {
-                                display: none !important;
-                            }
+                <style>
+                    @media (max-width: 768px) {
+                        .decorative-line {
+                            display: none !important;
                         }
-                    </style>
-                    <p>
-Hands-on courses, real projects, and a community that’s got your back. Start your journey—no experience
-needed.                    </p>
-                </div>
-                <div style="margin-top: 30px;">
-                    <a href="{{route('courses')}}" class="btn  btn-primary">Get  Started</a>
-                </div>
+                    }
+                </style>
+                <p>
+                    Hands-on courses, real projects, and a community that’s got your back. Start your journey—no experience
+                    needed.
+                </p>
+            </div>
+            <div style="margin-top: 30px;">
+                <a href="{{route('courses')}}" class="btn btn-primary">Get Started</a>
             </div>
         </div>
+    </div>
+</section>
 
-    </section>
+<style>
+/* Rain effect */
+.rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+}
+
+/* Each drop */
+.rain span {
+    position: absolute;
+    top: -10%;
+    width: 2px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+    animation: fall linear infinite;
+}
+
+/* Falling animation */
+@keyframes fall {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(120vh);
+        opacity: 0.4;
+    }
+}
+</style>
+
+<script>
+// Generate raindrops dynamically
+document.addEventListener("DOMContentLoaded", () => {
+    const rain = document.querySelector(".rain");
+    const dropCount = 50; // adjust density
+
+    for (let i = 0; i < dropCount; i++) {
+        const drop = document.createElement("span");
+        drop.style.left = Math.random() * 100 + "vw";  // random X position
+        drop.style.animationDuration = 0.5 + Math.random() * 1.5 + "s"; // different speeds
+        drop.style.animationDelay = Math.random() * 2 + "s"; // staggered starts
+        rain.appendChild(drop);
+    }
+});
+</script>
+
 
 
 
@@ -344,14 +358,8 @@ needed.                    </p>
     </section>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-        }
+      
+      
 
         .certification-section {
             background: linear-gradient(135deg, #001f3f 0%, #003366 50%, #001a33 100%);
@@ -695,7 +703,8 @@ needed.                    </p>
 
             .certification-logos {
                 justify-content: center;
-                gap: 20px;
+                gap: 0px;
+                margin-top:-280px;
             }
 
             .animate-title {
