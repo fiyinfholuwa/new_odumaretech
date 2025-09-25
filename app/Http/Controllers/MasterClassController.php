@@ -122,6 +122,7 @@ class MasterClassController extends Controller
     $masterclass_link->title = $request->title;
     $masterclass_link->visible = $request->visible;
     $masterclass_link->text_body = $request->text_body;
+    $masterclass_link->text_body_2 = $request->text_body_2;
 
     // ✅ File upload handling
     if ($request->hasFile('image')) {
@@ -133,6 +134,16 @@ class MasterClassController extends Controller
         }
         $file->move($destinationPath, $filename);
         $masterclass_link->image = 'uploads/masterclass/'.$filename;
+    }
+    if ($request->hasFile('masterclass_image')) {
+        $file = $request->file('masterclass_image');
+        $filename = time().'_'.$file->getClientOriginalName();
+        $destinationPath = public_path('uploads/masterclass');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        $file->move($destinationPath, $filename);
+        $masterclass_link->masterclass_image = 'uploads/masterclass/'.$filename;
     }
 
     $masterclass_link->save();

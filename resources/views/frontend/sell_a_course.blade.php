@@ -40,7 +40,9 @@
                     <p style="color: #5A5A5A;" class="">
                         Join thousands of instructors who are already earning by sharing their expertise on our marketplace.</p>
                     <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF"
+                        <iframe 
+  src="https://www.youtube.com/embed/-oGh3z4JCVI"
+                        
                                 title="YouTube video player"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

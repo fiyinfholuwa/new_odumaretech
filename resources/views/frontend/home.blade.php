@@ -926,39 +926,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     <section style="background-color: #FFF3CF; padding: 60px 0;">
-        <div class="company container">
-            <div class="section-header text-center mb-5">
-                <h2 class="fw-bold" style="font-size: 2.5rem;">Our Partner</h2>
-            </div>
-            <div class="row justify-content-center">
-                <?php
-                $partners = [
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
-                   'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
+    <style>
+    .partner-logo {
+        width: 100%;
+        height: 100px; /* adjust height as needed */
+        object-fit: contain; 
+        background: white; /* optional, makes logos on transparent background visible */
+        padding: 5px; /* optional, gives breathing room */
+    }
+</style>
 
-                ];
-
-                foreach ($partners as $partner) {
-                    ?>
-                <div class="col-6 col-md-4 col-lg-2 kompany text-center mb-4">
-                    <img src="{{ asset($partner) }}" alt="Partner Logo" class="img-fluid partner-logo">
-                </div>
-                    <?php
-                }
-                ?>
-            </div>
+    <div class="company container">
+        <div class="section-header text-center mb-5">
+            <h2 class="fw-bold" style="font-size: 2.5rem;">Our Partner</h2>
         </div>
-    </section>
+        <div class="row justify-content-center">
+            <?php
+            $partners = [
+                'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
+                'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
+                'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd',
+                'https://upload.wikimedia.org/wikipedia/commons/8/84/Zapier-logo.png',
+                'https://sm.pcmag.com/t/pcmag_me/review/s/spotify/spotify_wc7u.1200.png',
+                'https://m.media-amazon.com/images/I/71bVFk8cUKL.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAU2r-709qkZeCFT0Zdmhoyg2_UYm6xF0rA&s',
+                'https://images.contentstack.io/v3/assets/blt9e072702140c498e/bltea5495240d348c1f/5f51dca8ee702027c4ce85d9/Overview_Adobe_logo.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRA15tv2KxH56D7RHjS1JNeDoC3uyUp3F-8w&s',
+                'https://m.media-amazon.com/images/I/31JfJ6dXD9L.png'
+            ];
+
+            foreach ($partners as $partner) {
+            ?>
+            <div class="col-6 col-md-4 col-lg-2 kompany text-center mb-4">
+                <img src="<?= $partner ?>" alt="Partner Logo" class="img-fluid partner-logo">
+            </div>
+            <?php
+            }
+            ?>
+        </div>
+    </div>
+</section>
 
 
 @if (count($popular_courses)> 0)
@@ -1084,7 +1092,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h2 style="color: #0E2293;" class="fw-bold">Not Just Another EdTech Platform</h2>
                     <p style="color: #5A5A5A;" class="">We’re your dedicated partner in mastering digital skills. Our unique blend of hands-on learning and real-world experience sets us apart.</p>
                     <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF"
+                        <iframe
+  src="https://www.youtube.com/embed/BQY-qE-mXGk"
                                 title="YouTube video player"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -1166,7 +1175,7 @@ sharing insights you won’t find in textbooks.',
             <div class="col-12">
                 <div class="ratio ratio-16x9">
                     <iframe 
-                        src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" 
+  src="https://www.youtube.com/embed/vkUfFhMsR6g"
                         title="YouTube video player" 
                         allowfullscreen 
                         style="border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
@@ -1211,7 +1220,7 @@ sharing insights you won’t find in textbooks.',
             <div class="col-12">
                 <div class="ratio ratio-16x9">
                     <iframe 
-                        src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" 
+  src="https://www.youtube.com/embed/NKtNQm6JePc"
                         title="YouTube video player" 
                         allowfullscreen 
                         style="border-radius: 10px; box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.08);">
@@ -1364,19 +1373,12 @@ sharing insights you won’t find in textbooks.',
             <div class="row justify-content-center">
                 <?php
                 $partners = [
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
+                    'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
+                'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
+                'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd',
 
+                   
                 ];
 
                 foreach ($partners as $partner) {

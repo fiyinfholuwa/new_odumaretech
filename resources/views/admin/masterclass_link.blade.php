@@ -104,7 +104,7 @@
 
                 {{-- Visibility + Facilitator Image in a row --}}
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="visible">Visibility</label>
                         <select class="form-control" name="visible" required>
                             <option value="">Select Option</option>
@@ -112,7 +112,7 @@
                             <option value="off" {{ isset($masterclass_link) && $masterclass_link->visible == 'off' ? 'selected' : '' }}>No</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="facilitator_image">Facilitator Image</label>
                         <input type="file" class="form-control" id="facilitator_image" name="image" accept="image/*">
                         @if(isset($masterclass_link->image))
@@ -122,12 +122,29 @@
                             </div>
                         @endif
                     </div>
+                    <div class="col-md-4">
+                        <label for="facilitator_image">Master Class Image</label>
+                        <input type="file" class="form-control" id="masterclass_image" name="masterclass_image" accept="image/*">
+                        @if(isset($masterclass_link->image))
+                            <div class="mt-2">
+                                <img src="{{ asset($masterclass_link->masterclass_image) }}" 
+                                     alt="Facilitator" class="img-thumbnail" width="120">
+                            </div>
+                        @endif
+                    </div>
                 </div>
+                
+
 
                 {{-- Info/Description --}}
                 <div class="form-group mb-3">
                     <label for="info">Masterclass Info</label>
                     <textarea class="form-control" id="myTextarea" name="text_body" rows="4" placeholder="Enter details about the masterclass...">{{ $masterclass_link->text_body ?? '' }}</textarea>
+                </div>
+                {{-- Info/Description --}}
+                <div class="form-group mb-3">
+                    <label for="info">Facilitator Info</label>
+                    <textarea class="form-control" id="myTextarea2" name="text_body_2" rows="4" placeholder="Enter details about the masterclass facilitator...">{{ $masterclass_link->text_body_2 ?? '' }}</textarea>
                 </div>
 
                 {{-- Submit --}}

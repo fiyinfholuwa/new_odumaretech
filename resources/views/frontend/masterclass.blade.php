@@ -26,6 +26,8 @@
         </div>
     </section>
 
+    
+
     <section class="faq py-5">
         <div class="container">
             @if(!$master_class || !$master_class->title || !$master_class->image || !$master_class->text_body)
@@ -33,11 +35,19 @@
                     <h3>No Master Class Available</h3>
                 </div>
             @else
+
+<div class="text-center my-3">
+    <div class="d-inline-block px-4 py-2 rounded shadow-sm" style="background-color: #E9ECFF;">
+        <i class="bi bi-calendar-event me-2"></i> {{ $master_class->date }}
+        &nbsp; | &nbsp;
+        <i class="bi bi-clock me-2"></i> {{ $master_class->time }}
+    </div>
+</div>
                 <div class="row g-5 align-items-start">
                     <!-- Left Side: Title + Image -->
                     <div class="col-lg-5">
                         <h2 class="mb-3">{{ $master_class->title }}</h2>
-                        <img src="{{ asset($master_class->image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
+                        <img src="{{ asset($master_class->masterclass_image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
                     </div>
 
                     <!-- Right Side: Text + Form -->
@@ -48,6 +58,33 @@
                             </p>
                         </div>
 
+                    </div>
+                </div>
+
+                <div style="margin-top:50px;" class="row g-5 align-items-start">
+                    <!-- Left Side: Title + Image -->
+                                            <h2 class="mb-3">About The Facilitator</h2>
+
+                    <div class="col-lg-7">
+                        <div class="mb-4">
+                            <p class="text-muted" style="line-height: 1.7;">
+                                {!! $master_class->text_body_2 !!}
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-5">
+                        <img src="{{ asset($master_class->image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
+                    </div>
+
+                    <!-- Right Side: Text + Form -->
+                    
+                </div>
+
+                <div class="row">
+                
+                
+                        <div class="col-12">
                         <div class="p-4 rounded-4 shadow-sm" style="background-color: #F7F7F7;">
                             <h5 class="mb-3">Reserve Your Spot</h5>
                             <form enctype="multipart/form-data">
@@ -117,7 +154,8 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                        
+                        </div>
                 </div>
             @endif
         </div>

@@ -175,7 +175,7 @@ Creativity, Passion, Continuous improvement.
         </script>
     </section>
 
-    <section style="background-color: #FFF3CF; padding: 60px 0;">
+   <section style="background-color: #FFF3CF; padding: 60px 0;">
         <div class="company container">
             <div class="section-header text-center mb-5">
                 <h2 class="fw-bold" style="font-size: 2.5rem;">Where Our Graduates Work</h2>
@@ -183,19 +183,12 @@ Creativity, Passion, Continuous improvement.
             <div class="row justify-content-center">
                 <?php
                 $partners = [
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
-                    'frontend/assets/img/deloitte.png',
-                    'frontend/assets/img/firstbank.png',
-                    'frontend/assets/img/nhs.png',
-                    'frontend/assets/img/zenith.png',
+                    'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
+                'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
+                'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd',
 
+                   
                 ];
 
                 foreach ($partners as $partner) {
@@ -224,7 +217,10 @@ Ignite minds. Inspire futures. Become an instructor with us today!              
             <div class="row">
                 <div class="col-12">
                     <div class="ratio ratio-16x9">
-                        <iframe src="https://www.youtube.com/embed/EaGakAaLt5g?si=IkxAQ37BMNTWVJEF" title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>
+                        <iframe 
+  src="https://www.youtube.com/embed/DZqcyJ1Fx7g"
+                        
+                         title="YouTube video player" allowfullscreen style="border-radius: 10px;"></iframe>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Http\Controllers;
+use Google\Client;
+use Google\Service\Drive;
+
+class GoogleDriveManager2
+{
+    protected $client;
+    protected $service;
+
+    public function __construct()
+    {
+        $this->client = new Client();
+
+        // 🔹 Load JSON from .env
+        $path = base_path(env('GOOGLE_SERVICE_ACCOUNT_JSON_PATH', 'google.json'));
+
+if (!file_exists($path)) {
+    throw new \Exception("Google Service Account JSON file not found at: {$path}");
+}
+
+$credentials = json_decode(file_get_contents($path), true);
+
+if (!$credentials) {
+    throw new \Exception("Google Service Account JSON is missing or invalid at {$path}");
+}
+
+        $this->client->setAuthConfig($credentials);
+        $this->client->addScope(Drive::DRIVE);
+
+        $this->service = new Drive($this->client);
+    }
+
+    /**
+     * Upload a file to Google Drive and return shareable link
+     */
+    public function upload($filePath, $fileName)
+    {
+        try {
+            $fileMetadata = new Drive\DriveFile([
+                'name' => $fileName,
+                'parents' => [env('GOOGLE_DRIVE_FOLDER_ID')] // 👈 force upload into your shared folder
+            ]);
+
+            $content = file_get_contents($filePath);
+
+            $file = $this->service->files->create($fileMetadata, [
+                'data' => $content,
+                'mimeType' => mime_content_type($filePath),
+                'uploadType' => 'multipart',
+                'fields' => 'id, webViewLink, webContentLink'
+            ]);
+
+            return [
+                'success' => true,
+                'file_id' => $file->id,
+                'view_link' => $file->webViewLink,
+                'download_link' => $file->webContentLink,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Make a file public
+     */
+    public function makePublic($fileId)
+    {
+        $permission = new Drive\Permission();
+        $permission->setType('anyone');
+        $permission->setRole('reader');
+
+        $this->service->permissions->create($fileId, $permission);
+    }
+
+    /**
+     * Get shareable link
+     */
+    public function getLink($fileId)
+    {
+        return "https://drive.google.com/file/d/{$fileId}/view?usp=sharing";
+    }
+
+    /**
+     * Delete file
+     */
+    public function delete($fileId)
+    {
+        $this->service->files->delete($fileId);
+        return true;
+    }
+
+    /**
+     * List files in a folder (or all if no folderId)
+     */
+    public function list($folderId = null)
+    {
+        $query = $folderId ? "'{$folderId}' in parents" : null;
+
+        $results = $this->service->files->listFiles([
+            'q' => $query,
+            'fields' => 'files(id, name, webViewLink)'
+        ]);
+
+        return $results->getFiles();
+    }
+}
