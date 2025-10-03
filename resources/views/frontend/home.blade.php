@@ -1373,11 +1373,22 @@ sharing insights you won’t find in textbooks.',
             <div class="row justify-content-center">
                 <?php
                 $partners = [
-                    'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                    {{-- 'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
+                'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
+                'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd', --}}
+
+'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
                 'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
                 'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd',
-
+                'https://upload.wikimedia.org/wikipedia/commons/8/84/Zapier-logo.png',
+                'https://sm.pcmag.com/t/pcmag_me/review/s/spotify/spotify_wc7u.1200.png',
+                'https://m.media-amazon.com/images/I/71bVFk8cUKL.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAU2r-709qkZeCFT0Zdmhoyg2_UYm6xF0rA&s',
+                'https://images.contentstack.io/v3/assets/blt9e072702140c498e/bltea5495240d348c1f/5f51dca8ee702027c4ce85d9/Overview_Adobe_logo.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRA15tv2KxH56D7RHjS1JNeDoC3uyUp3F-8w&s',
+                'https://m.media-amazon.com/images/I/31JfJ6dXD9L.png'
                    
                 ];
 
