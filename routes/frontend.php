@@ -38,6 +38,9 @@ Route::controller(FrontendController::class)->group(function () {
         ->name('reviews.store');
 
     Route::get('/course/external/detail/{name}', 'course_external_detail')->name('course_external_detail');
+
+    Route::post('/cookie-consent',  'cookie_store')->name('cookie.consent.store');
+
 });
 
 require __DIR__.'/auth.php';

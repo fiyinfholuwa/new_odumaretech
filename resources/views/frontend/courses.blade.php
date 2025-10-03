@@ -65,8 +65,13 @@ Join over 110,000 professionals who have trained with us and taken their careers
                             <span style="background-color: #FFC000; color: white; position: absolute; top: 10px; left: 10px; padding: 5px 10px; border-radius: 5px; font-size: 14px;">{{ optional($course->cat)->name }}</span>
                         </div>
                         <h3 class="mt-3"><?php echo $course['title']; ?></h3>
-                        <p class="text-muted"><?php echo $course['description']; ?></p>
-                        <div class="mb-3">
+@php
+                            $cleaned = strip_tags(html_entity_decode($course['description']));
+                            $words = explode(' ', $cleaned);
+                            $shortDesc = implode(' ', array_slice($words, 0, 20));
+                        @endphp
+
+                        <p class="text-muted">{{ $shortDesc }}{{ count($words) > 20 ? '...' : '' }}</p>                        <div class="mb-3">
                             <span style="padding: 5px 10px; background-color: white; border-radius: 10px; font-size: 14px;"><?php echo $course['duration']; ?> Weeks</span>
                             <span style="background-color: #FFF0DC; color: #FF9500; padding: 5px 10px; border-radius: 10px; font-size: 14px;"><?php echo $course['level']; ?></span>
                         </div>

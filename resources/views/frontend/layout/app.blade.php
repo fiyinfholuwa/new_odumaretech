@@ -7,6 +7,8 @@
     <title>Odumaretech</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <!-- {{--    <link href="assets/img/favicon.png" rel="icon">--}}
     {{--    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">--}} -->
@@ -37,7 +39,7 @@
 
         <a href="{{route('home')}}" class="logo d-flex align-items-center me-auto me-lg-0">
             <!-- Uncomment the line below if you also wish to use an image logo -->
-            <img style="border-radius:10px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
+            <img style="border-radius:10px;" src="{{ asset('logo.png') }}" alt="">
             <!-- <h1 class="sitename">GP</h1>
             <span>.</span> -->
         </a>
@@ -761,6 +763,186 @@ window.BFModal = (function() {
 })();
 
 document.addEventListener('DOMContentLoaded', () => BFModal.init());
+</script>
+
+
+<!-- Cookie Overlay + Banner -->
+<div id="cookie-overlay" style="display:none;">
+  <div id="cookie-banner" aria-live="polite">
+    <div class="cookie-inner">
+      <div class="cookie-text">
+        <strong>We use cookies</strong>
+        <p>
+          We use cookies to improve your experience. By clicking <b>Accept</b> you allow us to collect minimal device info and page info. 
+          You can <b>Decline</b> if you prefer.
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button id="cookie-decline" class="cookie-btn cookie-btn-decline">Decline</button>
+        <button id="cookie-accept" class="cookie-btn cookie-btn-accept">Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Overlay to block interaction */
+#cookie-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 9998;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Fancy bottom banner styles */
+#cookie-banner {
+  width: 95%;
+  max-width: 650px;
+  margin-bottom: 200px;
+  background: linear-gradient(90deg, #fffaf0, #fff2e6);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  padding: 16px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  z-index: 9999;
+}
+
+.cookie-inner {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.cookie-text {
+  max-width: 70%;
+}
+
+.cookie-text p {
+  margin: 6px 0 0 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.cookie-actions {
+  display:flex;
+  gap: 8px;
+  align-items:center;
+}
+
+/* Buttons */
+.cookie-btn {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.cookie-btn-decline {
+  background: transparent;
+  border: 1px solid #d0a77a;
+  color: #7a4c2a;
+}
+
+.cookie-btn-accept {
+  background: linear-gradient(90deg,#ff8a00,#ff5e62);
+  color: white;
+  box-shadow: 0 6px 18px rgba(255,94,98,0.22);
+}
+@media (max-width:720px){
+  .cookie-text { max-width: 100%; }
+  .cookie-inner { flex-direction: column; align-items: stretch; gap: 12px; }
+  .cookie-actions { justify-content: flex-end; }
+}
+</style>
+
+<script>
+(function () {
+  const overlay = document.getElementById('cookie-overlay');
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('cookie-accept');
+  const declineBtn = document.getElementById('cookie-decline');
+
+  // Only show overlay if not already chosen
+  if (!localStorage.getItem('cookie_consent_decision')) {
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // block scrolling
+  }
+
+  function getDeviceInfo() {
+    return {
+      userAgent: navigator.userAgent || null,
+      platform: navigator.platform || null,
+      vendor: navigator.vendor || null,
+      language: navigator.language || (navigator.languages && navigator.languages[0]) || null,
+      screen: {
+        width: window.screen?.width || null,
+        height: window.screen?.height || null,
+        availWidth: window.screen?.availWidth || null,
+        availHeight: window.screen?.availHeight || null
+      },
+      viewport: {
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight
+      }
+    };
+  }
+
+  async function sendConsent(accepted) {
+    const payload = {
+      accepted: !!accepted,
+      device_info: getDeviceInfo(),
+      page: window.location.href,
+      referrer: document.referrer || null,
+      timestamp: new Date().toISOString()
+    };
+
+    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = tokenMeta ? tokenMeta.content : null;
+
+    try {
+      await fetch('/cookie-consent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(csrfToken ? {'X-CSRF-TOKEN': csrfToken} : {}),
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload),
+        credentials: 'same-origin'
+      });
+    } catch (err) {
+      console.error('Cookie consent AJAX failed', err);
+    }
+  }
+
+  function finalize(choice) {
+    localStorage.setItem('cookie_consent_decision', choice);
+    overlay.style.display = 'none';
+    document.body.style.overflow = ''; // allow scrolling
+  }
+
+  acceptBtn.addEventListener('click', function () {
+    finalize('accepted');
+    sendConsent(true);
+    alert('Thanks — cookies accepted.');
+  });
+
+  declineBtn.addEventListener('click', function () {
+    finalize('declined');
+    sendConsent(false);
+    alert('You declined cookies — preference saved.');
+  });
+
+})();
 </script>
 
 </body>

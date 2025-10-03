@@ -867,8 +867,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <div style="padding: 10px 75px;" class="row">
             <?php
             $items = [
-                ['icon' => 'fa-laptop', 'number' => 20, 'name' => 'BootCamps'],
-                ['icon' => 'fa-graduation-cap', 'number' => 15, 'name' => 'Student Taught'],
+                ['icon' => 'fa-laptop', 'number' => 50, 'name' => 'BootCamps'],
+                ['icon' => 'fa-graduation-cap', 'number' => 1500, 'name' => 'Student Taught'],
                 ['icon' => 'fa-briefcase', 'number' => 80, 'name' => 'Employability'],
                 ['icon' => 'fa-house', 'number' => 20, 'name' => 'Partnered Companies'],
             ];

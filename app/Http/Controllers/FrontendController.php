@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Cohort;
 use App\Models\CompanyTraining;
 use App\Models\ContentCreator;
+use App\Models\CookieConsent;
 use App\Models\Coupon;
 use App\Models\CouponUsed;
 use App\Models\Course;
@@ -22,11 +23,11 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 
 class FrontendController extends Controller
@@ -478,6 +479,36 @@ class FrontendController extends Controller
         }
     }
 
+
+    public function cookie_store(Request $request)
+    {
+        // Basic validation
+        $data = $request->validate([
+            'accepted' => 'required|boolean',
+            'page' => 'nullable|string|max:2048',
+            'referrer' => 'nullable|string|max:2048',
+            'device_info' => 'nullable|array',
+        ]);
+
+        // Capture server-side details
+        $ip = $request->ip();
+        $userAgent = $request->header('User-Agent');
+
+        $consent = CookieConsent::create([
+            'ip_address' => $ip,
+            'user_agent' => $userAgent,
+            'accepted' => (bool) $data['accepted'],
+            'page' => $data['page'] ?? null,
+            'referrer' => $data['referrer'] ?? null,
+            'device_info' => $data['device_info'] ?? null,
+            'session_id' => session()->getId() ?? Str::random(16),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'id' => $consent->id
+        ]);
+    }
 
 
 }
