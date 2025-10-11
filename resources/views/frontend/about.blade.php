@@ -23,10 +23,10 @@
 At OdumareTech, we believe everyone deserves a chance to thrive in the digital world. That’s why we make
 tech education practical, accessible, and supportive no matter your background or experience.
 Our programs are designed to help you learn by doing. You’ll work on real projects, get guidance from
-experienced mentors, and join a vibrant community that’s invested in your success. From your first lesson
+experienced mentors, and join a vibrant community that’s invested in your success.</p>  {{-- From your first lesson
 to your first job offer, we’re with you every step of the way.
 When you finish, you’ll have a globally recognized certification and the confidence to launch your tech
-career anywhere in the world.                 </p>
+career anywhere in the world.                 </p> --}}
             <a href="{{ route('courses') }}" class="btn btn-warning" style="margin-bottom: 20px;">Get Started</a>
 
         </div>
@@ -183,11 +183,18 @@ Creativity, Passion, Continuous improvement.
             <div class="row justify-content-center">
                 <?php
                 $partners = [
-                    'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                 
+                'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
                 'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
                 'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd',
-
+                'https://upload.wikimedia.org/wikipedia/commons/8/84/Zapier-logo.png',
+                'https://sm.pcmag.com/t/pcmag_me/review/s/spotify/spotify_wc7u.1200.png',
+                'https://m.media-amazon.com/images/I/71bVFk8cUKL.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoAU2r-709qkZeCFT0Zdmhoyg2_UYm6xF0rA&s',
+                'https://images.contentstack.io/v3/assets/blt9e072702140c498e/bltea5495240d348c1f/5f51dca8ee702027c4ce85d9/Overview_Adobe_logo.png',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRA15tv2KxH56D7RHjS1JNeDoC3uyUp3F-8w&s',
+                'https://m.media-amazon.com/images/I/31JfJ6dXD9L.png'
                    
                 ];
 

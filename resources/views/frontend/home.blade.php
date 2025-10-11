@@ -1373,12 +1373,8 @@ sharing insights you won’t find in textbooks.',
             <div class="row justify-content-center">
                 <?php
                 $partners = [
-                    {{-- 'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
-                'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
-                'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd', --}}
-
-'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
+                 
+                'https://logos-world.net/wp-content/uploads/2021/08/Deloitte-Emblem.png',
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThzUVNHMjee6gSYl7bTk-jT3npCZJw5qKcYA&s',
                 'https://upload.wikimedia.org/wikipedia/commons/d/d3/National_Health_Service_%28England%29_logo.svg',
                 'https://play-lh.googleusercontent.com/zvF7hv8g_NhRceUCZlEdwHBKEj7EneBHESau90TlARSdbvezPdQQ_HPA_JPypxyqNLRY=w600-h300-pc0xffffff-pd',

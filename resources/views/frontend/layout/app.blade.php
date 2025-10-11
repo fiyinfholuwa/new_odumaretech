@@ -933,13 +933,11 @@ document.addEventListener('DOMContentLoaded', () => BFModal.init());
   acceptBtn.addEventListener('click', function () {
     finalize('accepted');
     sendConsent(true);
-    alert('Thanks — cookies accepted.');
   });
 
   declineBtn.addEventListener('click', function () {
     finalize('declined');
     sendConsent(false);
-    alert('You declined cookies — preference saved.');
   });
 
 })();

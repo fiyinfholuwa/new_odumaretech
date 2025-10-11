@@ -17,10 +17,16 @@
 " class="section dark-background">
         <div  class="text-center" style="max-width: 800px; margin-top: 150px;  padding: 20px;">
             <span style="background: white; padding: 5px 10px; border-radius: 20px; font-weight: bold; color: #0E2293;">Top Instructors</span>
-            <h2 style="margin-top: 20px;">Learn from the Best, Achieve the Best</h2>
+            <h2 style="margin-top: 20px;">Earn from Teaching what you Know. 
+</h2>
+
+
 
             <p style="margin: 15px 0;">
-            Discover courses taught by exceptional digital professionals with proven expertise and real-world success. Our instructors aren’t just teachers, they are industry leaders who bring practical insights, cutting-edge strategies, and years of experience to every lesson.
+
+Our platform makes it simple to create, upload, and sell your courses while reaching a global audience 
+
+we give you the tools, visibility, and support to monetize what you know and make a lasting impact.
 </p>
             
         </div>

@@ -393,14 +393,14 @@
                     <!-- Replace with actual logo image -->
                     <h1 class="logo-text"><a href="{{route('home')}}" class="logo d-flex align-items-center me-auto me-lg-0">
                             <!-- Uncomment the line below if you also wish to use an image logo -->
-                            <img  style="border-radius:10px; width: 200px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
+                            <img  style="border-radius:10px; width: 200px;" src="{{ asset('logo.png') }}" alt="">
                             <!-- <h1 class="sitename">GP</h1>
                             <span>.</span> -->
                         </a>
                     </h1>
                 </div>
             </div>
-            <div class="col-6 text-end">
+            <div class="col-6 t">
                 <a href="{{route('home')}}" class="back-home">
                     <i class="bi bi-arrow-left"></i>
                     Back to Home
@@ -416,65 +416,79 @@
         <div class="row g-5 align-items-center">
             <!-- Testimonials Section -->
             <div class="col-lg-7">
-                <section class="testimonials">
-                    <div class="testimonials-content">
-                        <h2>Students Testimonials</h2>
-                        <p class="lead">From career transformations to breakthrough moments, our students' success stories speak volumes.</p>
+    <section class="testimonials">
+        <div class="testimonials-content">
+            <h2>Students Testimonials</h2>
+            <p class="lead">
+                From career transformations to breakthrough moments, our students' success stories speak volumes.
+            </p>
 
-                        <div class="testimonial-card" id="testimonial-1">
-                            <div>
-                                <p class="testimonial-text">"The web design course provided a solid foundation for me. The instructors were knowledgeable and supportive, and the interactive learning environment was engaging. I highly recommend it!"</p>
+            @foreach ($testimonials as $index => $testimonial)
+                <div class="testimonial-card {{ $index === 0 ? '' : 'd-none' }}" id="testimonial-{{ $index + 1 }}">
+                    <div>
+                        <p class="testimonial-text">"{{ $testimonial->content }}"</p>
+                    </div>
+                    <div class="testimonial-author">
+                        @if ($testimonial->image)
+                            <img  style="height:100px; width:100px; border-radius:30px;" src="{{ asset($testimonial->image) }}" alt="{{ $testimonial->name }}" class="author-avatar-img">
+                        @else
+                            <div class="author-avatar">
+                                {{ strtoupper(substr($testimonial->name, 0, 2)) }}
                             </div>
-                            <div class="testimonial-author">
-                                <div class="author-avatar">SL</div>
-                                <div class="author-info">
-                                    <h5>Sarah L.</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-card d-none" id="testimonial-2">
-                            <div>
-                                <p class="testimonial-text">"Amazing experience! The practical approach and real-world projects helped me land my dream job in tech. The community support is incredible and the mentorship was invaluable."</p>
-                            </div>
-                            <div class="testimonial-author">
-                                <div class="author-avatar">MJ</div>
-                                <div class="author-info">
-                                    <h5>Mike J.</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-card d-none" id="testimonial-3">
-                            <div>
-                                <p class="testimonial-text">"Outstanding curriculum and world-class instructors. The hands-on projects prepared me perfectly for the industry. I gained confidence and skills that transformed my career path completely."</p>
-                            </div>
-                            <div class="testimonial-author">
-                                <div class="author-avatar">AR</div>
-                                <div class="author-info">
-                                    <h5>Alex R.</h5>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="testimonial-navigation">
-                            <div class="nav-arrows">
-                                <div class="nav-arrow" onclick="previousTestimonial()">
-                                    <i class="bi bi-chevron-left"></i>
-                                </div>
-                                <div class="nav-arrow" onclick="nextTestimonial()">
-                                    <i class="bi bi-chevron-right"></i>
-                                </div>
-                            </div>
-                            <div class="navigation-dots">
-                                <div class="dot active" onclick="showTestimonial(1)"></div>
-                                <div class="dot" onclick="showTestimonial(2)"></div>
-                                <div class="dot" onclick="showTestimonial(3)"></div>
-                            </div>
+                        @endif
+                        <div class="author-info">
+                            <h5>{{ $testimonial->name }}</h5>
+                            @if ($testimonial->title)
+                                <small>{{ $testimonial->title }}</small>
+                            @endif
                         </div>
                     </div>
-                </section>
+                </div>
+            @endforeach
+
+            <div class="testimonial-navigation">
+                <div class="nav-arrows">
+                    <div class="nav-arrow" onclick="previousTestimonial()">
+                        <i class="bi bi-chevron-left"></i>
+                    </div>
+                    <div class="nav-arrow" onclick="nextTestimonial()">
+                        <i class="bi bi-chevron-right"></i>
+                    </div>
+                </div>
+                <div class="navigation-dots">
+                    @foreach ($testimonials as $index => $testimonial)
+                        <div class="dot {{ $index === 0 ? 'active' : '' }}" onclick="showTestimonial({{ $index + 1 }})"></div>
+                    @endforeach
+                </div>
             </div>
+        </div>
+    </section>
+    <script>
+let currentTestimonial = 1;
+const totalTestimonials = {{ count($testimonials) }};
+
+function showTestimonial(n) {
+    for (let i = 1; i <= totalTestimonials; i++) {
+        document.getElementById('testimonial-' + i).classList.add('d-none');
+        document.querySelectorAll('.dot')[i - 1].classList.remove('active');
+    }
+    document.getElementById('testimonial-' + n).classList.remove('d-none');
+    document.querySelectorAll('.dot')[n - 1].classList.add('active');
+    currentTestimonial = n;
+}
+
+function nextTestimonial() {
+    currentTestimonial = currentTestimonial >= totalTestimonials ? 1 : currentTestimonial + 1;
+    showTestimonial(currentTestimonial);
+}
+
+function previousTestimonial() {
+    currentTestimonial = currentTestimonial <= 1 ? totalTestimonials : currentTestimonial - 1;
+    showTestimonial(currentTestimonial);
+}
+</script>
+
+</div>
 
             <!-- Login Form -->
             <div class="col-lg-5">
