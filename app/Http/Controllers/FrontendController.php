@@ -67,6 +67,12 @@ class FrontendController extends Controller
     {
         return view('frontend.about');
     }
+    public function recommender(): View
+    {
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->get();
+        
+        return view('auth.recommender', compact('popular_courses'));
+    }
     public function faq(): View
     {
         return view('frontend.faq');

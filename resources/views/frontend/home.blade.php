@@ -252,7 +252,7 @@
                 </p>
             </div>
             <div style="margin-top: 30px;">
-                <a href="{{route('courses')}}" class="btn btn-primary">Get Started</a>
+                <a href="{{route('recommender')}}" class="btn btn-primary">Get Started</a>
             </div>
         </div>
     </div>

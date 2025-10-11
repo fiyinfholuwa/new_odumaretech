@@ -765,6 +765,55 @@ window.BFModal = (function() {
 document.addEventListener('DOMContentLoaded', () => BFModal.init());
 </script>
 
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="recommenderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="recommenderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold text-primary" id="recommenderModalLabel">
+          Explore Your Learning Path
+        </h5>
+      </div>
+
+      <div class="modal-body text-center">
+        <p class="mb-3">
+          We’ve built a personalized <strong>Course Recommender</strong> to help you find the perfect learning path.  
+          Would you like to check it out?
+        </p>
+      </div>
+
+      <div class="modal-footer border-0 d-flex justify-content-center gap-2">
+        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary px-4" id="proceedBtn">Proceed</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const hasVisited = localStorage.getItem('visitedRecommender');
+    const modalElement = document.getElementById('recommenderModal');
+    const proceedBtn = document.getElementById('proceedBtn');
+    const recommenderModal = new bootstrap.Modal(modalElement, {
+        backdrop: 'static',
+        keyboard: false
+    });
+
+    // Show only if not visited before
+    if (!hasVisited) {
+        recommenderModal.show();
+    }
+
+    // Handle Proceed button click
+    proceedBtn.addEventListener('click', function () {
+        localStorage.setItem('visitedRecommender', 'true');
+        recommenderModal.hide();
+        window.location.href = "{{ route('recommender') }}";
+    });
+});
+</script>
+
 
 <!-- Cookie Overlay + Banner -->
 <div id="cookie-overlay" style="display:none;">
