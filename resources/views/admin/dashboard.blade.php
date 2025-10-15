@@ -148,13 +148,7 @@
 
     <?php
 
-    {{-- 'users',
-        'instructors',
-        'payments',
-        'courses',
-        'testimonial',
-        'contacts' --}}
-// Dummy PHP data - you can replace with your actual data
+    
     $stats = [
         'students' =>  $users ,
         'instructors' =>  $instructors ,
@@ -165,44 +159,11 @@
         'master_class' => 23
     ];
 
-    $recent_masterclass = [
-        ['name' => 'Data Science', 'instructor' => 'Dr. Smith'],
-        ['name' => 'Web Development (Frontend)', 'instructor' => 'John Doe'],
-        ['name' => 'Web Development (Frontend)', 'instructor' => 'Jane Wilson']
-    ];
-
-    $innovations = [
-        ['title' => 'Suicide Model Predictor', 'author' => 'Research Team'],
-        ['title' => 'Suicide Model Predictor', 'author' => 'AI Department']
-    ];
-
-    $blogs = [
-        ['title' => 'WAYS TO POSITION YOURSELF FOR SUCCESS', 'date' => '2023-06-15'],
-        ['title' => 'WAYS TO POSITION YOURSELF FOR GROWTH', 'date' => '2023-06-14']
-    ];
-
-    $course_purchases = [
-        ['course' => 'Data Science', 'purchases' => 150],
-        ['course' => 'Web Development', 'purchases' => 80],
-        ['course' => 'Data Analytics', 'purchases' => 200],
-        ['course' => 'SQL', 'purchases' => 120],
-        ['course' => 'Power BI', 'purchases' => 160]
-    ];
-
-    $monthly_revenue = [
-        ['month' => 'Jan', 'revenue' => 15000],
-        ['month' => 'Feb', 'revenue' => 18000],
-        ['month' => 'Mar', 'revenue' => 22000],
-        ['month' => 'Apr', 'revenue' => 19000],
-        ['month' => 'May', 'revenue' => 25000],
-        ['month' => 'Jun', 'revenue' => 28000],
-        ['month' => 'Jul', 'revenue' => 24000],
-        ['month' => 'Aug', 'revenue' => 30000],
-        ['month' => 'Sep', 'revenue' => 32000],
-        ['month' => 'Oct', 'revenue' => 35000],
-        ['month' => 'Nov', 'revenue' => 38000],
-        ['month' => 'Dec', 'revenue' => 42000]
-    ];
+    
+    
+    
+    
+    
     ?>
 
     <div class="container-fluid p-4">
@@ -335,8 +296,24 @@
                     <?php foreach($recent_masterclass as $class): ?>
                     <div class="list-item">
                         <div>
-                            <div class="fw-semibold"><?php echo $class['name']; ?></div>
-                            <small class="text-muted"><?php echo $class['instructor']; ?></small>
+                            <div class="fw-semibold"><?php echo $class['title']; ?></div>
+<small class="text-muted">
+    <?php
+        $time = strtotime($class['date']);
+        $diff = time() - $time;
+
+        if ($diff < 60)
+            echo $diff . " seconds ago";
+        elseif ($diff < 3600)
+            echo floor($diff / 60) . " minutes ago";
+        elseif ($diff < 86400)
+            echo floor($diff / 3600) . " hours ago";
+        elseif ($diff < 604800)
+            echo floor($diff / 86400) . " days ago";
+        else
+            echo date('M d, Y', $time);
+    ?>
+</small>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -353,8 +330,21 @@
                     <?php foreach($innovations as $innovation): ?>
                     <div class="list-item">
                         <div>
-                            <div class="fw-semibold"><?php echo $innovation['title']; ?></div>
-                            <small class="text-muted"><?php echo $innovation['author']; ?></small>
+                            <div class="fw-semibold"><?php echo $innovation['name']; ?></div>
+<?php
+$status = strtolower($innovation['status']);
+
+$style = match ($status) {
+    'upcoming' => 'background-color:#cce5ff; color:#004085;',   // soft blue
+    'running' => 'background-color:#fff3cd; color:#856404;',    // soft yellow/orange
+    'completed' => 'background-color:#d4edda; color:#155724;',  // soft green
+    default => 'background-color:#e2e3e5; color:#383d41;',       // neutral gray
+};
+?>
+
+<small style="padding:4px 10px; border-radius:12px; font-weight:500; <?= $style ?>">
+    <?= ucfirst($status) ?>
+</small>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -371,8 +361,8 @@
                     <?php foreach($blogs as $blog): ?>
                     <div class="list-item">
                         <div>
-                            <div class="fw-semibold"><?php echo $blog['title']; ?></div>
-                            <small class="text-muted"><?php echo date('M d, Y', strtotime($blog['date'])); ?></small>
+                            <div class="fw-semibold"><?php echo $blog['name']; ?></div>
+                            <small class="text-muted"><?php echo date('M d, Y', strtotime($blog['created_at'])); ?></small>
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -435,9 +425,9 @@
         new Chart(purchaseCtx, {
             type: 'bar',
             data: {
-                labels: courseData.map(item => item.course),
+                labels: courseData.map(item => item.title),
                 datasets: [{
-                    data: courseData.map(item => item.purchases),
+                    data: courseData.map(item => item.student_count),
                     backgroundColor: [
                         '#4facfe',
                         '#fdbb2d',

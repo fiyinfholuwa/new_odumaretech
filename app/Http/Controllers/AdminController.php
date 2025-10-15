@@ -775,6 +775,11 @@ class AdminController extends Controller
         $roles = AdminRole::all();
         return view('admin.role_view', compact('roles'));
     }
+    public function admin_user_all():View
+    {
+        $users = User::all();
+        return view('admin.student_all', compact('users'));
+    }
 
     public function role_add(Request $request):RedirectResponse
     {

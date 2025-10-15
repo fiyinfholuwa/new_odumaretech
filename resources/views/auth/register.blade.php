@@ -502,7 +502,7 @@ function previousTestimonial() {
                         <!-- Full Name -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                   id="name" name="name" placeholder="Enter Full Name" required value="{{ old('name') }}">
+                                   id="name" name="name" placeholder="" required value="{{ old('name') }}">
                             <label for="name">Full Name</label>
                             @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -512,7 +512,7 @@ function previousTestimonial() {
                         <!-- Email -->
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                   id="email" name="email" placeholder="name@example.com" required value="{{ old('email') }}">
+                                   id="email" name="email" placeholder="" required value="{{ old('email') }}">
                             <label for="email">Email Address</label>
                             @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -520,7 +520,7 @@ function previousTestimonial() {
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control @error('referral_code') is-invalid @enderror"
-                                   id="referral_code" name="referral_code" placeholder="ODUMare1234"
+                                   id="referral_code" name="referral_code" placeholder=""
                                    value="{{ old('referral_code', request('ref')) }}">
                             <label for="referral_code">Referral Code</label>
                             @error('referral_code')

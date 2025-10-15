@@ -394,10 +394,10 @@
 
         <div class="cta-section fade-in">
             <h2 class="cta-title">Ready to start your learning journey?</h2>
-            <a style="text-decoration:none;" class="btn-primary-large" href="{{ route('register') }}">Get Started Now</a>
+            <a style="text-decoration:none;" class="btn btn-primary" href="{{ route('register') }}">Get Started Now</a>
         </div>
 
-        <div class="features-section fade-in">
+        {{-- <div class="features-section fade-in">
             <h2 class="features-title">Discover what's possible</h2>
             <div class="features-grid">
                 <div class="feature-item">
@@ -421,7 +421,7 @@
                     <p class="feature-description">Connect with millions of learners worldwide on the same journey</p>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>

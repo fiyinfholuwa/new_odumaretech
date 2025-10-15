@@ -63,6 +63,9 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
 
     Route::get('/admin/applied/user/view', 'applied_view')->name('applied.view');
     Route::get('/admin/user/view', 'admin_user_view')->name('admin.user.view');
+    Route::get('/admin/user/all', 'admin_user_all')->name('admin.user.all');
+    Route::get('/admin/applied/user/view', 'applied_view')->name('applied.view');
+
     Route::post('/admin/user/add', 'admin_user_add')->name('admin.user.add');
     Route::post('/admin/applied/user/update/{id}', 'applied_users_update')->name('applied.user.update');
     Route::post('/admin/dollar/save/', 'dollar_save')->name('dollar.save');
@@ -79,6 +82,7 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::get('admin/role/permission/view/{id}', 'role_permission')->name('role.permission');
     Route::post('admin/role/permission/set/{id}', 'role_permission_set')->name('role.permission.set');
     Route::post('admin/role/delete/{id}', 'role_delete')->name('role.delete');
+    Route::post('admin/user/delete/{id}', 'admin_admin_manager_delete')->name('student.delete');
 
     Route::get('admin/admin_manager/view', 'admin_manager_view')->name('admin_manager.view');
     Route::post('admin/admin_manager/save', 'admin_admin_manager_save')->name('admin.admin_manager.save');

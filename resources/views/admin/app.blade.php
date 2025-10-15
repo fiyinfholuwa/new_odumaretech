@@ -129,7 +129,7 @@
     <div class="navbar-wrapper">
         <div class="m-header">
             <a href="{{route('admin.dashboard')}}" class="b-brand text-primary">
-                <img  style="border-radius:10px; width: 200px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
+                <img  style="border-radius:10px; width: 200px;" src="{{ asset('logo.png') }}" alt="">
 
                 <!-- ========   Change your logo from here   ============ -->
 {{--                <img style="height: 60px" src="{{asset('backend/logo.svg')}}" class="img-fluid" alt="logo">--}}
@@ -233,10 +233,9 @@
         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
     </a>
     <ul class="pc-submenu">
-        {{-- <li class="pc-item"><a class="pc-link" href="{{route('admin.user.view')}}">Add User</a></li> --}}
-        {{-- <li class="pc-item"><a class="pc-link" href="{{route('student.all')}}">All Users</a></li> --}}
-        {{-- <li class="pc-item"><a class="pc-link" href="{{route('instructor.all')}}">All Instructors</a></li> --}}
-        {{-- <li class="pc-item"><a class="pc-link" href="{{route('applied.view')}}">Manage Applied Students</a></li> --}}
+        <li class="pc-item"><a class="pc-link" href="{{route('admin.user.view')}}">Add User</a></li> 
+         {{-- <li class="pc-item"><a class="pc-link" href="{{route('admin.user.all')}}">All Users</a></li> --}}
+        <li class="pc-item"><a class="pc-link" href="{{route('applied.view')}}">Manage Applied Students</a></li>
     </ul>
 </li>
 

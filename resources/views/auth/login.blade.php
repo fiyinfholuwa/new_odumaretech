@@ -501,8 +501,8 @@ function previousTestimonial() {
                         <!-- Email -->
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                   id="email" name="email" placeholder="name@example.com" required value="{{ old('email') }}">
-                            <label for="email">Email Address</label>
+                                   id="email" name="email" placeholder="Email" required value="{{ old('email') }}">
+                            {{-- <label for="email">Email Address</label> --}}
                             @error('email')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -512,11 +512,33 @@ function previousTestimonial() {
 
                         <!-- Password -->
                         <div class="mb-3 position-relative">
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                   id="password" name="password" placeholder="Password" required>
-                            <button type="button" class="password-toggle btn btn-sm btn-light position-absolute end-0 top-0 mt-2 me-2" onclick="togglePassword()">
-                                <i class="bi bi-eye"></i>
-                            </button>
+                            <div class="position-relative">
+    <input type="password" class="form-control @error('password') is-invalid @enderror"
+           id="password" name="password" placeholder="Password" required>
+
+    <button type="button" class="password-toggle btn btn-sm btn-light position-absolute end-0 top-0 mt-2 me-2"
+            onclick="togglePasswords()">
+        <i id="toggleIcon" class="bi bi-eye"></i>
+    </button>
+</div>
+
+<script>
+function togglePasswords() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('bi-eye');
+        toggleIcon.classList.add('bi-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('bi-eye-slash');
+        toggleIcon.classList.add('bi-eye');
+    }
+}
+</script>
+
                             @error('password')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -608,19 +630,7 @@ function previousTestimonial() {
     }, 6000);
 
     // Password toggle functionality
-    function togglePassword() {
-        const passwordField = document.getElementById('password');
-        const toggleButton = document.querySelector('.password-toggle i');
-
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleButton.className = 'bi bi-eye-slash';
-        } else {
-            passwordField.type = 'password';
-            toggleButton.className = 'bi bi-eye';
-        }
-    }
-
+   
     // Form submission handling
     // document.getElementById('loginForm').addEventListener('submit', function(e) {
     //     e.preventDefault();
