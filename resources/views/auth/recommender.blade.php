@@ -319,13 +319,21 @@
 </head>
 <body>
     <!-- Quiz Section -->
+   <div style="text-align:center; margin:20px;">
+    <img style="border-radius:10px; width:200px;" src="{{ asset('logo.png') }}" alt="">
+
+    <div style="margin-top:15px;">
+        <a href="{{ url()->previous() }}" 
+           style="display:inline-block; padding:8px 16px; background-color:red; color:white; border-radius:6px; text-decoration:none; font-size:14px;">
+           ← Go Back
+        </a>
+    </div>
+</div>
+
     <section class="quiz-section" id="quizPage">
         <div class="quiz-card">
         
             <div class="quiz-header">
-                                        <img  style="border-radius:10px; width: 200px;" src="{{ asset('logo.png') }}" alt="">
-
-            
                 <h1 class="quiz-title">Discover Your Perfect Match</h1>
                 <p class="quiz-subtitle">Take our brief 3-question quiz to receive personalized recommendations tailored to your interests.</p>
             </div>
