@@ -530,27 +530,47 @@ function previousTestimonial() {
 
                         <!-- Password -->
                         <div class="mb-3 position-relative">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                   id="password" name="password" placeholder="Password" required>
-                            <button type="button" class="password-toggle btn btn-sm btn-light position-absolute end-0 top-0 mt-2 me-2" onclick="togglePassword()">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3 position-relative">
-                            <label for="password" class="form-label">Password Confirmation</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                   id="password" name="password_confirmation" placeholder="Password" required>
-                            <button type="button" class="password-toggle btn btn-sm btn-light position-absolute end-0 top-0 mt-2 me-2" onclick="togglePassword()">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+    <label for="password" class="form-label">Password</label>
+    <input type="password" class="form-control @error('password') is-invalid @enderror"
+           id="password" name="password" placeholder="Password" required>
+    <button type="button" class="password-toggle btn btn-sm btn-light position-absolute end-0 top-0 mt-2 me-2"
+            onclick="togglePassword('password', this)">
+        <i class="bi bi-eye"></i>
+    </button>
+    @error('password')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="mb-3 position-relative">
+    <label for="password_confirmation" class="form-label">Password Confirmation</label>
+    <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
+           id="password_confirmation" name="password_confirmation" placeholder="Password Confirmation" required>
+    <button type="button" class="password-toggle btn btn-sm btn-light position-absolute end-0 top-0 mt-2 me-2"
+            onclick="togglePassword('password_confirmation', this)">
+        <i class="bi bi-eye"></i>
+    </button>
+    @error('password_confirmation')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+<script>
+    function togglePassword(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        const icon = btn.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+</script>
 
                         <!-- Remember Me -->
                         <div class="form-check mb-4">

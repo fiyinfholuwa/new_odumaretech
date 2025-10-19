@@ -546,6 +546,9 @@ function togglePasswords() {
                             @enderror
                         </div>
 
+<div class="forget">
+                                            <a href="{{ route('password.request') }}">Forgot Password?</a>
+                                        </div>
                         <!-- Remember Me -->
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" id="remember" name="remember">
