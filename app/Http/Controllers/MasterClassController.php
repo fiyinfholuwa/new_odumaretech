@@ -293,4 +293,7 @@ class MasterClassController extends Controller
         $attendees = MasterClass::all();
         return view('admin.masterclass_all', compact('attendees'));
     }
+
+
+    
 }
