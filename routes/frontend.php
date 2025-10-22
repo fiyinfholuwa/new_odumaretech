@@ -42,6 +42,8 @@ Route::controller(FrontendController::class)->group(function () {
 
     Route::post('/cookie-consent',  'cookie_store')->name('cookie.consent.store');
 
+    Route::post('/join-master-class', 'store_master')->name('join.class');
+
 });
 
 require __DIR__.'/auth.php';

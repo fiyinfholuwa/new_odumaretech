@@ -87,7 +87,9 @@
                         <div class="col-12">
                         <div class="p-4 rounded-4 shadow-sm" style="background-color: #F7F7F7;">
                             <h5 class="mb-3">Reserve Your Spot</h5>
-                            <form enctype="multipart/form-data">
+<form action="{{ route('join.class') }}" method="POST" enctype="multipart/form-data">
+
+@csrf
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <input type="text" class="form-control" name="first_name" placeholder="First Name">
