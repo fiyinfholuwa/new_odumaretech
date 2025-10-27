@@ -37,7 +37,7 @@ class AuthController extends Controller
     public function check_login()
     {
         if (Auth::id()) {
-            if (Auth::user()->user_type == 'admin') {
+            if (Auth::user()->user_type == 'admin' || Auth::user()->user_type=='admin_manager') {
                 return redirect()->route('admin.dashboard');
             } elseif (Auth::user()->user_type == 'instructor') {
                 return redirect()->route('instructor.dashboard');

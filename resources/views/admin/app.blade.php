@@ -123,6 +123,13 @@
         <div class="loader-fill"></div>
     </div>
 </div>
+
+<?php
+
+
+$permissions = getUserPermissions();
+
+?>
 <!-- [ Pre-loader ] End -->
 <!-- [ Sidebar Menu ] start -->
 <nav class="pc-sidebar">
@@ -152,6 +159,8 @@
                     </a>
                 </li>
 
+@if(in_array('full_access', $permissions) || in_array('manage_courses', $permissions))
+
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon"><i class="fas fa-tag"></i></span>
@@ -165,6 +174,10 @@
                     </ul>
                 </li>
 
+@endif
+
+@if(in_array('full_access', $permissions) || in_array('manage_cohort', $permissions))
+
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon"><i class="fas fa-tag"></i></span>
@@ -176,7 +189,10 @@
                         <li class="pc-item"><a class="pc-link" href="{{route('cohort_m.view')}}">Manage Cohort Price</a></li>
                     </ul>
                 </li>
+@endif
 
+
+@if(Auth::user()->user_type=='admin')
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
@@ -189,6 +205,9 @@
                         <li class="pc-item"><a class="pc-link" href="{{route('testimonial.all')}}">All Testimonials</a></li>
                     </ul>
                 </li>
+                @endif
+
+@if(in_array('full_access', $permissions) || in_array('manage_masterclass', $permissions))
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
@@ -201,6 +220,10 @@
                         <li class="pc-item"><a class="pc-link" href="{{route('masterclass.all')}}">MasterClass Attendees</a></li>
                     </ul>
                 </li>
+
+                @endif
+
+@if(in_array('full_access', $permissions) || in_array('manage_innovation', $permissions))
 
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
@@ -215,6 +238,9 @@
                     </ul>
                 </li>
 
+                @endif
+@if(in_array('full_access', $permissions) || in_array('manage_blog', $permissions))
+
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon"><i class="fa fa-blog"></i></span>
@@ -226,6 +252,10 @@
                         <li class="pc-item"><a class="pc-link" href="{{route('blog.all')}}">All Posts</a></li>
                     </ul>
                 </li>
+                @endif
+
+                @if(Auth::user()->user_type=='admin')
+
 <li class="pc-item pc-hasmenu">
     <a href="#!" class="pc-link">
         <span class="pc-micon"><i class="fa fa-user"></i></span>
@@ -239,6 +269,11 @@
     </ul>
 </li>
 
+@endif
+
+
+
+@if(in_array('full_access', $permissions) || in_array('manage_corporate_training', $permissions))
 
                 <li class="pc-item">
                     <a href="{{route('company.all')}}" class="pc-link">
@@ -246,6 +281,9 @@
                         <span class="pc-mtext">Corporate Training </span>
                     </a>
                 </li>
+                @endif
+
+                @if(Auth::user()->user_type=='admin')
 
                 <li class="pc-item">
                     <a href="{{route('github.link')}}" class="pc-link">
@@ -268,6 +306,8 @@
                     </a>
                 </li>
 
+                @endif
+
 {{--                <li class="pc-item">--}}
 {{--                    <a href="{{route('admin.chat.all')}}" class="pc-link">--}}
 {{--                        <span class="pc-micon"><i class="fa fa-comments"></i></span>--}}
@@ -275,12 +315,26 @@
 {{--                    </a>--}}
 {{--                </li>--}}
 
+
+
+@if(in_array('full_access', $permissions) || in_array('manage_instructor', $permissions))
+
+                <li class="pc-item">
+                    <a href="{{route('external.instructor.application.all')}}" class="pc-link">
+                        <span class="pc-micon"><i class="fa fa-users"></i></span>
+                        <span class="pc-mtext">External Applications</span>
+                    </a>
+                </li>
                 <li class="pc-item">
                     <a href="{{route('instructor.application.all')}}" class="pc-link">
                         <span class="pc-micon"><i class="fa fa-users"></i></span>
                         <span class="pc-mtext">Instructor Applications</span>
                     </a>
                 </li>
+
+                @endif
+
+                @if(Auth::user()->user_type=='admin')
 
 <li class="pc-item">
     <a href="{{route('transaction.all')}}" class="pc-link">
@@ -289,6 +343,9 @@
     </a>
 </li>
 
+@endif
+
+                @if(Auth::user()->user_type=='admin')
 
                 <li class="pc-item">
                     <a href="{{route('coupon.view')}}" class="pc-link">
@@ -313,9 +370,12 @@
                     <ul class="pc-submenu">
                         <li class="pc-item"><a class="pc-link" href="{{route('role.view')}}">Manage Role</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{route('admin_manager.view')}}">Admin</a></li>
+                                                <li class="pc-item"><a class="pc-link" href="{{route('instructor_t_c')}}">Set External Instructor T & C</a></li>
+                                                <li class="pc-item"><a class="pc-link" href="{{route('manage.cookies')}}">Manage Cookies</a></li>
                     </ul>
                 </li>
 
+@endif
 
                 <li class="pc-item">
                     <a style="color: #b01e1e; font-weight: bolder;" href="{{route('logout')}}" class="pc-link">

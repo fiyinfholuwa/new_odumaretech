@@ -389,7 +389,7 @@ $style = match ($status) {
         </div>
 
         <!-- Charts and Calendar Row -->
-        <div class="row">
+<div class="row {{ Auth::user()->user_type !== 'admin' ? 'd-none' : '' }}">
             <div class="col-md-6 mb-3">
                 <div class="card section-card">
                     <div class="section-title">

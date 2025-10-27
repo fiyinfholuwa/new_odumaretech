@@ -134,7 +134,7 @@
                         $permissionsFromDB = json_decode($role->permission ?? '[]');
                         $allPermissions = [
                             'manage_courses', 'manage_cohort', 'manage_blog', 'manage_users',
-                            'manage_instructor', 'manage_faqs', 'manage_masterclass',
+                            'manage_instructor', 'manage_masterclass',
                             'manage_innovation', 'manage_corporate_training'
                         ];
                     @endphp

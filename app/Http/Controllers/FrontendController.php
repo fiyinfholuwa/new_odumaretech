@@ -16,6 +16,7 @@ use App\Models\Course;
 use App\Models\CourseReview;
 use App\Models\Innovation;
 use App\Models\Instructor;
+use App\Models\InstructorTC;
 use App\Models\MasterClass;
 use App\Models\MasterClassLink;
 use App\Models\Testimonial;
@@ -140,7 +141,13 @@ class FrontendController extends Controller
     }
     public function sell_course(): View
     {
-        return view('frontend.sell_course');
+        $external_t_c = InstructorTC::first();
+        if($external_t_c){
+            $tc = $external_t_c->desc;
+        }else{
+            $tc = "Not Available";
+        }
+        return view('frontend.sell_course',compact('tc'));
     }
     public function community(): View
     {
@@ -406,83 +413,94 @@ class FrontendController extends Controller
     }
 
     public function sell_course_store(Request $request)
-    {
-        try {
-            // ✅ Validation
-            $validated = $request->validate([
-                'first_name'   => 'required|string|max:100',
-                'last_name'    => 'required|string|max:100',
-                'email'        => 'required|email|max:150',
-                'phone_number' => 'required|string|regex:/^\d{7,15}$/',
-                'about'        => 'required|string|max:2000',
+{
+    try {
+        // ✅ Validation
+        $validated = $request->validate([
+            'first_name'   => 'required|string|max:100',
+            'last_name'    => 'required|string|max:100',
+            'email'        => 'required|email|max:150',
+            'phone_number' => 'required|string|regex:/^\d{7,15}$/',
+            'about'        => 'required|string|max:2000',
+            'linkedin'     => 'required|url',
+            'course_name'  => 'required|string|max:200',
+            'message'      => 'required|string|max:5000',
+            'twitter'      => 'nullable|url',
+            'instagram'    => 'nullable|url',
+            'youtube'      => 'nullable|url',
+            'tiktok'       => 'nullable|url',
+            'portfolio'    => 'nullable|url',
+            'github'       => 'nullable|url',
+            'other_work'   => 'nullable|url',
+            'sample_link'  => 'nullable|url',
+        ]);
 
-                'linkedin'     => 'required|url',
+        // ✅ Generate Reference ID
+        $reference = strtoupper(Str::random(10));
 
-                'course_name'  => 'required|string|max:200',
-                'message'      => 'required|string|max:5000',
+        // ✅ Insert into DB
+        DB::table('content_creators')->insert([
+            'reference'     => $reference,
+            'first_name'    => $validated['first_name'],
+            'last_name'     => $validated['last_name'],
+            'email'         => $validated['email'],
+            'phone_number'  => $validated['phone_number'],
+            'about'         => $validated['about'],
+            'linkedin'      => $validated['linkedin'],
+            'twitter'       => $request->twitter,
+            'instagram'     => $request->instagram,
+            'youtube'       => $request->youtube,
+            'tiktok'        => $request->tiktok,
+            'portfolio'     => $request->portfolio,
+            'github'        => $request->github,
+            'other_work'    => $request->other_work,
+            'course_name'   => $validated['course_name'],
+            'description'   => $validated['message'],
+            'sample_link'   => $request->sample_link,
+            'created_at'    => now(),
+            'updated_at'    => now(),
+        ]);
 
-                'twitter'      => 'nullable|url',
-                'instagram'    => 'nullable|url',
-                'youtube'      => 'nullable|url',
-                'tiktok'       => 'nullable|url',
-                'portfolio'    => 'nullable|url',
-                'github'       => 'nullable|url',
-                'other_work'   => 'nullable|url',
-                'sample_link'  => 'nullable|url',
-            ]);
+        // ✅ Send confirmation email
+        $toEmail = $validated['email'];
+        $subject = "We’ve received your course submission";
+        $messageBody = "Hello {$validated['first_name']},\n\n"
+            . "Thank you for your interest in joining our instructor program. "
+            . "We’ve successfully received your course proposal titled \"{$validated['course_name']}\".\n\n"
+            . "Our team will review your submission and reach out soon.\n\n"
+            . "Your reference ID is: {$reference}\n\n"
+            . "Best regards,\n"
+            . "OdumareTech Team";
+
+        try{
+            Mail::raw($messageBody, function ($message) use ($toEmail, $subject) {
+                $message->to($toEmail)
+                        ->subject($subject)
+                        ->from('noreply@yourdomain.com', 'OdumareTech Team');
+            });
+    
+        }catch(\Throwable $e){
 
 
-            $check_email = ContentCreator::where('email', $request->email)->first();
-            if ($check_email) {
-            }
-
-            // ✅ Generate Reference ID
-            $reference = strtoupper(Str::random(10));
-
-
-            // ✅ Insert into DB
-            DB::table('content_creators')->insert([
-                'reference'     => $reference,
-                'first_name'    => $validated['first_name'],
-                'last_name'     => $validated['last_name'],
-                'email'         => $validated['email'],
-                'phone_number'  => $validated['phone_number'],
-                'about'         => $validated['about'],
-
-                'linkedin'      => $validated['linkedin'],
-                'twitter'       => $request->twitter,
-                'instagram'     => $request->instagram,
-                'youtube'       => $request->youtube,
-                'tiktok'        => $request->tiktok,
-                'portfolio'     => $request->portfolio,
-                'github'        => $request->github,
-                'other_work'    => $request->other_work,
-
-                'course_name'   => $validated['course_name'],
-                'description'   => $validated['message'],
-                'sample_link'   => $request->sample_link,
-
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ]);
-
-            // ✅ Notification
-            $notification = [
-                'message' => 'Application successfully submitted! Reference: ' . $reference,
-                'alert-type' => 'success'
-            ];
-
-            return redirect()->back()->with($notification);
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->validator)->withInput();
-        } catch (\Exception $e) {
-            $notification = [
-                'message' => 'Something went wrong, please try again later.',
-                'alert-type' => 'error'
-            ];
-            return redirect()->back()->with($notification);
         }
+        // ✅ Notification
+        $notification = [
+            'message' => 'Application successfully submitted! Reference: ' . $reference,
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
+
+    } catch (ValidationException $e) {
+        return redirect()->back()->withErrors($e->validator)->withInput();
+    } catch (\Exception $e) {
+        $notification = [
+            'message' => 'Something went wrong, please try again later.',
+            'alert-type' => 'error'
+        ];
+        return redirect()->back()->with($notification);
     }
+}
 
 
     public function cookie_store(Request $request)

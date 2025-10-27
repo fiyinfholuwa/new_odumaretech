@@ -53,8 +53,8 @@
 <div class="row my-4">
     <div class="col-md-11">
         <div class="card ">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0 text-white">Assess Applicant</h4>
+            <div class="card-header bgc-primary text-white">
+                <h4 class="mb-0  bgc-primary-text">Assess Applicant</h4>
             </div>
             <div class="card-body p-4">
                 <form action="{{ route('applicant.update', $applicant->id) }}" method="post" enctype="multipart/form-data">

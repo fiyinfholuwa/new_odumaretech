@@ -24,7 +24,6 @@
                     <form id="courseForm" action="{{ route('content.creator.store') }}" method="POST">
                         @csrf
 
-                        <!-- Step Content -->
                         <div class="tab-content" id="wizard-content">
 
                             <!-- Step 1 -->
@@ -44,12 +43,12 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Email</label>
                                         <input type="email" class="form-control required" name="email">
-                                        <div class="invalid-feedback">Valid email is required</div>
+                                        <div class="invalid-feedback">Enter a valid email</div>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Phone Number</label>
                                         <input type="text" class="form-control required" name="phone_number">
-                                        <div class="invalid-feedback">Valid phone number is required</div>
+                                        <div class="invalid-feedback">Enter a valid phone number</div>
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Tell Us About Yourself</label>
@@ -69,7 +68,7 @@
                                     <div class="col-12">
                                         <label class="form-label">LinkedIn Profile <span class="text-danger">*</span></label>
                                         <input type="url" class="form-control required" name="linkedin" placeholder="LinkedIn Profile">
-                                        <div class="invalid-feedback">LinkedIn is required</div>
+                                        <div class="invalid-feedback">LinkedIn profile is required</div>
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Other Social Media (Optional)</label>
@@ -129,8 +128,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                                    <p><strong>Agreement:</strong> By proceeding, you agree to our platform's terms and conditions, including compliance with guidelines, quality standards, and professional conduct as an instructor.</p>
-                                    <p>Lorem ipsum text for the terms... (replace with real terms)</p>
+                                    <p>{!! $tc !!}</p>
                                     <div class="form-check mt-3">
                                         <input class="form-check-input required" type="checkbox" id="agreeCheck">
                                         <label class="form-check-label" for="agreeCheck">
@@ -156,95 +154,153 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("courseForm");
     const steps = ["step1", "step2", "step3"];
     let currentStep = 0;
 
+    const patterns = {
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        phone: /^\d{7,15}$/,
+        url: /^(https?:\/\/)?([\w\d-]+\.)+([a-zA-Z]{2,})(\/[^\s]*)?$/
+    };
+
     function showStep(index) {
+        index = Math.max(0, Math.min(index, steps.length - 1));
+        currentStep = index;
         document.querySelectorAll(".tab-pane").forEach((pane, i) => {
-            pane.classList.remove("show", "active");
-            if (i === index) {
-                pane.classList.add("show", "active");
-            }
+            pane.classList.toggle("show", i === index);
+            pane.classList.toggle("active", i === index);
         });
     }
 
-    function validateStep(index) {
+    function showInvalidMessage(input) {
+        const feedback = input.parentElement.querySelector(".invalid-feedback");
+        if (feedback) feedback.classList.add("d-block");
+    }
+
+    function hideInvalidMessage(input) {
+        const feedback = input.parentElement.querySelector(".invalid-feedback");
+        if (feedback) feedback.classList.remove("d-block");
+    }
+
+    function validateField(input) {
+        const value = (input.value || '').trim();
         let valid = true;
-        let stepPane = document.getElementById(steps[index]);
-        let requiredFields = stepPane.querySelectorAll(".required");
 
-        requiredFields.forEach(input => {
-            if (!input.value.trim() || (input.type === "checkbox" && !input.checked)) {
-                input.classList.add("is-invalid");
-                valid = false;
-            } else {
-                input.classList.remove("is-invalid");
-            }
+        // Required check
+        if (input.classList.contains("required")) {
+            if (input.type === "checkbox") valid = input.checked;
+            else if (!value) valid = false;
+        }
 
-            // Email check
-            if (input.name === "email" && input.value) {
-                let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(input.value)) {
-                    input.classList.add("is-invalid");
-                    valid = false;
-                }
-            }
+        // Type-specific validation only if there's a value
+        if (value) {
+            if (input.type === "email") valid = patterns.email.test(value);
+            else if (input.type === "url" || input.name.includes("link") || input.placeholder?.toLowerCase().includes("http")) {
+                valid = patterns.url.test(value);
+            } else if (input.name === "phone_number") valid = patterns.phone.test(value);
+        }
 
-            // Phone check
-            if (input.name === "phone_number" && input.value) {
-                let phonePattern = /^\d{7,15}$/;
-                if (!phonePattern.test(input.value)) {
-                    input.classList.add("is-invalid");
-                    valid = false;
-                }
-            }
-
-            // LinkedIn required
-            if (input.name === "linkedin" && !input.value.trim()) {
-                input.classList.add("is-invalid");
-                valid = false;
-            }
-        });
+        if (!valid) {
+            input.classList.add("is-invalid");
+            input.classList.remove("is-valid");
+            showInvalidMessage(input);
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            hideInvalidMessage(input);
+        }
 
         return valid;
     }
 
-    // Next button
+    function validateStep(index) {
+        const stepPane = document.getElementById(steps[index]);
+        const fields = stepPane.querySelectorAll("input, textarea");
+        let validStep = true;
+
+        fields.forEach(input => {
+            if (!validateField(input)) validStep = false;
+        });
+
+        return validStep;
+    }
+
+    // Real-time validation
+    form.querySelectorAll("input, textarea").forEach(input => {
+        input.addEventListener("input", () => validateField(input));
+        input.addEventListener("blur", () => validateField(input));
+    });
+
+    // NEXT button — only proceed if step is valid
     document.querySelectorAll(".next-btn").forEach(btn => {
-        btn.addEventListener("click", function () {
-            if (validateStep(currentStep)) {
-                currentStep++;
-                showStep(currentStep);
+        btn.addEventListener("click", () => {
+            const ok = validateStep(currentStep);
+            if (ok && currentStep < steps.length - 1) {
+                showStep(currentStep + 1);
+            } else if (!ok) {
+                const invalid = document.querySelector(".tab-pane.show .is-invalid");
+                if (invalid) invalid.scrollIntoView({ behavior: "smooth", block: "center" });
             }
         });
     });
 
-    // Previous button
+    // PREVIOUS button
     document.querySelectorAll(".prev-btn").forEach(btn => {
-        btn.addEventListener("click", function () {
-            currentStep--;
-            showStep(currentStep);
+        btn.addEventListener("click", () => {
+            if (currentStep > 0) showStep(currentStep - 1);
         });
     });
 
-    // Checkbox in modal enables submit
-    document.getElementById("agreeCheck").addEventListener("change", function () {
-        document.getElementById("finalSubmit").disabled = !this.checked;
-    });
+    // Terms & Conditions checkbox
+    const agreeCheck = document.getElementById("agreeCheck");
+    const finalSubmit = document.getElementById("finalSubmit");
+    if (agreeCheck && finalSubmit) {
+        agreeCheck.addEventListener("change", function () {
+            finalSubmit.disabled = !this.checked;
+            validateField(this);
+        });
+    }
 
-    // Submit validation
-    form.addEventListener("submit", function (e) {
-        if (!validateStep(currentStep)) {
+    // When opening T&C modal, highlight invalids
+    const termsModal = document.getElementById("termsModal");
+    if (termsModal) {
+        termsModal.addEventListener('show.bs.modal', function () {
+            for (let i = 0; i < steps.length; i++) validateStep(i);
+        });
+    }
+
+    // Final form submission
+    form.addEventListener("submit", e => {
+        let allValid = true;
+        for (let i = 0; i < steps.length; i++) {
+            if (!validateStep(i)) allValid = false;
+        }
+
+        if (!agreeCheck.checked) {
+            agreeCheck.classList.add("is-invalid");
+            showInvalidMessage(agreeCheck);
+            allValid = false;
+        }
+
+        if (!allValid) {
             e.preventDefault();
+            // Jump to first invalid step
+            for (let i = 0; i < steps.length; i++) {
+                const invalid = document.getElementById(steps[i]).querySelector(".is-invalid");
+                if (invalid) {
+                    showStep(i);
+                    invalid.focus();
+                    break;
+                }
+            }
         }
     });
+
+    showStep(0);
 });
 </script>
 
 </main>
-
-{{-- JavaScript Wizard Validation --}}
-
 @endsection

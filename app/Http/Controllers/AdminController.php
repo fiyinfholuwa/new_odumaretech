@@ -13,11 +13,14 @@ use App\Models\Blog;
 use App\Models\Cohort;
 use App\Models\CompanyTraining;
 use App\Models\Contact;
+use App\Models\ContentCreator;
+use App\Models\CookieConsent;
 use App\Models\Course;
 use App\Models\DollarRate;
 use App\Models\Innovation;
 use App\Models\Instructor;
 use App\Models\InstructorChat;
+use App\Models\InstructorTC;
 use App\Models\MasterClass;
 use App\Models\PayoutRequest;
 use App\Models\Testimonial;
@@ -264,6 +267,10 @@ class AdminController extends Controller
         $applicants = Instructor::all();
         return view('admin.instructor_application_all', compact('applicants'));
     }
+    public function external_instructor_application_all(){
+        $applicants = ContentCreator::all();
+        return view('admin.external_instructor_application_all', compact('applicants'));
+    }
 
     public function applicant_delete(Request $request, $id){
         $applicant =  Instructor::findOrFail($id);
@@ -276,103 +283,231 @@ class AdminController extends Controller
         );
         return redirect()->back()->with($notification);
     }
+    public function external_applicant_delete(Request $request, $id){
+        $applicant =  ContentCreator::findOrFail($id);
+        $applicant->delete();
+        $notification = array(
+            'message' => 'External Applicant Successfully Deleted',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
 
     public function applicant_edit($id){
         $courses = Course::all();
         $applicant = Instructor::findOrFail($id);
         return view('admin.applicant_edit', compact('courses', 'applicant'));
     }
-    public function applicant_update(Request $request, $id){
-
-
-        $check_email = User::where('email', '=', $request->email)->first();
-        if($check_email){
-            $notification = array(
-                'message' => 'Email Already Exist',
-                'alert-type' => 'error'
-            );
-            return redirect()->route('instructor.application.all')->with($notification);
-        }
-        if($request->status == "approved" && $request->course_ids == NULL){
-            $notification = array(
-                'message' => 'Please Select at least a course for the Instructor',
-                'alert-type' => 'error'
-            );
-            return redirect()->back()->with($notification);
-        }
-
-        if($request->status == "approved"){
-            $applicant =  Instructor::findOrFail($id);
-            $applicant->status = $request->status;
-            $applicant->save();
-            $prefix = 'Instructor'; // Prefix or school code
-            $studentID = $this->generateStudentID($prefix);
-            $password = $this->generateStudentID($request->first_name);
-            $user = User::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'student_id' => $studentID,
-                'password' => Hash::make($password),
-                'user_type' => "instructor"
-            ]);
-            $user_id = $user->id;
-            $approved_instructor = new ApprovedInstructor;
-            $approved_instructor->user_id = $user_id;
-            $approved_instructor->course_ids = json_encode($request->course_ids);
-            $approved_instructor->save();
-
-            $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
-                'I am thrilled to inform you that you have been selected for the position of an Instructor at OdumareTech. Congratulations on securing the job! We were highly impressed by your skills, experience, and passion for education.' . PHP_EOL . PHP_EOL .
-                'We believe that your expertise and teaching abilities will be invaluable in creating an exceptional learning experience for our students. We are excited to have you join our team and contribute to our mission of transforming education.' . PHP_EOL . PHP_EOL .
-                'Welcome aboard, and we look forward to working with you to make a positive impact in the lives of learners around the world!' . PHP_EOL . PHP_EOL .
-                'Below is your login details';
-
-
-            $mailData = [
-                'status' => $request->status,
-                'password' => $password,
-                'message' => $message,
-                'email' => $request->email
-            ];
-            try{
-                Mail::to($request->email)->send(new ApplicantNotification($mailData));
-
-            }catch(\Throwable $e){
-
-            }
-            $notification = array(
-                'message' => 'Applicant Successfully updated',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('instructor.application.all')->with($notification);
-
-        }else{
-
-            $applicant =  Instructor::findOrFail($id);
-            $applicant->status = $request->status;
-            $applicant->save();
-            $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
-                'Thank you for your application and your interest in joining our team at OdumareTech. We appreciate the time and effort you put into the application process.' . PHP_EOL . PHP_EOL .
-                'After careful consideration, we regret to inform you that we have decided not to move forward with your application at this time. While your qualifications and experience are commendable, we had to make a difficult decision based on our specific requirements and current circumstances.' . PHP_EOL . PHP_EOL .
-                'We sincerely appreciate your interest in our organization and the dedication you have shown to the field of education. We encourage you to continue pursuing your passion for teaching and wish you the very best in your future endeavors.' . PHP_EOL . PHP_EOL .
-                'Thank you once again for considering us as a potential employer, and we extend our best wishes for your continued professional success.';
-
-            $mailData = [
-                'status' => $request->status,
-                'password' => "",
-                'message' => $message,
-                'email' => $request->email
-            ];
-            Mail::to($request->email)->send(new ApplicantNotification($mailData));
-            $notification = array(
-                'message' => 'Applicant Successfully updated',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('instructor.application.all')->with($notification);
-        }
-
+    public function external_applicant_edit($id){
+        $applicant = ContentCreator::findOrFail($id);
+        return view('admin.external_applicant_edit', compact( 'applicant'));
     }
+    public function applicant_update(Request $request, $id)
+{
+    // Check if email already exists
+    $check_email = User::where('email', '=', $request->email)->first();
+    if ($check_email) {
+        $notification = [
+            'message' => 'Email Already Exist',
+            'alert-type' => 'error'
+        ];
+        return redirect()->route('instructor.application.all')->with($notification);
+    }
+
+    // Ensure a course is selected if approving
+    if ($request->status == "approved" && $request->course_ids == NULL) {
+        $notification = [
+            'message' => 'Please Select at least a course for the Instructor',
+            'alert-type' => 'error'
+        ];
+        return redirect()->back()->with($notification);
+    }
+
+    // ✅ APPROVED CASE
+    if ($request->status == "approved") {
+        $applicant = Instructor::findOrFail($id);
+        $applicant->status = $request->status;
+        $applicant->save();
+
+        // Generate user credentials
+        $prefix = 'Instructor';
+        $studentID = $this->generateStudentID($prefix);
+        $password = $this->generateStudentID($request->first_name);
+
+        // Create user account
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'student_id' => $studentID,
+            'password'   => Hash::make($password),
+            'user_type'  => "instructor"
+        ]);
+
+        // Save approved instructor record
+        $approved_instructor = new ApprovedInstructor;
+        $approved_instructor->user_id = $user->id;
+        $approved_instructor->course_ids = json_encode($request->course_ids);
+        $approved_instructor->save();
+
+        // Email message
+        $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
+            'I am thrilled to inform you that you have been selected for the position of an Instructor at OdumareTech. Congratulations!' . PHP_EOL . PHP_EOL .
+            'We were highly impressed by your skills, experience, and passion for education.' . PHP_EOL . PHP_EOL .
+            'We believe that your expertise and teaching abilities will be invaluable in creating an exceptional learning experience for our students.' . PHP_EOL . PHP_EOL .
+            'Below are your login details:' . PHP_EOL .
+            'Email: ' . $request->email . PHP_EOL .
+            'Password: ' . $password . PHP_EOL . PHP_EOL .
+            'Welcome aboard!' . PHP_EOL . PHP_EOL .
+            'Best regards,' . PHP_EOL .
+            'OdumareTech Team';
+
+        // Send plain text email
+        try {
+            Mail::raw($message, function ($mail) use ($request) {
+                $mail->to($request->email)
+                     ->subject('Congratulations! Instructor Application Approved');
+            });
+        } catch (\Throwable $e) {
+        }
+
+        // Notification feedback
+        $notification = [
+            'message' => 'Applicant Successfully updated',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('instructor.application.all')->with($notification);
+    }
+
+    // ❌ REJECTED CASE
+    else {
+        $applicant = Instructor::findOrFail($id);
+        $applicant->status = $request->status;
+        $applicant->save();
+
+        $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
+            'Thank you for your application and your interest in joining our team at OdumareTech. We appreciate the time and effort you put into the process.' . PHP_EOL . PHP_EOL .
+            'After careful consideration, we regret to inform you that we have decided not to move forward with your application at this time.' . PHP_EOL . PHP_EOL .
+            'While your qualifications and experience are commendable, we had to make a difficult decision based on our specific requirements and current circumstances.' . PHP_EOL . PHP_EOL .
+            'We sincerely appreciate your interest and wish you the very best in your future endeavors.' . PHP_EOL . PHP_EOL .
+            'Best regards,' . PHP_EOL .
+            'OdumareTech Team';
+
+        // Send plain text email
+        try {
+            Mail::raw($message, function ($mail) use ($request) {
+                $mail->to($request->email)
+                     ->subject('Application Update - OdumareTech');
+            });
+        } catch (\Throwable $e) {
+        }
+
+        $notification = [
+            'message' => 'Applicant Successfully updated',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('instructor.application.all')->with($notification);
+    }
+}
+
+
+
+public function external_applicant_update(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:approved,rejected',
+        'email' => 'required|email',
+        'first_name' => 'required|string',
+        'last_name' => 'required|string',
+    ]);
+
+    $check_email = User::where('email', '=', $request->email)->first();
+    if ($check_email) {
+        return redirect()->route('external.instructor.application.all')
+            ->with([
+                'message' => 'Email already exists in the system.',
+                'alert-type' => 'error'
+            ]);
+    }
+
+    
+    // ✅ APPROVED CASE
+    if ($request->status === "approved") {
+        $applicant = ContentCreator::findOrFail($id);
+        $applicant->status = $request->status;
+        $applicant->save();
+
+        $prefix = 'ExtInstructor';
+        $instructorID = $this->generateStudentID($prefix);
+        $password = $this->generateStudentID($request->first_name);
+
+        // Create user record
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'student_id' => $instructorID,
+            'password'   => Hash::make($password),
+            'user_type'  => "external_instructor",
+        ]);
+
+        // Send approval email
+        $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
+            'Congratulations! You have been selected as an **External Instructor** at OdumareTech.' . PHP_EOL . PHP_EOL .
+            'Your skills and expertise will play a key role in delivering a rich learning experience.' . PHP_EOL . PHP_EOL .
+            'Below are your login details:' . PHP_EOL .
+            'Email: ' . $request->email . PHP_EOL .
+            'Password: ' . $password . PHP_EOL . PHP_EOL .
+            'Welcome aboard!' . PHP_EOL . PHP_EOL .
+            'Best regards,' . PHP_EOL .
+            'OdumareTech Team';
+
+        try {
+            Mail::raw($message, function ($mail) use ($request) {
+                $mail->to($request->email)
+                     ->subject('Congratulations! External Instructor Application Approved');
+            });
+        } catch (\Throwable $e) {
+        }
+
+        return redirect()->route('external.instructor.application.all')
+            ->with([
+                'message' => 'External Instructor successfully approved and notified.',
+                'alert-type' => 'success'
+            ]);
+    }
+
+    // ❌ REJECTED CASE
+    else {
+        $applicant = ContentCreator::findOrFail($id);
+        $applicant->status = $request->status;
+        $applicant->save();
+
+        // Rejection message
+        $message = 'Dear ' . $request->last_name . ',' . PHP_EOL . PHP_EOL .
+            'Thank you for your application to become an External Instructor at OdumareTech.' . PHP_EOL . PHP_EOL .
+            'After careful review, we regret to inform you that we will not be moving forward at this time.' . PHP_EOL . PHP_EOL .
+            'We appreciate your effort and wish you success in your future endeavors.' . PHP_EOL . PHP_EOL .
+            'Best regards,' . PHP_EOL .
+            'OdumareTech Team';
+
+        try {
+            Mail::raw($message, function ($mail) use ($request) {
+                $mail->to($request->email)
+                     ->subject('Application Update - OdumareTech');
+            });
+        } catch (\Throwable $e) {
+        }
+
+        return redirect()->route('external.instructor.application.all')
+            ->with([
+                'message' => 'External Instructor status updated and email sent.',
+                'alert-type' => 'success'
+            ]);
+    }
+}
 
     public function admin_chat_all(){
         $chats = InstructorChat::all();
@@ -850,54 +985,64 @@ class AdminController extends Controller
     public function admin_manager_view()
 {
     $roles = AdminRole::all()->keyBy('id'); // key roles by ID for easy lookup
-    $users = User::whereNotNull('user_role')->where('user_type', 2)->get();
+    $users = User::whereNotNull('user_role')->where('user_type', 'admin_manager')->get();
     return view('admin.admin_manager_view', compact('roles', 'users'));
 }
 
-    public function admin_admin_manager_save(Request $request)
-    {
-        $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'phone' => 'required',
-            'user_roles' => 'required|array',
-            'user_roles.*' => 'exists:admin_roles,id',
-        ]);
-        
+public function admin_admin_manager_save(Request $request)
+{
+    $request->validate([
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+        'phone' => 'required',
+        'user_roles' => 'required|array',
+        'user_roles.*' => 'exists:admin_roles,id',
+    ]);
 
-        $min = 100000;
-        $max = 999999;
-        $randomNumber = rand($min, $max);
-        $password = "admin_manager" . $randomNumber;
-        $add_user = new User;
-        $add_user->first_name = $request->first_name;
-        $add_user->last_name = $request->last_name;
-        $add_user->email = $request->email;
-        $add_user->phone = $request->phone;
-        $add_user->user_role = json_encode($request->user_roles); 
-        $add_user->user_type = 2;
-        $add_user->password = Hash::make($password);
-        $add_user->save();
+    // Generate random password
+    $min = 100000;
+    $max = 999999;
+    $randomNumber = rand($min, $max);
+    $password = "admin_manager" . $randomNumber;
 
-        $message = 'Dear ' . $request->first . ',' . PHP_EOL . PHP_EOL .
-            'Please Find attach below to your login detail. thank you.';
-        $mailData = [
-            'password' => $password,
-            'message' => $message,
-            'email' => $request->email
-        ];
-        try {
-            Mail::to($request->email)->send(new RegisterationEmail($mailData));
-        }catch (\Throwable $e){
+    // Create the user
+    $add_user = new User;
+    $add_user->first_name = $request->first_name;
+    $add_user->last_name = $request->last_name;
+    $add_user->email = $request->email;
+    $add_user->phone = $request->phone;
+    $add_user->user_role = json_encode($request->user_roles);
+    $add_user->user_type = 'admin_manager';
+    $add_user->password = Hash::make($password);
+    $add_user->save();
 
-        }
-        $notification = array(
-            'message' => 'Admin Manager Successfully saved',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
+    // Prepare plain text email
+    $message = "Dear {$request->first_name} {$request->last_name},\n\n" .
+               "Your admin manager account has been created successfully.\n\n" .
+               "Login details:\n" .
+               "Email: {$request->email}\n" .
+               "Password: {$password}\n\n" .
+               "Please login and change your password after first login.\n\n" .
+               "Regards,\n" .
+               "Admin Team";
+
+    // Send plain text email
+    try {
+        Mail::raw($message, function ($mail) use ($request) {
+            $mail->to($request->email)
+                 ->subject('Your Admin Manager Account Details');
+        });
+    } catch (\Throwable $e) {
     }
+
+    $notification = [
+        'message' => 'Admin Manager Successfully saved and email sent',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->back()->with($notification);
+}
 
 
     public function admin_manager_update(Request $request, $id)
@@ -1012,4 +1157,46 @@ public function uploadImage(Request $request)
 
     return response()->json(['error' => 'No file uploaded.'], 400);
 }
+
+
+public function instructor_t_c_save(Request $request)
+{
+    $request->validate([
+        'desc' => 'required|string',
+    ]);
+
+    // Fetch first row or create/update
+    $tc = InstructorTC::first();
+
+    if ($tc) {
+        // Update existing
+        $tc->update([
+            'desc' => $request->desc,
+        ]);
+    } else {
+        // Create new
+        InstructorTC::create([
+            'desc' => $request->desc,
+        ]);
+    }
+    $notification = [
+        'message' => 'Term and condition saved successfully!',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->back()->with($notification);
+}
+
+public function instructor_t_c()
+{
+    $tc = InstructorTC::first();
+    return view('admin.instructor_t_c', compact('tc'));
+}
+
+
+public function manage_cookies(){
+    $visitors = CookieConsent::all();
+    return view('admin.manage_cookies', compact('visitors'));
+}
+
 }

@@ -6,6 +6,10 @@ use Torann\GeoIP\Facades\GeoIP;
 use GeoIp2\Database\Reader;
 
 
+use Illuminate\Support\Facades\Auth;
+use App\Models\AdminRole;
+
+
 if (!function_exists('getConvertedAfricanCurrencies')) {
     function getConvertedAfricanCurrencies($amount = 10): array
     {
@@ -204,5 +208,41 @@ if (!function_exists('getAllCountries')) {
             "United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Vatican City",
             "Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"
         ];
+    }
+}
+
+
+
+if (!function_exists('getUserPermissions')) {
+    function getUserPermissions()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return []; // no authenticated user
+        }
+
+        // Decode user_role JSON or default to empty array
+        $roleIds = $user->user_role ? json_decode($user->user_role, true) : [];
+
+        // If no roles assigned
+        if (empty($roleIds)) {
+            return $user->user_type === 'admin' ? ['full_access'] : [];
+        }
+
+        // Fetch roles from DB
+        $roles = AdminRole::whereIn('id', $roleIds)->get();
+
+        $permissions = [];
+
+        foreach ($roles as $role) {
+            // Decode permissions JSON if not null, else empty array
+            $rolePermissions = $role->permission ? json_decode($role->permission, true) : [];
+
+            if (is_array($rolePermissions)) {
+                $permissions = array_merge($permissions, $rolePermissions);
+            }
+        }
+        // Return unique permissions
+        return array_unique($permissions);
     }
 }

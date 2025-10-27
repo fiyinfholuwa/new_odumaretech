@@ -34,9 +34,13 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
 
     Route::get('/instructor', 'instructor_view')->name('instructor');
     Route::get('/admin/intructor/applications', 'instructor_application_all')->name('instructor.application.all');
+    Route::get('/admin/external/intructor/applications', 'external_instructor_application_all')->name('external.instructor.application.all');
     Route::post('/admin/intructor/applicant/delete/{id}', 'applicant_delete')->name('applicant.delete');
-    Route::get('/admin/intructor/applicant/edit/{id}', 'applicant_edit')->name('applicant.edit');
+    Route::post('/admin/external/intructor/applicant/delete/{id}', 'external_applicant_delete')->name('external.applicant.delete');
+    Route::get('/admin/external/intructor/applicant/edit/{id}', 'external_applicant_edit')->name('external.applicant.edit');
     Route::post('/admin/intructor/applicant/update/{id}', 'applicant_update')->name('applicant.update');
+    Route::post('/admin/external/intructor/applicant/update/{id}', 'external_applicant_update')->name('external.applicant.update');
+    Route::get('/admin/cookies', 'manage_cookies')->name('manage.cookies');
 
     Route::get('/admin/chat/all', 'admin_chat_all')->name('admin.chat.all');
     Route::get('/admin/chat/{id}', 'admin_chat_reply')->name('admin.chat.reply');
@@ -91,6 +95,9 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::post('admin/admin_manager/update/{id}', 'admin_manager_update')->name('admin.admin_manager.update');
     Route::post('admin/admin_manager/delete/{id}', 'admin_admin_manager_delete')->name('admin.admin_manager.delete');
     Route::post('admin/admin_manager/block/{id}', 'admin_admin_manager_block')->name('admin.admin_manager.block');
+    Route::get('instructor/t/c', 'instructor_t_c')->name('instructor_t_c');
+    Route::post('/admin/instructor-t-c/save', 'instructor_t_c_save')->name('instructor_t_c.add');
+
 });
 
 
