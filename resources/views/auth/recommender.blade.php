@@ -622,29 +622,32 @@
                 
                 // Format duration
                 const duration = course.duration ? `${course.duration} weeks` : 'Self-paced';
-                
+                const course_url = course.course_url;
                 courseCard.innerHTML = `
-                    ${course.image ? 
-                        `<img src="${course.image}" alt="${course.title}" class="course-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                         <div class="course-image-placeholder" style="display:none; background: ${gradients[index % gradients.length]}">
-                            📚
-                         </div>` 
-                        : 
-                        `<div class="course-image-placeholder" style="background: ${gradients[index % gradients.length]}">
-                            📚
-                         </div>`
-                    }
-                    <div class="course-content">
-                        <h3 class="course-title">${course.title}</h3>
-                        <div class="course-meta">
-                            <span class="course-level">${course.level || 'All Levels'}</span>
-                            <span class="course-duration">⏱️ ${duration}</span>
-                        </div>
-                        <div class="course-meta" style="border-top: none; padding-top: 0.5rem;">
-                            ${course.cat ? `<span style="color: #6b7280; font-size: 0.85rem;">${course.cat.name}</span>` : ''}
-                        </div>
-                    </div>
-                `;
+    ${course.image ? 
+        `<img src="${course.image}" alt="${course.title}" class="course-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+         <div class="course-image-placeholder" style="display:none; background: ${gradients[index % gradients.length]}">
+            📚
+         </div>` 
+        : 
+        `<div class="course-image-placeholder" style="background: ${gradients[index % gradients.length]}">
+            📚
+         </div>`
+    }
+    <a href="/courses/detail/${encodeURIComponent(course.course_url)}">
+    <div class="course-content">
+        <h3 class="course-title">${course.title}</h3>
+        <div class="course-meta">
+            <span class="course-level">${course.level || 'All Levels'}</span>
+            <span class="course-duration">⏱️ ${duration}</span>
+        </div>
+        <div class="course-meta" style="border-top: none; padding-top: 0.5rem;">
+            ${course.cat ? `<span style="color: #6b7280; font-size: 0.85rem;">${course.cat.name}</span>` : ''}
+        </div>
+    </div>
+    </a>
+`;
+
                 
                 courseGrid.appendChild(courseCard);
             });

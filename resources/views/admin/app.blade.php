@@ -343,6 +343,14 @@ $permissions = getUserPermissions();
     </a>
 </li>
 
+
+<li class="pc-item">
+    <a href="{{route('admin.payout')}}" class="pc-link">
+<span class="pc-micon"><i class="fa fa-credit-card"></i></span>
+        <span class="pc-mtext">PayOut History</span>
+    </a>
+</li>
+
 @endif
 
                 @if(Auth::user()->user_type=='admin')

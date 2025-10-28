@@ -98,6 +98,10 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::get('instructor/t/c', 'instructor_t_c')->name('instructor_t_c');
     Route::post('/admin/instructor-t-c/save', 'instructor_t_c_save')->name('instructor_t_c.add');
 
+    Route::get('/admin/payout', 'allPayoutRequests')->name('admin.payout');
+    Route::post('/admin/payout/update',  'update_payout')->name('admin.payout.update');
+
+
 });
 
 
