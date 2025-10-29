@@ -402,7 +402,7 @@
 
         <div class="cta-section fade-in">
             <h2 class="cta-title">Ready to start your learning journey?</h2>
-            <a style="text-decoration:none;" class="btn btn-primary" href="{{ route('register') }}">Get Started Now</a>
+            <a style="text-decoration:none;" class="btn btn-primary" href="{{ route('redirect') }}">Get Started Now</a>
         </div>
 
         {{-- <div class="features-section fade-in">

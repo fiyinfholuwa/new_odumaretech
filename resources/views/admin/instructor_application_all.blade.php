@@ -45,7 +45,8 @@
 
                                                 <td>
                                                 @if($applicant->status =="approved" ||  $applicant->status =="rejected")
-                                                <span class="btn btn-secondary">proccessed <i class="fa fa-check"></i></span>
+                                                                                                <a class="btn btn-dark btn-sm text-white" href="{{route('applicant.edit', $applicant->id)}}" >Check Detail</a>
+
                                                 @else
                                                 <a class="btn btn-dark btn-sm text-white" href="{{route('applicant.edit', $applicant->id)}}" >Assess Applicant</a>
                                                 @endif
