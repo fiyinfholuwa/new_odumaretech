@@ -80,7 +80,7 @@
 
                         <div class="col-md-12 mb-4">
                             <label class="fw-bold">Resume</label><br>
-                            <a class="btn btn-sm btn-danger" target="_blank" href="{{ route('applicant.view.resume', $applicant->id) }}">View Resume</a>
+                            <a class="btn btn-sm btn-danger" target="_blank" href="{{ asset($applicant->resume) }}">View Resume</a>
                         </div>
 
                         <div class="col-md-12 mb-4">

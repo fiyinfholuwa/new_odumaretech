@@ -77,8 +77,8 @@
     </a>
 </li>
 <li>
-    <a href="{{ route('career') }}" class="{{ request()->routeIs('career') ? 'active' : '' }}">
-        Career
+    <a href="{{ route('blog') }}" class="{{ request()->routeIs('blog') ? 'active' : '' }}">
+        Blog
     </a>
 </li>
 

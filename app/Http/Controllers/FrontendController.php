@@ -49,20 +49,24 @@ class FrontendController extends Controller
         return view('frontend.courses', ['courses' => $popular_courses, 'testimonials' => $testimonials]);
     }
     public function blog(Request $request): View
-    {
-        $query = Blog::query();
+{
+    $query = Blog::query();
 
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('desc', 'LIKE', '%' . $keyword . '%');
-            });
-        }
-
-        $blogs = $query->paginate(6)->withQueryString();
-        return view('frontend.blog', ['blogs' => $blogs]);
+    if ($request->filled('keyword')) {
+        $keyword = $request->keyword;
+        $query->where(function ($q) use ($keyword) {
+            $q->where('name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('desc', 'LIKE', '%' . $keyword . '%');
+        });
     }
+
+    // Order by most recent
+    $query->orderBy('created_at', 'desc');
+
+    $blogs = $query->paginate(6)->withQueryString();
+
+    return view('frontend.blog', ['blogs' => $blogs]);
+}
 
 
     public function about(): View
