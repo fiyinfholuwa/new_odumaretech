@@ -400,10 +400,10 @@
             <!-- Courses will be dynamically inserted here -->
         </div>
 
-        <div class="cta-section fade-in">
+        {{-- <div class="cta-section fade-in">
             <h2 class="cta-title">Ready to start your learning journey?</h2>
             <a style="text-decoration:none;" class="btn btn-primary" href="{{ route('redirect') }}">Get Started Now</a>
-        </div>
+        </div> --}}
 
         {{-- <div class="features-section fade-in">
             <h2 class="features-title">Discover what's possible</h2>
@@ -634,7 +634,7 @@
             📚
          </div>`
     }
-    <a href="/courses/detail/${encodeURIComponent(course.course_url)}">
+    <a style="text-decoration:none;" href="/courses/detail/${encodeURIComponent(course.course_url)}">
     <div class="course-content">
         <h3 class="course-title">${course.title}</h3>
         <div class="course-meta">
