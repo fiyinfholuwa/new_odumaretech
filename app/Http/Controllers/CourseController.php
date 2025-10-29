@@ -293,7 +293,7 @@ class CourseController extends Controller
 
     public function course_all():View{
         $courses = Course::where('course_type','=', 'internal')->latest()->get();
-        $instructors = User::all();
+        $instructors = User::where('user_type', 'instructor')->get();
         return view('admin.course_all', compact('courses','instructors'));
     }
 
