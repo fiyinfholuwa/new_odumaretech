@@ -254,7 +254,7 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="price">Course Price (Naira)</label>
+                                    <label for="price">Course Price (Dollar)</label>
                                     <input class="form-control" type="number" name="price" id="price" required
                                            placeholder="Course Price" value="{{ old('price', $course->price) }}"/>
                                     @error('price')

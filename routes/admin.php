@@ -38,6 +38,7 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::post('/admin/intructor/applicant/delete/{id}', 'applicant_delete')->name('applicant.delete');
     Route::post('/admin/external/intructor/applicant/delete/{id}', 'external_applicant_delete')->name('external.applicant.delete');
     Route::get('/admin/external/intructor/applicant/edit/{id}', 'external_applicant_edit')->name('external.applicant.edit');
+    Route::get('/admin/intructor/applicant/edit/{id}', 'applicant_edit')->name('applicant.edit');
     Route::post('/admin/intructor/applicant/update/{id}', 'applicant_update')->name('applicant.update');
     Route::post('/admin/external/intructor/applicant/update/{id}', 'external_applicant_update')->name('external.applicant.update');
     Route::get('/admin/cookies', 'manage_cookies')->name('manage.cookies');

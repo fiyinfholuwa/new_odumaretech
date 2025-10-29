@@ -30,7 +30,7 @@
                                     <td>{{ $i++ }}</td>
                                     <td>{{ $course->title }}</td>
                                     <td>{{ optional($course->cat)->name }}</td>
-                                    <td>₦{{ number_format($course->price, 2) }}</td>
+                                    <td>${{ number_format($course->price, 2) }}</td>
                                     <td>
                                         @php
                                             $types = [
