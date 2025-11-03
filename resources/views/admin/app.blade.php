@@ -542,11 +542,34 @@ $permissions = getUserPermissions();
             <div class="page-block">
                 <div class="row align-items-center">
                     <div class="col-md-12">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                            <li class="breadcrumb-item" aria-current="page">@yield('page')</li>
-                        </ul>
+                        @php
+    // Get the previous URL
+    $previousUrl = url()->previous();
+
+    // Extract just the path (e.g. "/admin/manage-courses")
+    $previousPath = parse_url($previousUrl, PHP_URL_PATH);
+
+    // Format it for display: remove leading slash, replace dashes with spaces, and capitalize
+    $previousLabel = ucfirst(str_replace(['-', '/'], [' ', ' / '], ltrim($previousPath, '/')));
+@endphp
+
+<ul class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="{{ route('admin.dashboard') }}">Home</a>
+    </li>
+
+    
+    @if ($previousUrl && $previousUrl !== url()->current())
+        <li class="breadcrumb-item">
+            <a href="{{ $previousUrl }}">{{ $previousLabel }}</a>
+        </li>
+    @endif
+
+    <li class="breadcrumb-item active" aria-current="page">
+        {{ ucfirst(basename(request()->path())) }}
+    </li>
+</ul>
+
                     </div>
                     <div class="col-md-12">
                         <div class="page-header-title">
