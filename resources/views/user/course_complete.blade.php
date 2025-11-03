@@ -39,19 +39,13 @@
                                 <span class="cohort-badge">Cohort : {{ optional($detail->cohort_name)->name }}</span>
                             </div>
                             
-                            <div class="resource-stats mb-4">
-                                <div class="stat-item">
-                                    <i class="fas fa-file-alt text-primary"></i>
-                                    {{-- <span>Materials Available</span> --}}
-                                </div>
-                            </div>
-                            
+                         
                             <div class="card-actions">
-                                <a style="background:#0E2293;" href="{{route('assignment.user.all',  ['id' => $detail->course_id, 'co' => $detail->cohort_id])}}" 
-                                   class="btn btn-modern btn-primary w-100">
-                                    <i class="fas fa-arrow-right me-2"></i>
-                                    Continue Learning
-                                </a>
+                            												<a href="{{route('download.certificate', $detail->course_name->id)}}" class="btn btn-danger btn-sm btn btn-modern btn-primary w-100" >
+                                                                             <i class="fas fa-arrow-right me-2"></i>
+                                    Continue Learning Download Certificate</a>
+
+                                
                             </div>
                         </div>
                     </div>

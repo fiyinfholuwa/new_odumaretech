@@ -174,15 +174,18 @@ class FrontendController extends Controller
     public function marketplace(): View
     {
 
-        $ext_courses  = Course::where('course_type', 'external')->count();
+        $ext_courses  = Course::where('course_type', 'external')->where('admin_status', '=', 'approved')->count();
         $ext_instructor = User::where('user_type', 'external_instructor')->count();
         $student = User::where('user_type', 'user')->count();
         $best_selling = Course::with('cat')
             ->where('course_type', 'external')
+            ->where('admin_status', 'approved')
             ->orderBy('student_count', 'desc')
             ->take(8)
             ->get();
-        $featured_courses  = Course::with('cat')->where('course_type', 'external')->get();
+        $featured_courses  = Course::with('cat')->where('course_type', 'external')
+        ->where('admin_status', 'approved')
+        ->get();
 
         $categories = Category::withCount('courses')->get();
         $formatted = $categories->map(function ($cat) {
@@ -206,6 +209,8 @@ class FrontendController extends Controller
     {
         $categories = Category::all();
         $query = Course::with('cat')
+        ->where('admin_status', 'approved')
+
             ->where('course_type', 'external');
 
         // 🔍 Search by title
@@ -279,7 +284,9 @@ class FrontendController extends Controller
 
     public function course_external_detail($name): View
     {
-        $popular_courses = Course::with('cat')->where('course_type', 'external')->paginate(4);
+        $popular_courses = Course::with('cat')->where('course_type', 'external')
+        ->where('admin_status', 'approved')
+        ->paginate(4);
 
         $course = Course::with('cat')->where('course_url', $name)->first();
         $reviews = CourseReview::with('user')

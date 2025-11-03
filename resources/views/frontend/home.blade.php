@@ -292,22 +292,22 @@
         opacity: 0.4;
     }
 }
+
 </style>
 
 <script>
-// Generate raindrops dynamically
 document.addEventListener("DOMContentLoaded", () => {
     const rain = document.querySelector(".rain");
-    const dropCount = 50; // adjust density
+    const dropCount = 20; // fewer drops for better performance
 
     for (let i = 0; i < dropCount; i++) {
         const drop = document.createElement("span");
-        drop.style.left = Math.random() * 100 + "vw";  // random X position
-        drop.style.animationDuration = 0.5 + Math.random() * 1.5 + "s"; // different speeds
-        drop.style.animationDelay = Math.random() * 2 + "s"; // staggered starts
+        drop.style.left = Math.random() * 100 + "vw";
+        drop.style.animation = `fall ${0.7 + Math.random() * 1.3}s linear ${Math.random() * 2}s infinite`;
         rain.appendChild(drop);
     }
 });
+
 </script>
 
 

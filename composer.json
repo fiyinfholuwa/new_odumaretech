@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "ext-curl": "*",
+        "barryvdh/laravel-dompdf": "^3.1",
         "geoip2/geoip2": "^3.2",
         "google/apiclient": "^2.15",
         "intervention/image": "^3.11",

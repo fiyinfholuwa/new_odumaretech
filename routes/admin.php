@@ -18,7 +18,6 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->group(function () {
-    Route::get('/admin/dashboard', 'admin_dashboard')->name('admin.dashboard');
     Route::get('/admin/testimonial/view', 'testimonial_view')->name('testimonial.view');
     Route::get('/admin/testimonial/all', 'testimonial_all')->name('testimonial.all');
     Route::post('/admin/testimonial/add', 'testimonial_add')->name('testimonial.add');
@@ -100,8 +99,14 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::post('/admin/instructor-t-c/save', 'instructor_t_c_save')->name('instructor_t_c.add');
 
     Route::get('/admin/payout', 'allPayoutRequests')->name('admin.payout');
+    Route::get('/admin/manage/external/courses', 'manage_external_courses')->name('manage.external.courses');
     Route::post('/admin/payout/update',  'update_payout')->name('admin.payout.update');
 
+    Route::get('/admin/external/course/view/{id}', 'admin_external_course_view')->name('admin.external.course.view');
+    Route::get('/admin/external/curriculum/view/{id}', 'external_in_curriculum')->name('admin.external.curriculum');
+
+    Route::post('/admin/external/course/update-status/{id}', 'updateStatusExternalCourse')
+    ->name('admin.external.course.updateStatus');
 
 });
 

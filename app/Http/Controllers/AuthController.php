@@ -37,11 +37,11 @@ class AuthController extends Controller
     public function check_login()
     {
         if (Auth::id()) {
-            if (Auth::user()->user_type == 'admin' || Auth::user()->user_type=='admin_manager') {
+            if (Auth::user()->user_type === 'admin' || Auth::user()->user_type==='admin_manager') {
                 return redirect()->route('admin.dashboard');
-            } elseif (Auth::user()->user_type == 'instructor') {
+            } elseif (Auth::user()->user_type === 'instructor') {
                 return redirect()->route('instructor.dashboard');
-            } elseif (Auth::user()->user_type == 'external_instructor') {
+            } elseif (Auth::user()->user_type === 'external_instructor') {
                 return redirect()->route('external.instructor.dashboard');
             } else {
                 $check_if_user_has_paid_course = AppliedCourse::where('user_id', '=', Auth::user()->id)->first();

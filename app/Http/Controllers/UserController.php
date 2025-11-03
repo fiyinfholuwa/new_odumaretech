@@ -24,7 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Pdf;
+use PDF; // 👈 this is what you meant by use PDF;
 
 class UserController extends Controller
 {
@@ -399,7 +399,7 @@ public function download_certificate($id){
             'score'=> $submit_project_detail->status_in,
             'time' => $formattedDate
     ];
-    $pdf = Pdf::loadView('user.certificate', $data);
+    $pdf = PDF::loadView('user.certificate', $data);
     return $pdf->download('certificate_'.$student_id.'.pdf');
 }
 
@@ -482,6 +482,7 @@ public function user_badge()
     ->join('courses', 'courses.id', '=', 'applied_courses.course_id')
     ->join('categories', 'categories.id', '=', 'courses.category')
     ->select(
+        'courses.id',
         'courses.title',
         'categories.name as category',
         'applied_courses.status',
@@ -491,6 +492,7 @@ public function user_badge()
     ->get()
     ->map(function ($row) {
         return [
+            'id'       => $row->id,
             'title'       => $row->title,
             'category'    => $row->category ?? 'General',
             'status'      => $row->status === 'pending' ? 'In Progress' : 'Issued',

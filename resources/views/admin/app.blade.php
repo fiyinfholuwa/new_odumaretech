@@ -331,6 +331,12 @@ $permissions = getUserPermissions();
                         <span class="pc-mtext">Instructor Applications</span>
                     </a>
                 </li>
+                <li class="pc-item">
+                    <a href="{{route('manage.external.courses')}}" class="pc-link">
+                        <span class="pc-micon"><i class="fa fa-book"></i></span>
+                        <span class="pc-mtext">Manage MarketPlace Courses</span>
+                    </a>
+                </li>
 
                 @endif
 

@@ -317,19 +317,19 @@
                                 </td>
                                 <td>
                                     <?php if ($cert['status'] === 'Issued'): ?>
-                                        <button class="action-btn btn-download">
+                                        <a href="{{route('download.certificate', $cert['id'])}}" class="action-btn btn-download">
                                             <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                             </svg>
                                             Download
-                                        </button>
+                                        </a>
                                     <?php else: ?>
-                                        <button class="action-btn btn-continue">
+                                        <a class="action-btn btn-continue">
                                             <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                             </svg>
                                             Continue
-                                        </button>
+                                        </a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

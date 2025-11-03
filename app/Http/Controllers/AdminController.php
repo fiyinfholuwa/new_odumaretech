@@ -10,6 +10,7 @@ use App\Models\AdminRole;
 use App\Models\AppliedCourse;
 use App\Models\ApprovedInstructor;
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\Cohort;
 use App\Models\CompanyTraining;
 use App\Models\Contact;
@@ -29,6 +30,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -1288,5 +1290,82 @@ class AdminController extends Controller
         return view('admin.manage_cookies', compact('visitors'));
     }
 
+    public function manage_external_courses():View{
+        $courses = Course::where('course_type', '=', 'external')->get();
+        return view('admin.manage_external_courses', compact('courses'));
+    }
 
+
+    public function admin_external_course_view($id){
+        $categories = Category::all();
+        $course = Course::findOrFail($id);
+        return view('admin.course_external_edit', compact('categories', 'course'));
+    }
+
+    public function external_in_curriculum($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('admin.admin_external_curriculum', compact('course'));
+    }
+
+
+    public function updateStatusExternalCourse(Request $request, $id)
+{
+    $request->validate([
+        'admin_status' => 'required|string|in:under_review,approved,declined,make_changes',
+        'reason' => 'nullable|string',
+    ]);
+
+    $course = DB::table('courses')->where('id', $id)->first();
+    if (!$course) {
+        return back()->with('error', 'Course not found.');
+    }
+
+    $status = $request->admin_status;
+    $reason = $request->reason ?? null;
+    $logs = json_decode($course->approval_logs ?? '[]', true);
+
+    $logs[] = [
+        'status' => $status,
+        'reason' => $reason,
+        'time' => now()->toDateTimeString(),
+    ];
+
+    DB::table('courses')->where('id', $id)->update([
+        'admin_status' => $status,
+        'approval_logs' => json_encode($logs),
+        'updated_at' => now(),
+    ]);
+
+    try{
+// Send notification to instructor
+$instructorEmail = optional($course->instructor_name)->email ?? null;
+$instructorfirstName = optional($course->instructor_name)->first_name ?? null;
+
+if ($instructorEmail) {
+    $message = "Hello {$instructorfirstName},\n\n".
+               "Your course titled '{$course->title}' has been updated to status: '".ucfirst($status)."'.\n\n";
+
+    if ($reason) {
+        $message .= "Reason: {$reason}\n\n";
+    }
+
+    $message .= "Login to your dashboard to view more details.\n\nRegards,\nAdmin Team";
+
+    Mail::raw($message, function ($msg) use ($instructorEmail) {
+        $msg->to($instructorEmail)
+            ->subject('Course Status Updated');
+    });
+}
+
+    }catch(\Throwable){
+
+    }
+    $notification = [
+        'message' => 'Course status updated successfully.',
+        'alert-type' => 'success'
+    ];
+    return redirect()->back()->with($notification);
+    
+}
 }

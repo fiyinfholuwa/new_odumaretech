@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 
@@ -80,10 +81,35 @@ class ExternalController extends Controller
             $new_course->course_outline = $request->course_outline; // Based on your form
             $new_course->outcome = $request->career_outcome; // Based on your form
             $new_course->requirement = $request->requirement; // Based on your form
-
+            $new_course->admin_status = 'under_review';
             $new_course->image = $imageUrl;
             $new_course->save();
 
+
+            try{
+                $admins = User::where('user_type', 'admin')->pluck('email');
+
+if ($admins->count() > 0) {
+    $instructor = Auth::user();
+    $instructorName = $instructor->first_name ?? 'Unknown User';
+    $instructorEmail = $instructor->email ?? 'No email provided';
+
+    foreach ($admins as $adminEmail) {
+        Mail::raw(
+            "A new course titled '{$new_course->title}' has been submitted for review.\n\n" .
+            "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
+            "Login to the admin panel to review it.",
+            function ($message) use ($adminEmail) {
+                $message->to($adminEmail)
+                        ->subject('New Course Awaiting Review');
+            }
+        );
+    }
+}
+
+            }catch(\Throwable $e){
+
+            }
             $notification = [
                 'message' => 'Course successfully added',
                 'alert-type' => 'success'
@@ -123,6 +149,32 @@ class ExternalController extends Controller
         'curriculum.*.points.*.text' => 'required|string',
         'curriculum.*.points.*.url'  => 'required|url', // ✅ URL validation
     ]);
+
+
+    try{
+        $admins = User::where('user_type', 'admin')->pluck('email');
+
+if ($admins->count() > 0) {
+$instructor = Auth::user();
+$instructorName = $instructor->first_name ?? 'Unknown User';
+$instructorEmail = $instructor->email ?? 'No email provided';
+
+foreach ($admins as $adminEmail) {
+Mail::raw(
+    "A new course titled '{$course->title}' has been submitted for review.\n\n" .
+    "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
+    "Login to the admin panel to review the Course curriculum it.",
+    function ($message) use ($adminEmail) {
+        $message->to($adminEmail)
+                ->subject('New Course Awaiting Review');
+    }
+);
+}
+}
+
+    }catch(\Throwable $e){
+
+    }
 
     // Store as JSON
     $course->curriculum = json_encode($validated['curriculum']);

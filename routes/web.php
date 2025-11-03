@@ -13,7 +13,7 @@ require __DIR__.'/external.php';
 require __DIR__.'/instructor.php';
 
 Route::get('/redirect', [AuthController::class, 'check_login'])->middleware(['auth', 'verified'])->name('redirect');
-Route::get('admin/dashboard', [AuthController::class, 'admin_dashboard'])->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('admin/dashboard', [AuthController::class, 'admin_dashboard'])->middleware(['auth', 'verified', 'is_admin'])->name('admin.dashboard');
 Route::get('instructor/dashboard', [AuthController::class, 'instructor_dashboard'])->middleware(['auth', 'verified'])->name('instructor.dashboard');
 Route::get('external/instructor/dashboard', [AuthController::class, 'external_instructor_dashboard'])->middleware(['auth', 'verified'])->name('external.instructor.dashboard');
 Route::get('user/dashboard', [AuthController::class, 'user_dashboard'])->middleware(['auth', 'verified'])->name('user.dashboard');
