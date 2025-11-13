@@ -505,7 +505,7 @@ public function user_badge()
     })
     ->toArray();
 
-            return view('user.certificates', compact('certificates'));
+      return view('user.certificates', compact('certificates'));
     }
 
 

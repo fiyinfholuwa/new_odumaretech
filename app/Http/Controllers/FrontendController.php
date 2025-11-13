@@ -494,6 +494,33 @@ class FrontendController extends Controller
 
 
         }
+        // Notify Admin
+try {
+    $admin = DB::table('users')->where('user_type', 'admin')->first();
+
+    if ($admin) {
+        $adminSubject = "New Course Submission Received";
+        $adminMessage = 
+            "Hello Admin,\n\nA new course submission has been received.\n\n" .
+            "Reference ID: {$reference}\n" .
+            "Instructor: {$validated['first_name']} {$validated['last_name']}\n" .
+            "Email: {$validated['email']}\n" .
+            "Phone: {$validated['phone_number']}\n" .
+            "Course Name: {$validated['course_name']}\n\n" .
+            "Please log in to the admin panel to review.\n\n" .
+            "OdumareTech Team";
+
+        Mail::raw($adminMessage, function ($message) use ($admin, $adminSubject) {
+            $message->to($admin->email)
+                    ->subject($adminSubject)
+                    ->from('noreply@yourdomain.com', 'OdumareTech Notifications');
+        });
+    }
+} catch (\Throwable $e) {
+    // Prevent admin email failure from interrupting user flow
+}
+
+
         // ✅ Notification
         $notification = [
             'message' => 'Application successfully submitted! Reference: ' . $reference,

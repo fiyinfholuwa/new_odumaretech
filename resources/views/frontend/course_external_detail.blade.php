@@ -22,16 +22,24 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                     <div class="col-lg-8">
                         <h3 class="fw-bold" style="color: black;">{{ $course->title }}</h3>
 
-                        <!-- Instructor Info -->
-                        <div class="d-flex align-items-center mb-4">
-                            <img src="https://www.foodallergy.org/sites/default/files/styles/635x460/public/2020-06/shutterstock_1375976735.jpg?h=45a22253&itok=6rPqSQOO"
-                                 alt="Instructor" class="img-fluid rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                        @if (!is_null($course->instructor))
+                            <div class="d-flex align-items-center mb-4">
+                            <img src="{{ optional($course->instructor_name)->image 
+        ? asset($course->instructor_name->image) 
+        : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s' }}"
+     alt="Instructor"
+     class="img-fluid rounded-circle"
+     style="width: 80px; height: 80px; object-fit: cover;">
+
                             <div class="ms-3">
                                 <p class="mb-0 text-muted">Created by:</p>
-                                <h6 class="mb-0 fw-bold">{{ optional($course->instructor_name)->name }}</h6>
+                                <h6 style="color:navy;" class="mb-0 fw-bold">{{ optional($course->instructor_name)->first_name . " ". optional($course->instructor_name)->last_name }}</h6>
                             </div>
                         </div>
 
+                        @endif
+                        <!-- Instructor Info -->
+                        
                         <!-- Video Preview -->
                         <div class="ratio ratio-16x9">
                         <div class="w-100">
@@ -405,7 +413,7 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                                     'students' => optional($course->instructor_name)->student_count,
                                     'courses' => optional($course->instructor_name)->student_count,
                                     'bio' => optional($course->instructor_name)->about_me,
-                                    'image' => asset(optional($course->instructor_name)->image),
+                                    'image' => asset(optional($course->instructor_name)->image ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnFRPx77U9mERU_T1zyHcz9BOxbDQrL4Dvtg&s'),
                                 ];
                             @endphp
 
@@ -413,7 +421,7 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
                                 <div class="row" style="padding: 20px; align-items: center;">
 
                                     <div class="col-lg-3 text-center">
-                                        <img src="{{ $instructor['image'] }}" alt="Instructor Image" style="max-width: 100%; border-radius: 50%;">
+                                        <img src="{{   $instructor['image'] }}" alt="Instructor Image" style="max-width: 100%; border-radius: 50%;">
                                     </div>
 
                                     <div class="col-lg-9">
