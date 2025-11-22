@@ -17,12 +17,13 @@ use Illuminate\View\View;
 
 class ExternalController extends Controller
 {
-    public function in_course_view(){
+    public function in_course_view()
+    {
         $categories = Category::all();
         return view('external_instructor.course_view', compact('categories'));
     }
 
-    public function in_course_add(Request $request):RedirectResponse
+    public function in_course_add(Request $request): RedirectResponse
     {
         // Validate the request
         $request->validate([
@@ -38,25 +39,34 @@ class ExternalController extends Controller
         ]);
 
         try {
+            $check_if_title_exist = Course::where('title', $request->title)->first();
+            if($check_if_title_exist){
+                $notification = [
+                    'message' => 'Course Title Already Exist',
+                    'alert-type' => 'error'
+                ];
+
+                return redirect()->back()->with($notification);  
+            }
             // Generate URL slug
             $url_slug = strtolower($request->title);
             $label_slug = preg_replace('/\s+/', '-', $url_slug);
             $label_slug = preg_replace('/[^a-z0-9\-]/', '', $label_slug);
 
 
-                $image = $request->file('image');
-                $extension = $image->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
-                $directory = 'uploads/courses/images/';
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $directory = 'uploads/courses/images/';
 
-                // Create directory if not exists
-                if (!file_exists(public_path($directory))) {
-                    mkdir(public_path($directory), 0755, true);
-                }
+            // Create directory if not exists
+            if (!file_exists(public_path($directory))) {
+                mkdir(public_path($directory), 0755, true);
+            }
 
-                // Move file to the directory
-                $image->move(public_path($directory), $filename);
-                $imageUrl =$directory . $filename;
+            // Move file to the directory
+            $image->move(public_path($directory), $filename);
+            $imageUrl = $directory . $filename;
 
 
             // Create new course
@@ -86,29 +96,27 @@ class ExternalController extends Controller
             $new_course->save();
 
 
-            try{
+            try {
                 $admins = User::where('user_type', 'admin')->pluck('email');
 
-if ($admins->count() > 0) {
-    $instructor = Auth::user();
-    $instructorName = $instructor->first_name ?? 'Unknown User';
-    $instructorEmail = $instructor->email ?? 'No email provided';
+                if ($admins->count() > 0) {
+                    $instructor = Auth::user();
+                    $instructorName = $instructor->first_name ?? 'Unknown User';
+                    $instructorEmail = $instructor->email ?? 'No email provided';
 
-    foreach ($admins as $adminEmail) {
-        Mail::raw(
-            "A new course titled '{$new_course->title}' has been submitted for review.\n\n" .
-            "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
-            "Login to the admin panel to review it.",
-            function ($message) use ($adminEmail) {
-                $message->to($adminEmail)
-                        ->subject('New Course Awaiting Review');
-            }
-        );
-    }
-}
-
-            }catch(\Throwable $e){
-
+                    foreach ($admins as $adminEmail) {
+                        Mail::raw(
+                            "A new course titled '{$new_course->title}' has been submitted for review.\n\n" .
+                                "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
+                                "Login to the admin panel to review it.",
+                            function ($message) use ($adminEmail) {
+                                $message->to($adminEmail)
+                                    ->subject('New Course Awaiting Review');
+                            }
+                        );
+                    }
+                }
+            } catch (\Throwable $e) {
             }
             $notification = [
                 'message' => 'Course successfully added',
@@ -116,7 +124,6 @@ if ($admins->count() > 0) {
             ];
 
             return redirect()->back()->with($notification);
-
         } catch (\Exception $e) {
             $notification = [
                 'message' => 'Error adding course: ' . $e->getMessage(),
@@ -127,7 +134,8 @@ if ($admins->count() > 0) {
         }
     }
 
-    public function in_course_all():View{
+    public function in_course_all(): View
+    {
         $courses = Course::where('instructor', '=', Auth::user()->id)->get();
         return view('external_instructor.course_all', compact('courses'));
     }
@@ -139,57 +147,56 @@ if ($admins->count() > 0) {
     }
 
     public function in_saveCurriculum(Request $request, $id)
-{
-    $course = Course::findOrFail($id);
+    {
+        $course = Course::findOrFail($id);
 
-    $validated = $request->validate([
-        'curriculum' => 'required|array',
-        'curriculum.*.title' => 'required|string',
-        'curriculum.*.points' => 'required|array',
-        'curriculum.*.points.*.text' => 'required|string',
-        'curriculum.*.points.*.url'  => 'required|url', // ✅ URL validation
-    ]);
+        $validated = $request->validate([
+            'curriculum' => 'required|array',
+            'curriculum.*.title' => 'required|string',
+            'curriculum.*.points' => 'required|array',
+            'curriculum.*.points.*.text' => 'required|string',
+            'curriculum.*.points.*.url'  => 'required|url', // ✅ URL validation
+        ]);
 
 
-    try{
-        $admins = User::where('user_type', 'admin')->pluck('email');
+        try {
+            $admins = User::where('user_type', 'admin')->pluck('email');
 
-if ($admins->count() > 0) {
-$instructor = Auth::user();
-$instructorName = $instructor->first_name ?? 'Unknown User';
-$instructorEmail = $instructor->email ?? 'No email provided';
+            if ($admins->count() > 0) {
+                $instructor = Auth::user();
+                $instructorName = $instructor->first_name ?? 'Unknown User';
+                $instructorEmail = $instructor->email ?? 'No email provided';
 
-foreach ($admins as $adminEmail) {
-Mail::raw(
-    "A new course titled '{$course->title}' has been submitted for review.\n\n" .
-    "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
-    "Login to the admin panel to review the Course curriculum it.",
-    function ($message) use ($adminEmail) {
-        $message->to($adminEmail)
-                ->subject('New Course Awaiting Review');
+                foreach ($admins as $adminEmail) {
+                    Mail::raw(
+                        "A new course titled '{$course->title}' has been submitted for review.\n\n" .
+                            "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
+                            "Login to the admin panel to review the Course curriculum it.",
+                        function ($message) use ($adminEmail) {
+                            $message->to($adminEmail)
+                                ->subject('New Course Awaiting Review');
+                        }
+                    );
+                }
+            }
+        } catch (\Throwable $e) {
+        }
+
+        // Store as JSON
+        $course->curriculum = json_encode($validated['curriculum']);
+        $course->save();
+
+        $notification = [
+            'message' => 'Curriculum updated successfully.',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('in.course.all')->with($notification);
     }
-);
-}
-}
 
-    }catch(\Throwable $e){
 
-    }
-
-    // Store as JSON
-    $course->curriculum = json_encode($validated['curriculum']);
-    $course->save();
-
-    $notification = [
-        'message' => 'Curriculum updated successfully.',
-        'alert-type' => 'success'
-    ];
-
-    return redirect()->route('in.course.all')->with($notification);
-}
-
-    
-    public function in_course_delete($id){
+    public function in_course_delete($id)
+    {
         $course =  Course::findOrFail($id);
         $filePath = $course->image;
         File::delete(public_path($filePath));
@@ -201,7 +208,8 @@ Mail::raw(
         return redirect()->back()->with($notification);
     }
 
-    public function in_course_edit($id):View{
+    public function in_course_edit($id): View
+    {
         $categories = Category::all();
         $course = Course::findOrFail($id);
         return view('external_instructor.course_edit', compact('course', 'categories'));
@@ -258,13 +266,13 @@ Mail::raw(
             $course->duration = $request->duration;
             $course->start_date = $request->start_date;
 
-            
+
             $course->experience = $request->experience;
             $course->certification = $request->certificate;
             $course->description = $request->description;
             $course->description_corp = $request->description_corp;
 
-            
+
             $course->image = $imageUrl;
             $course->save();
 
@@ -274,7 +282,6 @@ Mail::raw(
             ];
 
             return redirect()->route('in.course.all')->with($notification);
-
         } catch (\Exception $e) {
             $notification = [
                 'message' => 'Error updating course: ' . $e->getMessage(),
@@ -284,32 +291,34 @@ Mail::raw(
         }
     }
 
-    public function in_revenue(){
+    public function in_revenue()
+    {
 
         $user = Auth::user();
 
-    // Get all users referred by the logged-in user
-    $reward_count = User::where('referred_by', $user->referral_code)->count();
+        // Get all users referred by the logged-in user
+        $reward_count = User::where('referred_by', $user->referral_code)->count();
 
-    // Get the user's current referral bonus balance
-    $reward_bal = $user->referral_bonus ?? 0;
+        // Get the user's current referral bonus balance
+        $reward_bal = $user->referral_bonus ?? 0;
 
-    // Get referral bonus history with related details
-    $history = ReferralBonusHistory::where('referrer_id', $user->id)
-                ->with(['referredUser', 'course'])
-                ->orderBy('created_at', 'desc')
-                ->get();
+        // Get referral bonus history with related details
+        $history = ReferralBonusHistory::where('referrer_id', $user->id)
+            ->with(['referredUser', 'course'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    // Pass everything to the view
-    return view('external_instructor.revenue', [
-        'rewards' => $history,
-        'reward_count' => $reward_count,
-        'balance' => $reward_bal,
-    ]);
+        // Pass everything to the view
+        return view('external_instructor.revenue', [
+            'rewards' => $history,
+            'reward_count' => $reward_count,
+            'balance' => $reward_bal,
+        ]);
     }
 
 
-    public function in_password_view(){
+    public function in_password_view()
+    {
         $countries = getAllCountries(); // ✅ use global function
         $user = Auth::user();
         $bankInfo = $user->bank_info ? json_decode($user->bank_info, true) : [];
@@ -318,12 +327,11 @@ Mail::raw(
 
 
     public function myPayoutRequests()
-{
-    $payouts = PayoutRequest::where('user_id', Auth::id())
-                ->orderBy('created_at', 'desc')
-                ->get();
+    {
+        $payouts = PayoutRequest::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    return view('external_instructor.payout', compact('payouts'));
-}
-
+        return view('external_instructor.payout', compact('payouts'));
+    }
 }

@@ -58,7 +58,7 @@ $amount_info = getUserLocalCurrencyConversion($course['price']);
 
                             <div class="d-flex justify-content-between mb-2">
                                 <span><i class="fa fa-clock me-2"></i>Course Duration</span>
-                                <span>{{ $course->duration }}</span>
+                                <span>{{ $course->duration }} Hours</span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span><i class="fa fa-layer-group me-2"></i>Course Level</span>
