@@ -573,19 +573,25 @@ try {
 
 
     public function store_master(Request $request)
-    {
-        $request->validate([
-            'first_name' => 'required|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'email' => 'required|email|max:50',
-            'phone_number' => 'required|string|max:50',
-            'interested_skill' => 'required|string|max:50',
-            'gender' => 'required|string|max:50',
-            'career_level' => 'required|string|max:50',
-            'location' => 'required|string|max:50',
-        ]);
+{
+    $request->validate([
+        'first_name' => 'required|string|max:50',
+        'last_name' => 'required|string|max:50',
+        'email' => 'required|email|max:50',
+        'phone_number' => 'required|string|max:50',
+        'interested_skill' => 'required|string|max:50',
+        'gender' => 'required|string|max:50',
+        'career_level' => 'required|string|max:50',
+        'location' => 'required|string|max:50',
+    ]);
 
-        // Save to database
+    // Check if user already exists
+    $existing = MasterClass::where('email', $request->email)->first();
+
+    if ($existing) {
+        $showModal = true; // trigger modal
+    } else {
+        // Save new registration
         MasterClass::create([
             'first_name'   => $request->first_name,
             'last_name'    => $request->last_name,
@@ -597,46 +603,30 @@ try {
             'location'     => $request->location,
         ]);
 
-
         $masterclass_link = MasterClassLink::first();
 
         $htmlContent = '
-<div  style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border-radius:20px; background-color:#EDE9E8; box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px; color:black; ">
-    <div style="text-align:center">
-    <img style="width:200px; height:80px; border-radius:10px;" src="https://odumaretech.com/logo.png"/>
-    </div>
-    
-    <p>Congratulations! You have been exclusively selected to join our upcoming webinar at OdumareTech. We\'re excited to have you on board for this special event!</p>
-    <p>The webinar will take place on <span style="font-weight:700;">' . $masterclass_link->date . '</span> at <span style="font-weight:700;">' . $masterclass_link->time . ' WAT</span>. We have prepared an insightful session on <span style="font-weight:700;">' . $masterclass_link->title . '</span> that will empower you with valuable knowledge and practical insights.</p>
-    <p>
-        To access the webinar, simply click on the personalized link provided below:<br>
-        ' . $masterclass_link->link . '
-    </p>
-    
-    <p>
-        We encourage you to mark your calendar and join us promptly to make the most of this unique learning opportunity.<br><br>
-
-        Should you have any questions or require assistance, please don\'t hesitate to reach out to us. We are here to support you.<br><br>
-
-        Thank you for being a valued part of our community, and we look forward to your active participation in the webinar!
-    </p>
-    <p>Best regards,<br>OdumareTech</p>
-</div>
-';
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin:0 auto; padding: 20px; border-radius:20px; background-color:#EDE9E8; color:black;">
+            <div style="text-align:center">
+                <img style="width:200px; height:80px; border-radius:10px;" src="https://odumaretech.com/logo.png"/>
+            </div>
+            <p>Congratulations! You have been selected for our webinar at OdumareTech.</p>
+            <p>The webinar will take place on <strong>'.$masterclass_link->date.'</strong> at <strong>'.$masterclass_link->time.' WAT</strong>.</p>
+            <p>Topic: <strong>'.$masterclass_link->title.'</strong></p>
+            <p>Access your webinar here:<br> '.$masterclass_link->link.'</p>
+            <p>Thank you, OdumareTech</p>
+        </div>';
 
         Mail::send([], [], function ($message) use ($request, $htmlContent) {
             $message->to($request->email)
                 ->subject('Your Masterclass Access')
-                ->html($htmlContent);
+                ->setBody($htmlContent, 'text/html');
         });
 
-        $notification = [
-            'message' => 'Registration successful, please check your email for the masterclass link',
-            'alert-type' => 'success'
-        ];
-
-
-
-        return redirect()->back()->with($notification);
+        $showModal = true;
     }
+
+    return redirect()->back()->with('show_modal', $showModal);
+}
+
 }

@@ -161,7 +161,63 @@
                 </div>
             @endif
         </div>
+
     </section>
+
+<!-- Fancy Modal -->
+<div class="modal fade" id="telegramModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+            
+            <!-- Header -->
+            <div class="modal-header text-white" style="background: linear-gradient(135deg, #0E2293, #3B1CCB); border-bottom: none; justify-content: center;">
+                <h3 class="modal-title text-center w-100 text-white">🎉 Welcome to OdumareTech!</h3>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body text-center p-5" style="background-color: #F9F7F7;">
+                <div style="font-size: 18px; color: #333; margin-bottom: 25px;">
+                    Thank you for registering! You’re now part of our tech community. 🚀<br>
+                    Click the button below to join our <strong>Telegram group</strong> and connect with fellow learners:
+                </div>
+
+                <a href="https://t.me/odumaretech" target="_blank" 
+                   class="btn btn-gradient px-5 py-3 mb-4" 
+                   style="background: linear-gradient(135deg, #0E2293, #3B1CCB); color: white; font-weight: bold; font-size: 18px; border-radius: 50px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); transition: all 0.3s ease;">
+   <i class="fab fa-telegram-plane" style="margin-right: 10px;"></i> Join Telegram
+                </a>
+
+                <div>
+                    <button type="button" class="btn btn-secondary px-4 py-2" data-bs-dismiss="modal" style="border-radius: 50px; font-weight: bold;">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trigger Modal if session exists -->
+@if(session('show_modal'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var telegramModalEl = document.getElementById('telegramModal');
+        var telegramModal = new bootstrap.Modal(telegramModalEl, {
+            backdrop: 'static',  // disable click outside
+            keyboard: false      // disable ESC
+        });
+        telegramModal.show();
+    });
+</script>
+@endif
+
+<!-- Optional: Hover animation for button -->
+<style>
+.btn-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+}
+</style>
 
 </main>
 @endsection
