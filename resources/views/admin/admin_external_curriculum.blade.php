@@ -45,6 +45,31 @@
     font-size: 1rem;
 }
 
+/* Sidebar */
+.curriculum-sidebar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 600px;
+    overflow-y: auto;
+    border-right: 1px solid #e0e0e0;
+    padding-right: 10px;
+}
+
+.curriculum-sidebar li {
+    padding: 10px 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    border-radius: 5px;
+}
+
+.curriculum-sidebar li:hover,
+.curriculum-sidebar li.active {
+    background: #3498db;
+    color: white;
+}
+
 /* Button Styles */
 .btn-preview {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -186,6 +211,10 @@
     .iframe-preview {
         min-height: 400px;
     }
+    
+    .curriculum-sidebar {
+        max-height: 300px;
+    }
 }
 </style>
 
@@ -213,43 +242,74 @@ function getDriveFileId($url) {
                             <div class="curriculum-title">
                                 <i class="fa fa-folder-open"></i> {{ $item['title'] }}
                             </div>
-                            <ul class="curriculum-list">
-                                @foreach($item['points'] as $pointIndex => $point)
-                                    <li>
-                                        <strong>
-                                            <i class="fa fa-check-circle" style="color: #27ae60; margin-right: 8px;"></i>
-                                            {{ $point['text'] ?? $point }}
-                                        </strong>
-                                        @if(!empty($point['url']))
-                                            @php
-                                                $fileId = getDriveFileId($point['url']);
-                                                $uniqueId = "preview-{$index}-{$pointIndex}";
-                                            @endphp
-                                            @if($fileId)
-                                                <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this)">
-                                                    <i class="fa fa-eye"></i> <span>View Content</span>
-                                                </button>
 
-                                                <div id="{{ $uniqueId }}" class="preview-container">
-                                                    <div class="security-notice">
-                                                        🔒 View Only – Protected Content – No Downloads Allowed
-                                                    </div>
-                                                    <div class="iframe-wrapper" oncontextmenu="return false;">
-                                                        <div class="corner-watermark top-left">🔒 VIEW ONLY</div>
-                                                        <div class="corner-watermark top-right">PROTECTED</div>
-                                                        <iframe class="iframe-preview"
-                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
-                                                                allow="autoplay"
-                                                                sandbox="allow-scripts allow-same-origin">
-                                                        </iframe>
-                                                        <div class="iframe-overlay"></div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
+                            @php
+                                $pdfPoints = collect($item['points'])->filter(fn($p) => !empty($p['url']));
+                            @endphp
+
+                            @if($pdfPoints->count())
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <ul class="curriculum-sidebar">
+                                            @foreach($pdfPoints as $pointIndex => $point)
+                                                <li data-target="preview-{{ $index }}-{{ $pointIndex }}">
+                                                    {{ $point['text'] ?? $point }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <ul class="curriculum-list">
+                                            @foreach($item['points'] as $pointIndex => $point)
+                                                <li>
+                                                    <strong>
+                                                        <i class="fa fa-check-circle" style="color: #27ae60; margin-right: 8px;"></i>
+                                                        {{ $point['text'] ?? $point }}
+                                                    </strong>
+                                                    @if(!empty($point['url']))
+                                                        @php
+                                                            $fileId = getDriveFileId($point['url']);
+                                                            $uniqueId = "preview-{$index}-{$pointIndex}";
+                                                        @endphp
+                                                        @if($fileId)
+                                                            <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this)">
+                                                                <i class="fa fa-eye"></i> <span>View Content</span>
+                                                            </button>
+
+                                                            <div id="{{ $uniqueId }}" class="preview-container">
+                                                                <div class="security-notice">
+                                                                    🔒 View Only – Protected Content – No Downloads Allowed
+                                                                </div>
+                                                                <div class="iframe-wrapper" oncontextmenu="return false;">
+                                                                    <div class="corner-watermark top-left">🔒 VIEW ONLY</div>
+                                                                    <div class="corner-watermark top-right">PROTECTED</div>
+                                                                    <iframe class="iframe-preview"
+                                                                            data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
+                                                                            allow="autoplay"
+                                                                            sandbox="allow-scripts allow-same-origin">
+                                                                    </iframe>
+                                                                    <div class="iframe-overlay"></div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            @else
+                                <ul class="curriculum-list">
+                                    @foreach($item['points'] as $pointIndex => $point)
+                                        <li>
+                                            <strong>
+                                                <i class="fa fa-check-circle" style="color: #27ae60; margin-right: 8px;"></i>
+                                                {{ $point['text'] ?? $point }}
+                                            </strong>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </div>
                     @endforeach
                 @else
@@ -279,22 +339,13 @@ document.addEventListener('contextmenu', e => {
 // Prevent common keyboard shortcuts
 document.addEventListener('keydown', e => {
     if(document.querySelector('.preview-container.show')) {
-        // Prevent Save, Print, and DevTools
         if(e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'S' || e.key === 'P')) {
             e.preventDefault();
             alert('⚠️ This action is disabled for content protection.');
             return false;
         }
-        // Prevent F12 (DevTools)
-        if(e.key === 'F12') {
-            e.preventDefault();
-            return false;
-        }
-        // Prevent Ctrl+Shift+I (DevTools)
-        if(e.ctrlKey && e.shiftKey && e.key === 'I') {
-            e.preventDefault();
-            return false;
-        }
+        if(e.key === 'F12') { e.preventDefault(); return false; }
+        if(e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); return false; }
     }
 });
 
@@ -314,29 +365,49 @@ function togglePreview(id, btn) {
     const icon = btn.querySelector('i');
 
     if(container.classList.contains('show')) {
-        // Hide the container
         container.classList.remove('show');
         text.textContent = 'View Content';
         icon.className = 'fa fa-eye';
     } else {
-        // Show the container
         container.classList.add('show');
         text.textContent = 'Hide Content';
         icon.className = 'fa fa-eye-slash';
         
-        // Load iframe source if not already loaded
         if(!iframe.src || iframe.src === '') {
             iframe.src = iframe.getAttribute('data-src');
         }
     }
 }
 
+// Highlight side navigation
+document.querySelectorAll('.curriculum-sidebar li').forEach(li => {
+    li.addEventListener('click', () => {
+        const targetId = li.getAttribute('data-target');
+        const target = document.getElementById(targetId);
+        if(target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+});
+
+window.addEventListener('scroll', () => {
+    document.querySelectorAll('.curriculum-sidebar li').forEach(li => {
+        const targetId = li.getAttribute('data-target');
+        const target = document.getElementById(targetId);
+        if(target) {
+            const rect = target.getBoundingClientRect();
+            if(rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                li.classList.add('active');
+            } else {
+                li.classList.remove('active');
+            }
+        }
+    });
+});
+
 // Additional security: Monitor and prevent iframe manipulation
 setInterval(() => {
     document.querySelectorAll('.iframe-preview').forEach(iframe => {
         if(iframe.src && !iframe.hasAttribute('data-protected')) {
             iframe.setAttribute('data-protected', 'true');
-            // Re-apply sandbox attribute if removed
             if(!iframe.hasAttribute('sandbox')) {
                 iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
             }
