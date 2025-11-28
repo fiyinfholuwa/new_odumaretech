@@ -220,11 +220,13 @@ function getDriveFileId($url) {
                                             <i class="fa fa-check-circle" style="color: #27ae60; margin-right: 8px;"></i>
                                             {{ $point['text'] ?? $point }}
                                         </strong>
+
                                         @if(!empty($point['url']))
                                             @php
                                                 $fileId = getDriveFileId($point['url']);
                                                 $uniqueId = "preview-{$index}-{$pointIndex}";
                                             @endphp
+
                                             @if($fileId)
                                                 <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this)">
                                                     <i class="fa fa-eye"></i> <span>View Content</span>
@@ -234,14 +236,18 @@ function getDriveFileId($url) {
                                                     <div class="security-notice">
                                                         🔒 View Only – Protected Content – No Downloads Allowed
                                                     </div>
+
                                                     <div class="iframe-wrapper" oncontextmenu="return false;">
                                                         <div class="corner-watermark top-left">🔒 VIEW ONLY</div>
                                                         <div class="corner-watermark top-right">PROTECTED</div>
+
+                                                        <!-- FIXED VERSION — WORKS FOR PDF & VIDEO -->
                                                         <iframe class="iframe-preview"
-                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
-                                                                allow="autoplay"
-                                                                sandbox="allow-scripts allow-same-origin">
+                                                            data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
+                                                            allow="autoplay; fullscreen"
+                                                            allowfullscreen>
                                                         </iframe>
+
                                                         <div class="iframe-overlay"></div>
                                                     </div>
                                                 </div>
@@ -268,7 +274,7 @@ function getDriveFileId($url) {
 </div>
 
 <script>
-// Prevent right-click on iframe wrapper
+// Block right-click inside iframe wrapper
 document.addEventListener('contextmenu', e => {
     if(e.target.closest('.iframe-wrapper')) {
         e.preventDefault();
@@ -276,29 +282,22 @@ document.addEventListener('contextmenu', e => {
     }
 });
 
-// Prevent common keyboard shortcuts
+// Block save, print, developer tools
 document.addEventListener('keydown', e => {
     if(document.querySelector('.preview-container.show')) {
-        // Prevent Save, Print, and DevTools
-        if(e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'S' || e.key === 'P')) {
+        if(e.ctrlKey && ['s','p','S','P'].includes(e.key)) {
             e.preventDefault();
-            alert('⚠️ This action is disabled for content protection.');
+            alert('⚠️ Action disabled for protection');
             return false;
         }
-        // Prevent F12 (DevTools)
-        if(e.key === 'F12') {
-            e.preventDefault();
-            return false;
-        }
-        // Prevent Ctrl+Shift+I (DevTools)
-        if(e.ctrlKey && e.shiftKey && e.key === 'I') {
+        if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
             e.preventDefault();
             return false;
         }
     }
 });
 
-// Prevent iframe pop-out attempts
+// Prevent opening iframe in new tab
 document.addEventListener('click', e => {
     if(e.target.closest('.iframe-preview')) {
         e.preventDefault();
@@ -314,34 +313,18 @@ function togglePreview(id, btn) {
     const icon = btn.querySelector('i');
 
     if(container.classList.contains('show')) {
-        // Hide the container
         container.classList.remove('show');
         text.textContent = 'View Content';
         icon.className = 'fa fa-eye';
     } else {
-        // Show the container
         container.classList.add('show');
         text.textContent = 'Hide Content';
         icon.className = 'fa fa-eye-slash';
-        
-        // Load iframe source if not already loaded
-        if(!iframe.src || iframe.src === '') {
+
+        if(!iframe.src) {
             iframe.src = iframe.getAttribute('data-src');
         }
     }
 }
-
-// Additional security: Monitor and prevent iframe manipulation
-setInterval(() => {
-    document.querySelectorAll('.iframe-preview').forEach(iframe => {
-        if(iframe.src && !iframe.hasAttribute('data-protected')) {
-            iframe.setAttribute('data-protected', 'true');
-            // Re-apply sandbox attribute if removed
-            if(!iframe.hasAttribute('sandbox')) {
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-            }
-        }
-    });
-}, 1000);
 </script>
 @endsection
