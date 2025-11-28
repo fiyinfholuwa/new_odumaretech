@@ -194,6 +194,29 @@ function getDriveFileId($url) {
     preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $url, $matches);
     return $matches[1] ?? null;
 }
+
+function getFileType($url) {
+    // Check URL for file extension or mime type indicators
+    $url = strtolower($url);
+    
+    // Video extensions
+    if (preg_match('/\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)$/i', $url)) {
+        return 'video';
+    }
+    
+    // PDF extension
+    if (preg_match('/\.pdf$/i', $url)) {
+        return 'pdf';
+    }
+    
+    // Check for Google Drive mime type hints in URL
+    if (strpos($url, 'video') !== false) {
+        return 'video';
+    }
+    
+    // Default to pdf if uncertain
+    return 'pdf';
+}
 @endphp
 
 <div class="row my-4">
@@ -224,6 +247,7 @@ function getDriveFileId($url) {
                                         @if(!empty($point['url']))
                                             @php
                                                 $fileId = getDriveFileId($point['url']);
+                                                $fileType = getFileType($point['url']);
                                                 $uniqueId = "preview-{$index}-{$pointIndex}";
                                             @endphp
 
@@ -241,12 +265,20 @@ function getDriveFileId($url) {
                                                         <div class="corner-watermark top-left">🔒 VIEW ONLY</div>
                                                         <div class="corner-watermark top-right">PROTECTED</div>
 
-                                                        <!-- FIXED VERSION — WORKS FOR PDF & VIDEO -->
-                                                        <iframe class="iframe-preview"
-                                                            data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
-                                                            allow="autoplay; fullscreen"
-                                                            allowfullscreen>
-                                                        </iframe>
+                                                        @if($fileType === 'video')
+                                                            <!-- VIDEO: Use /preview endpoint with proper video player -->
+                                                            <iframe class="iframe-preview"
+                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
+                                                                allow="autoplay; encrypted-media"
+                                                                allowfullscreen>
+                                                            </iframe>
+                                                        @else
+                                                            <!-- PDF: Use /preview endpoint -->
+                                                            <iframe class="iframe-preview"
+                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
+                                                                allow="autoplay">
+                                                            </iframe>
+                                                        @endif
 
                                                         <div class="iframe-overlay"></div>
                                                     </div>
@@ -316,6 +348,11 @@ function togglePreview(id, btn) {
         container.classList.remove('show');
         text.textContent = 'View Content';
         icon.className = 'fa fa-eye';
+        
+        // Stop video playback by removing src
+        if(iframe.src) {
+            iframe.src = '';
+        }
     } else {
         container.classList.add('show');
         text.textContent = 'Hide Content';
