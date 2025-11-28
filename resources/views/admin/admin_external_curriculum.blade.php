@@ -123,13 +123,26 @@
     pointer-events: none;
 }
 
+
+
+.iframe-wrapper {
+    position: relative;
+    width: 100%;
+    height: 80vh; /* use viewport height for scrollable area */
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fafafa;
+    overflow: hidden; /* let iframe handle its own scroll */
+}
+
 .iframe-preview {
     width: 100%;
     height: 100%;
-    min-height: 600px;
     border: none;
     display: block;
+    overflow: auto;
 }
+
 
 /* Watermarks */
 .corner-watermark {
