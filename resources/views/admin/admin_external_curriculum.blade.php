@@ -33,7 +33,6 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 10px;
 }
 
 .curriculum-list li:last-child {
@@ -43,6 +42,7 @@
 .curriculum-list li strong {
     color: #34495e;
     font-size: 1rem;
+    flex: 1;
 }
 
 /* Button Styles */
@@ -57,6 +57,7 @@
     font-weight: 500;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    margin-left: 10px;
 }
 
 .btn-preview:hover {
@@ -78,26 +79,6 @@
     font-weight: 600;
     margin-bottom: 15px;
     box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
-}
-
-/* Preview Container */
-.preview-container {
-    width: 100%;
-    margin-top: 15px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.4s ease;
-}
-
-.preview-container.show {
-    max-height: 800px;
-    opacity: 1;
-    padding: 20px;
 }
 
 /* Iframe Wrapper */
@@ -123,26 +104,12 @@
     pointer-events: none;
 }
 
-
-
-.iframe-wrapper {
-    position: relative;
-    width: 100%;
-    height: 80vh; /* use viewport height for scrollable area */
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    background: #fafafa;
-    overflow: hidden; /* let iframe handle its own scroll */
-}
-
 .iframe-preview {
     width: 100%;
     height: 100%;
     border: none;
     display: block;
-    overflow: auto;
 }
-
 
 /* Watermarks */
 .corner-watermark {
@@ -170,6 +137,23 @@
     right: 20px;
 }
 
+/* Preview Container */
+.preview-container {
+    display: none;
+    margin-top: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.preview-container.show {
+    display: block;
+    opacity: 1;
+}
+
 /* Card Enhancements */
 .card {
     border: none;
@@ -192,12 +176,13 @@
         align-items: flex-start;
     }
     
-    .iframe-wrapper {
-        height: 400px;
+    .btn-preview {
+        margin-left: 0;
+        margin-top: 10px;
     }
     
-    .iframe-preview {
-        min-height: 400px;
+    .iframe-wrapper {
+        height: 400px;
     }
 }
 </style>
@@ -314,6 +299,8 @@ document.addEventListener('keydown', e => {
 // Prevent iframe pop-out attempts
 document.addEventListener('click', e => {
     if(e.target.closest('.iframe-preview')) {
+        const iframe = e.target.closest('.iframe-preview');
+        // Prevent any click actions that might trigger pop-out
         e.preventDefault();
         e.stopPropagation();
         return false;
@@ -327,13 +314,20 @@ function togglePreview(id, btn) {
     const icon = btn.querySelector('i');
 
     if(container.classList.contains('show')) {
-        // Hide the container
-        container.classList.remove('show');
+        // Hide the container with animation
+        container.style.opacity = '0';
+        setTimeout(() => {
+            container.classList.remove('show');
+            container.style.display = 'none';
+        }, 300);
         text.textContent = 'View Content';
         icon.className = 'fa fa-eye';
     } else {
-        // Show the container
-        container.classList.add('show');
+        // Show the container with animation
+        container.style.display = 'block';
+        setTimeout(() => {
+            container.classList.add('show');
+        }, 10);
         text.textContent = 'Hide Content';
         icon.className = 'fa fa-eye-slash';
         
