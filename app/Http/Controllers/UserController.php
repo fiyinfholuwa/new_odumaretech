@@ -484,6 +484,8 @@ public function user_badge()
     ->select(
         'courses.id',
         'courses.title',
+        'courses.cohort',
+        'courses.course_type',
         'categories.name as category',
         'applied_courses.status',
         'applied_courses.updated_at'
@@ -494,6 +496,8 @@ public function user_badge()
         return [
             'id'       => $row->id,
             'title'       => $row->title,
+            'cohort'       => $row->cohort,
+            'course_type'       => $row->course_type,
             'category'    => $row->category ?? 'General',
             'status'      => $row->status === 'pending' ? 'In Progress' : 'Issued',
             'date_issued' => $row->status === 'completed' 
@@ -662,5 +666,12 @@ public function updateUserAchievementByCode($userId, $code, $increment = 1)
 
     $userAchievement->save();
 }
+
+
+public function user_view_course_curriculum($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('user.user_curriculum', compact('course'));
+    }
 
 }

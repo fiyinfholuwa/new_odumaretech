@@ -1,88 +1,62 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App;
 
-use Google\Client;
-use Google\Service\Drive;
+use Google_Client;
+use Google_Service_Drive;
+use Google_Service_Drive_DriveFile;
 
 class GoogleDriveManager
 {
     protected $client;
     protected $service;
 
-    public function __construct($withAuth = true)
+    public function __construct()
     {
-        $this->client = new Client();
-        $this->client->setClientId(env('GOOGLE_CLIENT_ID'));
-        $this->client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $this->client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
-        $this->client->addScope(Drive::DRIVE);
+        $this->client = new Google_Client();
+        $this->client->setAuthConfig(base_path('google-service-account.json')); 
+        $this->client->addScope(Google_Service_Drive::DRIVE);
 
-        if ($withAuth && env('GOOGLE_REFRESH_TOKEN')) {
-            $this->client->refreshToken(env('GOOGLE_REFRESH_TOKEN'));
-            $this->service = new Drive($this->client);
-        }
+        // Important for Shared Drives
+        $this->client->setSubject('storage@odumaretech.com');
+
+        $this->service = new Google_Service_Drive($this->client);
     }
 
-    public function getAuthUrl()
+    public function uploadFile($filePath, $fileName, $sharedDriveId, $folderId = null)
     {
-        $this->client->setAccessType('offline');   // get refresh token
-        $this->client->setPrompt('consent');       // force consent
-        return $this->client->createAuthUrl();
+        $fileMetadata = new Google_Service_Drive_DriveFile([
+            'name' => $fileName,
+            'parents' => [$folderId ?: $sharedDriveId],
+        ]);
+
+        $content = file_get_contents($filePath);
+
+        $file = $this->service->files->create(
+            $fileMetadata,
+            [
+                'data' => $content,
+                'mimeType' => mime_content_type($filePath),
+                'uploadType' => 'multipart',
+                'supportsAllDrives' => true
+            ]
+        );
+
+        return $file->id;
     }
 
-    public function exchangeCodeForToken($code)
+    public function listFiles($sharedDriveId, $folderId = null)
     {
-        return $this->client->fetchAccessTokenWithAuthCode($code);
-    }
+        $query = $folderId
+            ? "'$folderId' in parents"
+            : "'$sharedDriveId' in parents";
 
-    public function upload($localPath, $fileName, $parentId = null)
-    {
-        try {
-            $fileMetadata = new Drive\DriveFile([
-                'name'    => $fileName,
-                'parents' => $parentId ? [$parentId] : []
-            ]);
+        $results = $this->service->files->listFiles([
+            'q' => $query,
+            'supportsAllDrives' => true,
+            'includeItemsFromAllDrives' => true,
+        ]);
 
-            $file = $this->service->files->create(
-                $fileMetadata,
-                [
-                    'data' => file_get_contents($localPath),
-                    'uploadType' => 'multipart',
-                    'fields' => 'id, webViewLink, webContentLink'
-                ]
-            );
-
-            return [
-                'success'       => true,
-                'file_id'       => $file->id,
-                'view_link'     => $file->webViewLink,
-                'download_link' => $file->webContentLink,
-            ];
-        } catch (\Exception $e) {
-            return ['success' => false, 'error' => $e->getMessage()];
-        }
-    }
-
-    public function delete($fileId)
-    {
-        try {
-            $this->service->files->delete($fileId);
-            return ['success' => true];
-        } catch (\Exception $e) {
-            return ['success' => false, 'error' => $e->getMessage()];
-        }
-    }
-
-    public function list()
-    {
-        try {
-            $files = $this->service->files->listFiles([
-                'fields' => 'files(id, name, webViewLink)'
-            ]);
-            return ['success' => true, 'files' => $files->files];
-        } catch (\Exception $e) {
-            return ['success' => false, 'error' => $e->getMessage()];
-        }
+        return $results->getFiles();
     }
 }

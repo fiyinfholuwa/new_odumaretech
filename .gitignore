@@ -22,3 +22,5 @@ yarn-error.log
 /.vscode
 /.zed
 google.json
+/google-service-account.json
+

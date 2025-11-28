@@ -44,7 +44,7 @@
                             
                             
                             @if (optional($detail->course_name)->course_type ==='external')
-                                 <a href="{{ route('assignment.user.all', ['id' => $detail->course_id, 'co' => $detail->cohort_id]) }}"
+                                 <a href="{{ route('user.view.course.curriculum', $detail->course_id) }}"
        class="btn btn-primary flex-fill" style="background: #0E2293;">
         <i class="fas fa-tasks me-2"></i>
         Continue Learning

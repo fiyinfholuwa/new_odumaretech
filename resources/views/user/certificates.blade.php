@@ -281,7 +281,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($certificates as $index => $cert): ?>
+                        <?php foreach ($certificates as $index => $cert):
+                        
+                         ?>
                             <tr>
                                 <td>
                                     <div class="fw-bold text-muted"><?= $index + 1 ?>.</div>
@@ -324,11 +326,25 @@
                                             Download
                                         </a>
                                     <?php else: ?>
-                                        <a class="action-btn btn-continue">
-                                            <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                            </svg>
-                                            Continue
+                                            
+                                              @if ($cert['course_type'] ==='external')
+                                 <a href="{{ route('user.view.course.curriculum', $cert['id']) }}"
+       class="btn btn-primary flex-fill" style="background: #0E2293;">
+        <i class="fas fa-tasks me-2"></i>
+        Continue Learning
+    </a>
+
+                                @else
+    <!-- View Assignments -->
+    <a href="{{ route('assignment.user.all', ['id' => $cert['id'], 'co' => $cert['cohort']]) }}"
+       class="btn btn-primary flex-fill" style="background: #0E2293;">
+        <i class="fas fa-tasks me-2"></i>
+        Continue Learning
+    </a>
+
+    
+                            @endif
+                          
                                         </a>
                                     <?php endif; ?>
                                 </td>

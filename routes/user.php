@@ -50,6 +50,7 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
     Route::get('/user/leaderboard', 'user_leaderboard')->name('user.leaderboard');
     Route::get('/user/certificates', 'user_certificates')->name('user.certificates');
     Route::get('/user/payout', 'myPayoutRequests')->name('user.payout');
+    Route::get('/user/view/curriculum/{id}', 'user_view_course_curriculum')->name('user.view.course.curriculum');
     Route::post('/user/profile/update', 'updateProfile')->name('user.profile.update');
     Route::post('/user/bankinfo/update', 'updateBankInfo')->name('user.bankinfo.update');
 

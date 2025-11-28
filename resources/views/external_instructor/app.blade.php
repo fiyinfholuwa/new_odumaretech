@@ -18,7 +18,7 @@
     <meta name="author" content="Phoenixcoded">
 
     <!-- [Favicon] icon -->
-    <link rel="icon" href="{{asset('https://odumaretech.com/frontend/img/img/logo.png')}}" type="image/x-icon"> <!-- [Font] Family -->
+    <link rel="icon" href="{{asset('logo.png')}}" type="image/x-icon"> <!-- [Font] Family -->
     <link rel="stylesheet" href="{{asset('backend/assets/fonts/inter/inter.css')}}" id="main-font-link"/>
     <!-- [Tabler Icons] https://tablericons.com -->
     <link rel="stylesheet" href="{{asset('backend/assets/fonts/tabler-icons.min.css')}}">
@@ -125,7 +125,7 @@
     <div class="navbar-wrapper">
         <div class="m-header">
             <a href="{{route('external.instructor.dashboard')}}" class="b-brand text-primary">
-                <img  style="border-radius:10px; width: 200px;" src="https://odumaretech.com/frontend/img/img/logo.png" alt="">
+                <img  style="border-radius:10px; width: 200px;" src="{{ asset('logo.png') }}" alt="">
 
                 <!-- ========   Change your logo from here   ============ -->
 {{--                <img style="height: 60px" src="{{asset('backend/logo.svg')}}" class="img-fluid" alt="logo">--}}
