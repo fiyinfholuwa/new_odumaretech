@@ -1,3 +1,7 @@
+
+
+
+
 @extends('external_instructor.app')
 
 @section('content')
@@ -31,15 +35,11 @@
                                         <div class="point-group mb-3 border-bottom pb-2">
                                             <input type="text" name="curriculum[{{ $index }}][points][{{ $pIndex }}][text]" class="form-control mb-2" value="{{ $point['text'] ?? $point }}" placeholder="Point text" required>
                                             
-                                            <!-- Hidden input to store the Google Drive URL -->
                                             <input type="hidden" name="curriculum[{{ $index }}][points][{{ $pIndex }}][url]" class="url-hidden" value="{{ $point['url'] ?? '' }}">
-                                            
-                                            <!-- File ID for delete/replace operations -->
                                             <input type="hidden" class="file-id-hidden" value="">
                                             
                                             <div class="file-control">
                                                 @if(isset($point['url']) && $point['url'] && !str_starts_with($point['url'], '!#'))
-                                                    <!-- Show file info if valid URL exists -->
                                                     <div class="file-info">
                                                         <a href="{{ $point['url'] }}" target="_blank" class="btn btn-sm btn-info">
                                                             <i class="fa fa-file"></i> View File
@@ -52,7 +52,6 @@
                                                         </button>
                                                     </div>
                                                 @else
-                                                    <!-- Show upload button if no URL -->
                                                     <div class="file-upload">
                                                         <button type="button" class="btn btn-sm btn-primary btn-upload">
                                                             <i class="fa fa-upload"></i> Upload File
@@ -62,6 +61,9 @@
                                                     </div>
                                                 @endif
                                             </div>
+
+                                            <!-- Remove point button -->
+                                            <button type="button" class="btn btn-sm btn-danger remove-point mt-2">Remove Point</button>
                                         </div>
                                     @endforeach
                                 </div>
@@ -125,6 +127,7 @@ document.getElementById('add-outline').addEventListener('click', function () {
                         <span class="status-text ms-2"></span>
                     </div>
                 </div>
+                <button type="button" class="btn btn-sm btn-danger remove-point mt-2">Remove Point</button>
             </div>
         </div>
         <button type="button" class="btn btn-sm btn-secondary add-point">+ Add Point</button>
@@ -134,8 +137,9 @@ document.getElementById('add-outline').addEventListener('click', function () {
     outlineCount++;
 });
 
-// Add point to outline
+// Handle clicks for add/remove points, outlines, upload/replace/delete
 document.addEventListener('click', function (e) {
+    // Add point
     if (e.target.classList.contains('add-point') || e.target.parentElement.classList.contains('add-point')) {
         const button = e.target.classList.contains('add-point') ? e.target : e.target.parentElement;
         const pointsList = button.previousElementSibling;
@@ -158,13 +162,21 @@ document.addEventListener('click', function (e) {
                     <span class="status-text ms-2"></span>
                 </div>
             </div>
+            <button type="button" class="btn btn-sm btn-danger remove-point mt-2">Remove Point</button>
         `;
         pointsList.appendChild(div);
     }
 
+    // Remove outline section
     if (e.target.classList.contains('remove-outline') || e.target.parentElement.classList.contains('remove-outline')) {
         const button = e.target.classList.contains('remove-outline') ? e.target : e.target.parentElement;
         button.closest('.outline-item').remove();
+    }
+
+    // Remove individual point
+    if (e.target.classList.contains('remove-point') || e.target.parentElement.classList.contains('remove-point')) {
+        const button = e.target.classList.contains('remove-point') ? e.target : e.target.parentElement;
+        button.closest('.point-group').remove();
     }
 
     // Upload button clicked
@@ -205,7 +217,7 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// File selected
+// File input change
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('file-input')) {
         const file = e.target.files[0];
@@ -215,6 +227,8 @@ document.addEventListener('change', function(e) {
         }
     }
 });
+
+// AJAX uploadFile and deleteFile functions remain the same as your original code
 
 // AJAX Upload Function
 function uploadFile(file, pointGroup, oldFileId = null) {
