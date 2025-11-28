@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Log;
 
 class GoogleDriveController extends Controller
 {
-    const MAX_FILE_SIZE_MB = 10;
-    const MAX_FILE_SIZE_BYTES = 10485760; // 10MB in bytes
+    const MAX_FILE_SIZE_MB = 20;
+    const MAX_FILE_SIZE_BYTES = 20971520; // 20MB in bytes
     
     protected function googleClient()
     {
@@ -37,7 +37,6 @@ class GoogleDriveController extends Controller
         return $client;
     }
 
-    // Extract Shared Drive or Folder ID from Google URL
     protected function extractDriveId($url)
     {
         if (preg_match('/folders\/([a-zA-Z0-9_-]+)/', $url, $m)) return $m[1];
@@ -45,13 +44,11 @@ class GoogleDriveController extends Controller
         return null;
     }
 
-    // Get or create user-specific subfolder
     protected function getUserFolder($driveService, $parentFolderId)
     {
         $userEmail = Auth::user()->email;
         $folderName = str_replace(['@', '.'], ['_', '_'], $userEmail);
 
-        // Search for existing folder
         $query = "name='{$folderName}' and '{$parentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false";
         
         $results = $driveService->files->listFiles([
@@ -69,7 +66,6 @@ class GoogleDriveController extends Controller
             return $files[0]->getId();
         }
 
-        // Create new folder
         $folderMetadata = new DriveFile([
             'name' => $folderName,
             'mimeType' => 'application/vnd.google-apps.folder',
@@ -84,24 +80,20 @@ class GoogleDriveController extends Controller
         return $folder->getId();
     }
 
-    // Check if file is a video
     protected function isVideoFile($mimeType)
     {
         return strpos($mimeType, 'video/') === 0;
     }
 
-    // Upload file to Google Drive with optimizations
     public function uploadFile(Request $request)
     {
         try {
-            // Validate file size FIRST (10MB limit)
             $request->validate([
-                'file' => 'required|file|max:10240', // 10MB max (in kilobytes)
+                'file' => 'required|file|max:40960' // 20MB
             ]);
 
             $file = $request->file('file');
             
-            // Additional server-side size check
             if ($file->getSize() > self::MAX_FILE_SIZE_BYTES) {
                 return response()->json([
                     'success' => false,
@@ -117,14 +109,11 @@ class GoogleDriveController extends Controller
             $client = $this->googleClient();
             $driveService = new Drive($client);
 
-            // Get user-specific folder
             $userFolderId = $this->getUserFolder($driveService, $sharedDriveId);
 
-            // Get MIME type
             $mimeType = $file->getMimeType();
             $isVideo = $this->isVideoFile($mimeType);
 
-            // Log upload attempt
             Log::info('File upload attempt', [
                 'filename' => $file->getClientOriginalName(),
                 'mime_type' => $mimeType,
@@ -132,9 +121,7 @@ class GoogleDriveController extends Controller
                 'is_video' => $isVideo
             ]);
 
-            // For videos, ensure compatible MIME type
             if ($isVideo) {
-                // Force MP4 MIME type for better compatibility
                 if (in_array(strtolower($file->getClientOriginalExtension()), ['mp4', 'mov', 'avi', 'mkv'])) {
                     $mimeType = 'video/mp4';
                 }
@@ -146,19 +133,17 @@ class GoogleDriveController extends Controller
                 'mimeType' => $mimeType
             ]);
 
-            // Upload file with resumable upload for better reliability
             $uploadedFile = $driveService->files->create(
                 $fileMetadata,
                 [
                     'data' => file_get_contents($file),
                     'mimeType' => $mimeType,
-                    'uploadType' => 'resumable', // Changed from multipart for better handling
+                    'uploadType' => 'resumable',
                     'supportsAllDrives' => true,
                     'fields' => 'id, name, mimeType, size, webViewLink, webContentLink, thumbnailLink'
                 ]
             );
 
-            // Make file publicly accessible with viewer role
             $permission = new Permission([
                 'type' => 'anyone',
                 'role' => 'reader'
@@ -170,7 +155,6 @@ class GoogleDriveController extends Controller
                 ['supportsAllDrives' => true]
             );
 
-            // Generate proper links for videos
             $fileId = $uploadedFile->getId();
             $publicLink = "https://drive.google.com/file/d/{$fileId}/view";
             $previewLink = "https://drive.google.com/file/d/{$fileId}/preview";
@@ -187,7 +171,6 @@ class GoogleDriveController extends Controller
                 'isVideo' => $isVideo
             ];
 
-            // Add video-specific links
             if ($isVideo) {
                 $response['previewLink'] = $previewLink;
                 $response['embedLink'] = $embedLink;
@@ -217,7 +200,6 @@ class GoogleDriveController extends Controller
         }
     }
 
-    // Delete file from Google Drive
     public function deleteFile(Request $request)
     {
         try {
@@ -252,18 +234,16 @@ class GoogleDriveController extends Controller
         }
     }
 
-    // Replace existing file
     public function replaceFile(Request $request)
     {
         try {
             $request->validate([
                 'fileId' => 'required|string',
-                'file' => 'required|file|max:10240' // 10MB max
+                'file' => 'required|file|max:40960' // 20MB
             ]);
 
             $file = $request->file('file');
 
-            // Check file size
             if ($file->getSize() > self::MAX_FILE_SIZE_BYTES) {
                 return response()->json([
                     'success' => false,
@@ -276,12 +256,10 @@ class GoogleDriveController extends Controller
             $client = $this->googleClient();
             $driveService = new Drive($client);
 
-            // Delete old file
             $driveService->files->delete($request->fileId, [
                 'supportsAllDrives' => true
             ]);
 
-            // Upload new file
             $sharedDriveUrl = "https://drive.google.com/drive/folders/0AEC82CMaKw77Uk9PVA";
             $sharedDriveId = $this->extractDriveId($sharedDriveUrl);
             $userFolderId = $this->getUserFolder($driveService, $sharedDriveId);
@@ -289,7 +267,6 @@ class GoogleDriveController extends Controller
             $mimeType = $file->getMimeType();
             $isVideo = $this->isVideoFile($mimeType);
 
-            // Force MP4 for videos
             if ($isVideo && in_array(strtolower($file->getClientOriginalExtension()), ['mp4', 'mov', 'avi', 'mkv'])) {
                 $mimeType = 'video/mp4';
             }
@@ -311,7 +288,6 @@ class GoogleDriveController extends Controller
                 ]
             );
 
-            // Make file publicly accessible
             $permission = new Permission([
                 'type' => 'anyone',
                 'role' => 'reader'

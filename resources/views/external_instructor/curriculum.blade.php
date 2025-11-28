@@ -10,7 +10,33 @@
         <div class="card">
             <div class="card-header bgc-primary">
                 <div class="card-title">
-                    <h3 class="bgc-primary-text" style="text-align: left;">Set Curriculum ({{ $course->title }})</h3>
+<h3 class="bgc-primary-text" style="text-align: left;">
+    Set Curriculum ({{ $course->title }})
+</h3>
+
+<div style="background: #fff3f3; border-left: 4px solid red; padding: 12px; margin-top: 10px; border-radius: 5px;">
+    <strong style="color: red;">Important:</strong>
+    <p style="margin: 5px 0; font-size: 14px;">
+        The maximum upload size for each file is <strong>20MB</strong>.
+        If your video is larger than 20MB, please compress it before uploading.
+    </p>
+
+    <p style="margin: 5px 0; font-size: 14px;">
+        You can use a free online video compressor:
+        <a href="https://www.freeconvert.com/video-compressor" target="_blank" style="color: #007bff;">
+            Free Video Compressor
+        </a>
+    </p>
+
+    <p style="margin: 5px 0; font-size: 14px;">
+        <strong>How to compress:</strong><br>
+        1. Click the link above<br>
+        2. Upload your video<br>
+        3. Select “Compress Video”<br>
+        4. Download the new smaller file<br>
+        5. Upload it here
+    </p>
+</div>
                 </div>
             </div>
             <div class="card-body">

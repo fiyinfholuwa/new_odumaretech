@@ -9,6 +9,7 @@ use App\Http\Controllers\InnovationController;
 use App\Http\Controllers\MasterClassController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,7 +59,9 @@ Route::middleware(['auth'])->controller(UserController::class)->group(function (
         ->name('user.payout.request');
     
 
-
+        Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+        Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+        Route::post('/chat/clear', [ChatController::class, 'clearChat'])->name('chat.clear');
 
 
 
