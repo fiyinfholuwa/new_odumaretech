@@ -1,4 +1,4 @@
-@extends('user.app')
+@extends('admin.app')
 
 @section('content')
 <style>
@@ -194,6 +194,39 @@ function getDriveFileId($url) {
     preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $url, $matches);
     return $matches[1] ?? null;
 }
+
+function getFileType($url) {
+    // Check URL for file extension or mime type indicators
+    $url = strtolower($url);
+    
+    // Video extensions
+    if (preg_match('/\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv|m4v)$/i', $url)) {
+        return 'video';
+    }
+    
+    // PDF extension
+    if (preg_match('/\.pdf$/i', $url)) {
+        return 'pdf';
+    }
+    
+    // Check for Google Drive mime type hints in URL
+    if (strpos($url, 'video') !== false) {
+        return 'video';
+    }
+    
+    // Default to pdf if uncertain
+    return 'pdf';
+}
+
+function getEmbedUrl($fileId, $fileType) {
+    if ($fileType === 'video') {
+        // Try direct stream URL first, fallback to preview
+        return "https://drive.google.com/uc?export=download&id={$fileId}";
+    } else {
+        // For PDFs, use the preview endpoint
+        return "https://drive.google.com/file/d/{$fileId}/preview";
+    }
+}
 @endphp
 
 <div class="row my-4">
@@ -220,28 +253,48 @@ function getDriveFileId($url) {
                                             <i class="fa fa-check-circle" style="color: #27ae60; margin-right: 8px;"></i>
                                             {{ $point['text'] ?? $point }}
                                         </strong>
+
                                         @if(!empty($point['url']))
                                             @php
                                                 $fileId = getDriveFileId($point['url']);
+                                                $fileType = getFileType($point['url']);
+                                                $embedUrl = getEmbedUrl($fileId, $fileType);
                                                 $uniqueId = "preview-{$index}-{$pointIndex}";
                                             @endphp
+
                                             @if($fileId)
-                                                <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this)">
+                                                <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this, '{{ $fileType }}')">
                                                     <i class="fa fa-eye"></i> <span>View Content</span>
                                                 </button>
 
-                                                <div id="{{ $uniqueId }}" class="preview-container">
+                                                <div id="{{ $uniqueId }}" class="preview-container" data-file-type="{{ $fileType }}">
                                                     <div class="security-notice">
                                                         🔒 View Only – Protected Content – No Downloads Allowed
                                                     </div>
+
                                                     <div class="iframe-wrapper" oncontextmenu="return false;">
                                                         <div class="corner-watermark top-left">🔒 VIEW ONLY</div>
                                                         <div class="corner-watermark top-right">PROTECTED</div>
-                                                        <iframe class="iframe-preview"
-                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
-                                                                allow="autoplay"
-                                                                sandbox="allow-scripts allow-same-origin">
-                                                        </iframe>
+
+                                                        @if($fileType === 'video')
+                                                            <!-- Use HTML5 video player for better compatibility -->
+                                                            <video class="iframe-preview" 
+                                                                   controls 
+                                                                   controlslist="nodownload"
+                                                                   oncontextmenu="return false;"
+                                                                   style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                                                                <source data-src="{{ $embedUrl }}" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        @else
+                                                            <iframe class="iframe-preview"
+                                                                data-src="{{ $embedUrl }}"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowfullscreen
+                                                                loading="lazy">
+                                                            </iframe>
+                                                        @endif
+
                                                         <div class="iframe-overlay"></div>
                                                     </div>
                                                 </div>
@@ -268,7 +321,7 @@ function getDriveFileId($url) {
 </div>
 
 <script>
-// Prevent right-click on iframe wrapper
+// Block right-click inside iframe wrapper
 document.addEventListener('contextmenu', e => {
     if(e.target.closest('.iframe-wrapper')) {
         e.preventDefault();
@@ -276,29 +329,22 @@ document.addEventListener('contextmenu', e => {
     }
 });
 
-// Prevent common keyboard shortcuts
+// Block save, print, developer tools
 document.addEventListener('keydown', e => {
     if(document.querySelector('.preview-container.show')) {
-        // Prevent Save, Print, and DevTools
-        if(e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'S' || e.key === 'P')) {
+        if(e.ctrlKey && ['s','p','S','P'].includes(e.key)) {
             e.preventDefault();
-            alert('⚠️ This action is disabled for content protection.');
+            alert('⚠️ Action disabled for protection');
             return false;
         }
-        // Prevent F12 (DevTools)
-        if(e.key === 'F12') {
-            e.preventDefault();
-            return false;
-        }
-        // Prevent Ctrl+Shift+I (DevTools)
-        if(e.ctrlKey && e.shiftKey && e.key === 'I') {
+        if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
             e.preventDefault();
             return false;
         }
     }
 });
 
-// Prevent iframe pop-out attempts
+// Prevent opening iframe in new tab
 document.addEventListener('click', e => {
     if(e.target.closest('.iframe-preview')) {
         e.preventDefault();
@@ -307,41 +353,107 @@ document.addEventListener('click', e => {
     }
 });
 
-function togglePreview(id, btn) {
+// ⭐ NEW: Handle Broken Drive Preview
+function handleDrivePreview(mediaEl, fileType, embedUrl) {
+    const fallbackBox = document.createElement('div');
+    fallbackBox.style.marginTop = "15px";
+    fallbackBox.style.color = "red";
+    fallbackBox.style.fontWeight = "600";
+    fallbackBox.style.fontSize = "0.9rem";
+    fallbackBox.innerHTML = "⚠ Google Drive preview failed. Loading fallback viewer...";
+    mediaEl.parentElement.appendChild(fallbackBox);
+
+    setTimeout(() => {
+
+        if (fileType === "pdf") {
+            mediaEl.outerHTML = `
+                <iframe src="https://docs.google.com/gview?url=${embedUrl}&embedded=true"
+                    style="width:100%;height:600px;border:none;background:#fff;">
+                </iframe>
+            `;
+        } else {
+            mediaEl.outerHTML = `
+                <video controls style="width:100%;height:100%;object-fit:contain;background:#000;">
+                    <source src="${embedUrl}" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            `;
+        }
+
+        fallbackBox.innerHTML = "✔ Fallback viewer loaded successfully";
+        fallbackBox.style.color = "green";
+
+    }, 500);
+}
+
+function togglePreview(id, btn, fileType) {
     const container = document.getElementById(id);
-    const iframe = container.querySelector('iframe');
+    const media = container.querySelector(fileType === 'video' ? 'video' : 'iframe');
     const text = btn.querySelector('span');
     const icon = btn.querySelector('i');
 
-    if(container.classList.contains('show')) {
-        // Hide the container
+    // Get the real URL
+    const embedUrl = media.dataset.src;
+
+    if (container.classList.contains('show')) {
         container.classList.remove('show');
         text.textContent = 'View Content';
         icon.className = 'fa fa-eye';
+
+        // Stop playback
+        if (fileType === 'video') {
+            media.pause();
+            media.currentTime = 0;
+            media.querySelector('source').removeAttribute('src');
+        } else {
+            media.src = '';
+        }
     } else {
-        // Show the container
+
+        document.querySelectorAll('.preview-container.show').forEach(other => {
+            const otherType = other.dataset.fileType;
+            const otherMedia = other.querySelector(otherType === 'video' ? 'video' : 'iframe');
+
+            if (otherType === 'video') {
+                otherMedia.pause();
+            } else {
+                otherMedia.src = '';
+            }
+
+            other.classList.remove('show');
+        });
+
         container.classList.add('show');
         text.textContent = 'Hide Content';
         icon.className = 'fa fa-eye-slash';
-        
-        // Load iframe source if not already loaded
-        if(!iframe.src || iframe.src === '') {
-            iframe.src = iframe.getAttribute('data-src');
-        }
+
+        setTimeout(() => {
+            // Set source for playback
+            if (fileType === 'video') {
+                const srcEl = media.querySelector('source');
+                srcEl.src = embedUrl;
+                media.load();
+
+                // 💥 NEW: 8 second timeout to detect broken Drive or broken stream
+                setTimeout(() => {
+                    if (media.readyState === 0) {
+                        handleDrivePreview(media, "video", embedUrl);
+                    }
+                }, 8000);
+
+            } else {
+                media.src = embedUrl;
+
+                // 💥 NEW: Detect PDF fail
+                setTimeout(() => {
+                    if (media.contentWindow === null) {
+                        handleDrivePreview(media, "pdf", embedUrl);
+                    }
+                }, 8000);
+            }
+        }, 200);
     }
 }
-
-// Additional security: Monitor and prevent iframe manipulation
-setInterval(() => {
-    document.querySelectorAll('.iframe-preview').forEach(iframe => {
-        if(iframe.src && !iframe.hasAttribute('data-protected')) {
-            iframe.setAttribute('data-protected', 'true');
-            // Re-apply sandbox attribute if removed
-            if(!iframe.hasAttribute('sandbox')) {
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-            }
-        }
-    });
-}, 1000);
 </script>
+
 @endsection

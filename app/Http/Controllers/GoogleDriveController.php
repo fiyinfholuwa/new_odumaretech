@@ -8,9 +8,13 @@ use Google\Service\Drive;
 use Google\Service\Drive\DriveFile;
 use Google\Service\Drive\Permission;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class GoogleDriveController extends Controller
 {
+    const MAX_FILE_SIZE_MB = 10;
+    const MAX_FILE_SIZE_BYTES = 10485760; // 10MB in bytes
+    
     protected function googleClient()
     {
         $client = new Client();
@@ -80,13 +84,32 @@ class GoogleDriveController extends Controller
         return $folder->getId();
     }
 
-    // Upload file to Google Drive
+    // Check if file is a video
+    protected function isVideoFile($mimeType)
+    {
+        return strpos($mimeType, 'video/') === 0;
+    }
+
+    // Upload file to Google Drive with optimizations
     public function uploadFile(Request $request)
     {
         try {
+            // Validate file size FIRST (10MB limit)
             $request->validate([
-                'file' => 'required|file|max:102400', // 100MB max
+                'file' => 'required|file|max:10240', // 10MB max (in kilobytes)
             ]);
+
+            $file = $request->file('file');
+            
+            // Additional server-side size check
+            if ($file->getSize() > self::MAX_FILE_SIZE_BYTES) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'File size exceeds ' . self::MAX_FILE_SIZE_MB . 'MB limit. Please compress your video first.',
+                    'fileSize' => round($file->getSize() / 1048576, 2) . 'MB',
+                    'maxSize' => self::MAX_FILE_SIZE_MB . 'MB'
+                ], 422);
+            }
 
             $sharedDriveUrl = "https://drive.google.com/drive/folders/0AEC82CMaKw77Uk9PVA";
             $sharedDriveId = $this->extractDriveId($sharedDriveUrl);
@@ -97,25 +120,45 @@ class GoogleDriveController extends Controller
             // Get user-specific folder
             $userFolderId = $this->getUserFolder($driveService, $sharedDriveId);
 
-            $file = $request->file('file');
+            // Get MIME type
+            $mimeType = $file->getMimeType();
+            $isVideo = $this->isVideoFile($mimeType);
+
+            // Log upload attempt
+            Log::info('File upload attempt', [
+                'filename' => $file->getClientOriginalName(),
+                'mime_type' => $mimeType,
+                'size' => $file->getSize(),
+                'is_video' => $isVideo
+            ]);
+
+            // For videos, ensure compatible MIME type
+            if ($isVideo) {
+                // Force MP4 MIME type for better compatibility
+                if (in_array(strtolower($file->getClientOriginalExtension()), ['mp4', 'mov', 'avi', 'mkv'])) {
+                    $mimeType = 'video/mp4';
+                }
+            }
 
             $fileMetadata = new DriveFile([
                 'name' => $file->getClientOriginalName(),
-                'parents' => [$userFolderId]
+                'parents' => [$userFolderId],
+                'mimeType' => $mimeType
             ]);
 
+            // Upload file with resumable upload for better reliability
             $uploadedFile = $driveService->files->create(
                 $fileMetadata,
                 [
                     'data' => file_get_contents($file),
-                    'mimeType' => $file->getMimeType(),
-                    'uploadType' => 'multipart',
+                    'mimeType' => $mimeType,
+                    'uploadType' => 'resumable', // Changed from multipart for better handling
                     'supportsAllDrives' => true,
-                    'fields' => 'id, name, webViewLink, webContentLink'
+                    'fields' => 'id, name, mimeType, size, webViewLink, webContentLink, thumbnailLink'
                 ]
             );
 
-            // Make file publicly accessible
+            // Make file publicly accessible with viewer role
             $permission = new Permission([
                 'type' => 'anyone',
                 'role' => 'reader'
@@ -127,21 +170,49 @@ class GoogleDriveController extends Controller
                 ['supportsAllDrives' => true]
             );
 
-            // Generate public link
-            $publicLink = "https://drive.google.com/file/d/{$uploadedFile->getId()}/view";
+            // Generate proper links for videos
+            $fileId = $uploadedFile->getId();
+            $publicLink = "https://drive.google.com/file/d/{$fileId}/view";
+            $previewLink = "https://drive.google.com/file/d/{$fileId}/preview";
+            $embedLink = "https://drive.google.com/file/d/{$fileId}/preview?embedded=true";
 
-            return response()->json([
+            $response = [
                 'success' => true,
-                'fileId' => $uploadedFile->getId(),
+                'fileId' => $fileId,
                 'fileName' => $uploadedFile->getName(),
+                'fileSize' => round($uploadedFile->getSize() / 1048576, 2) . 'MB',
+                'mimeType' => $uploadedFile->getMimeType(),
                 'publicLink' => $publicLink,
-                'viewLink' => $uploadedFile->getWebViewLink()
-            ]);
+                'viewLink' => $uploadedFile->getWebViewLink(),
+                'isVideo' => $isVideo
+            ];
 
-        } catch (\Exception $e) {
+            // Add video-specific links
+            if ($isVideo) {
+                $response['previewLink'] = $previewLink;
+                $response['embedLink'] = $embedLink;
+                $response['message'] = 'Video uploaded successfully. Google Drive may take 5-10 minutes to process the video for streaming.';
+            }
+
+            Log::info('File uploaded successfully', ['fileId' => $fileId]);
+
+            return response()->json($response);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'File validation failed: ' . $e->getMessage(),
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('File upload failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Upload failed: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -161,12 +232,19 @@ class GoogleDriveController extends Controller
                 'supportsAllDrives' => true
             ]);
 
+            Log::info('File deleted', ['fileId' => $request->fileId]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'File deleted successfully'
             ]);
 
         } catch (\Exception $e) {
+            Log::error('File deletion failed', [
+                'fileId' => $request->fileId,
+                'error' => $e->getMessage()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -180,8 +258,20 @@ class GoogleDriveController extends Controller
         try {
             $request->validate([
                 'fileId' => 'required|string',
-                'file' => 'required|file|max:102400'
+                'file' => 'required|file|max:10240' // 10MB max
             ]);
+
+            $file = $request->file('file');
+
+            // Check file size
+            if ($file->getSize() > self::MAX_FILE_SIZE_BYTES) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'File size exceeds ' . self::MAX_FILE_SIZE_MB . 'MB limit.',
+                    'fileSize' => round($file->getSize() / 1048576, 2) . 'MB',
+                    'maxSize' => self::MAX_FILE_SIZE_MB . 'MB'
+                ], 422);
+            }
 
             $client = $this->googleClient();
             $driveService = new Drive($client);
@@ -196,21 +286,28 @@ class GoogleDriveController extends Controller
             $sharedDriveId = $this->extractDriveId($sharedDriveUrl);
             $userFolderId = $this->getUserFolder($driveService, $sharedDriveId);
 
-            $file = $request->file('file');
+            $mimeType = $file->getMimeType();
+            $isVideo = $this->isVideoFile($mimeType);
+
+            // Force MP4 for videos
+            if ($isVideo && in_array(strtolower($file->getClientOriginalExtension()), ['mp4', 'mov', 'avi', 'mkv'])) {
+                $mimeType = 'video/mp4';
+            }
 
             $fileMetadata = new DriveFile([
                 'name' => $file->getClientOriginalName(),
-                'parents' => [$userFolderId]
+                'parents' => [$userFolderId],
+                'mimeType' => $mimeType
             ]);
 
             $uploadedFile = $driveService->files->create(
                 $fileMetadata,
                 [
                     'data' => file_get_contents($file),
-                    'mimeType' => $file->getMimeType(),
-                    'uploadType' => 'multipart',
+                    'mimeType' => $mimeType,
+                    'uploadType' => 'resumable',
                     'supportsAllDrives' => true,
-                    'fields' => 'id, name, webViewLink'
+                    'fields' => 'id, name, mimeType, size, webViewLink'
                 ]
             );
 
@@ -226,17 +323,34 @@ class GoogleDriveController extends Controller
                 ['supportsAllDrives' => true]
             );
 
-            $publicLink = "https://drive.google.com/file/d/{$uploadedFile->getId()}/view";
+            $fileId = $uploadedFile->getId();
+            $publicLink = "https://drive.google.com/file/d/{$fileId}/view";
+            $previewLink = "https://drive.google.com/file/d/{$fileId}/preview";
 
-            return response()->json([
+            $response = [
                 'success' => true,
-                'fileId' => $uploadedFile->getId(),
+                'fileId' => $fileId,
                 'fileName' => $uploadedFile->getName(),
+                'fileSize' => round($uploadedFile->getSize() / 1048576, 2) . 'MB',
+                'mimeType' => $uploadedFile->getMimeType(),
                 'publicLink' => $publicLink,
-                'viewLink' => $uploadedFile->getWebViewLink()
-            ]);
+                'viewLink' => $uploadedFile->getWebViewLink(),
+                'isVideo' => $isVideo
+            ];
+
+            if ($isVideo) {
+                $response['previewLink'] = $previewLink;
+                $response['message'] = 'Video replaced successfully. Processing may take 5-10 minutes.';
+            }
+
+            return response()->json($response);
 
         } catch (\Exception $e) {
+            Log::error('File replacement failed', [
+                'fileId' => $request->fileId,
+                'error' => $e->getMessage()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()

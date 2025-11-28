@@ -200,7 +200,7 @@ function getFileType($url) {
     $url = strtolower($url);
     
     // Video extensions
-    if (preg_match('/\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)$/i', $url)) {
+    if (preg_match('/\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv|m4v)$/i', $url)) {
         return 'video';
     }
     
@@ -216,6 +216,16 @@ function getFileType($url) {
     
     // Default to pdf if uncertain
     return 'pdf';
+}
+
+function getEmbedUrl($fileId, $fileType) {
+    if ($fileType === 'video') {
+        // Try direct stream URL first, fallback to preview
+        return "https://drive.google.com/uc?export=download&id={$fileId}";
+    } else {
+        // For PDFs, use the preview endpoint
+        return "https://drive.google.com/file/d/{$fileId}/preview";
+    }
 }
 @endphp
 
@@ -248,15 +258,16 @@ function getFileType($url) {
                                             @php
                                                 $fileId = getDriveFileId($point['url']);
                                                 $fileType = getFileType($point['url']);
+                                                $embedUrl = getEmbedUrl($fileId, $fileType);
                                                 $uniqueId = "preview-{$index}-{$pointIndex}";
                                             @endphp
 
                                             @if($fileId)
-                                                <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this)">
+                                                <button class="btn-preview" onclick="togglePreview('{{ $uniqueId }}', this, '{{ $fileType }}')">
                                                     <i class="fa fa-eye"></i> <span>View Content</span>
                                                 </button>
 
-                                                <div id="{{ $uniqueId }}" class="preview-container">
+                                                <div id="{{ $uniqueId }}" class="preview-container" data-file-type="{{ $fileType }}">
                                                     <div class="security-notice">
                                                         🔒 View Only – Protected Content – No Downloads Allowed
                                                     </div>
@@ -266,17 +277,21 @@ function getFileType($url) {
                                                         <div class="corner-watermark top-right">PROTECTED</div>
 
                                                         @if($fileType === 'video')
-                                                            <!-- VIDEO: Use /preview endpoint with proper video player -->
-                                                            <iframe class="iframe-preview"
-                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
-                                                                allow="autoplay; encrypted-media"
-                                                                allowfullscreen>
-                                                            </iframe>
+                                                            <!-- Use HTML5 video player for better compatibility -->
+                                                            <video class="iframe-preview" 
+                                                                   controls 
+                                                                   controlslist="nodownload"
+                                                                   oncontextmenu="return false;"
+                                                                   style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+                                                                <source data-src="{{ $embedUrl }}" type="video/mp4">
+                                                                Your browser does not support the video tag.
+                                                            </video>
                                                         @else
-                                                            <!-- PDF: Use /preview endpoint -->
                                                             <iframe class="iframe-preview"
-                                                                data-src="https://drive.google.com/file/d/{{ $fileId }}/preview"
-                                                                allow="autoplay">
+                                                                data-src="{{ $embedUrl }}"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowfullscreen
+                                                                loading="lazy">
                                                             </iframe>
                                                         @endif
 
@@ -338,30 +353,107 @@ document.addEventListener('click', e => {
     }
 });
 
-function togglePreview(id, btn) {
+// ⭐ NEW: Handle Broken Drive Preview
+function handleDrivePreview(mediaEl, fileType, embedUrl) {
+    const fallbackBox = document.createElement('div');
+    fallbackBox.style.marginTop = "15px";
+    fallbackBox.style.color = "red";
+    fallbackBox.style.fontWeight = "600";
+    fallbackBox.style.fontSize = "0.9rem";
+    fallbackBox.innerHTML = "⚠ Google Drive preview failed. Loading fallback viewer...";
+    mediaEl.parentElement.appendChild(fallbackBox);
+
+    setTimeout(() => {
+
+        if (fileType === "pdf") {
+            mediaEl.outerHTML = `
+                <iframe src="https://docs.google.com/gview?url=${embedUrl}&embedded=true"
+                    style="width:100%;height:600px;border:none;background:#fff;">
+                </iframe>
+            `;
+        } else {
+            mediaEl.outerHTML = `
+                <video controls style="width:100%;height:100%;object-fit:contain;background:#000;">
+                    <source src="${embedUrl}" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            `;
+        }
+
+        fallbackBox.innerHTML = "✔ Fallback viewer loaded successfully";
+        fallbackBox.style.color = "green";
+
+    }, 500);
+}
+
+function togglePreview(id, btn, fileType) {
     const container = document.getElementById(id);
-    const iframe = container.querySelector('iframe');
+    const media = container.querySelector(fileType === 'video' ? 'video' : 'iframe');
     const text = btn.querySelector('span');
     const icon = btn.querySelector('i');
 
-    if(container.classList.contains('show')) {
+    // Get the real URL
+    const embedUrl = media.dataset.src;
+
+    if (container.classList.contains('show')) {
         container.classList.remove('show');
         text.textContent = 'View Content';
         icon.className = 'fa fa-eye';
-        
-        // Stop video playback by removing src
-        if(iframe.src) {
-            iframe.src = '';
+
+        // Stop playback
+        if (fileType === 'video') {
+            media.pause();
+            media.currentTime = 0;
+            media.querySelector('source').removeAttribute('src');
+        } else {
+            media.src = '';
         }
     } else {
+
+        document.querySelectorAll('.preview-container.show').forEach(other => {
+            const otherType = other.dataset.fileType;
+            const otherMedia = other.querySelector(otherType === 'video' ? 'video' : 'iframe');
+
+            if (otherType === 'video') {
+                otherMedia.pause();
+            } else {
+                otherMedia.src = '';
+            }
+
+            other.classList.remove('show');
+        });
+
         container.classList.add('show');
         text.textContent = 'Hide Content';
         icon.className = 'fa fa-eye-slash';
 
-        if(!iframe.src) {
-            iframe.src = iframe.getAttribute('data-src');
-        }
+        setTimeout(() => {
+            // Set source for playback
+            if (fileType === 'video') {
+                const srcEl = media.querySelector('source');
+                srcEl.src = embedUrl;
+                media.load();
+
+                // 💥 NEW: 8 second timeout to detect broken Drive or broken stream
+                setTimeout(() => {
+                    if (media.readyState === 0) {
+                        handleDrivePreview(media, "video", embedUrl);
+                    }
+                }, 8000);
+
+            } else {
+                media.src = embedUrl;
+
+                // 💥 NEW: Detect PDF fail
+                setTimeout(() => {
+                    if (media.contentWindow === null) {
+                        handleDrivePreview(media, "pdf", embedUrl);
+                    }
+                }, 8000);
+            }
+        }, 200);
     }
 }
 </script>
+
 @endsection
