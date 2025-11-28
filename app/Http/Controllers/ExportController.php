@@ -54,12 +54,12 @@ class ExportController extends Controller
         $data = DB::table('master_classes')
             ->whereBetween('created_at', [$dateFrom, $dateTo])
             ->get();
-        $excelContent = "SN, Last Name,First Name, Email, Phone Number, Intrested In Learning, Gender, Level, Location,  Date Created\n"; // Header row
+        $excelContent = "SN, Last Name,First Name, Email, Phone Number,  Date Created\n"; // Header row
 
         $i=0;
         foreach ($data as $item) {
             $i++;
-            $excelContent .= $i . ','. $item->last_name . ',' . $item->first_name . ',' .$item->email. ',' .$item->phone. ','. $item->intrested_in . ',' . $item->gender . ',' .$item->career. ',' . $item->location .  ',' . $item->created_at . "\n";
+            $excelContent .= $i . ','. $item->last_name . ',' . $item->first_name . ',' .$item->email. ',' .$item->phone. ',' . $item->created_at . "\n";
         }
         header("Content-type: application/vnd.ms-excel");
         header("Content-Disposition: attachment; filename=masterclass_export.csv");

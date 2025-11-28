@@ -53,10 +53,8 @@
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
-                                <th>Interested In</th>
-                                <th>Gender</th>
-                                <th>Career</th>
-                                <th>Location</th>
+                                <th>Phone Number</th>
+                                
                             </tr>
                             </thead>
                             <tbody>
@@ -67,10 +65,8 @@
                                     <td>{{ $attendee->first_name }}</td>
                                     <td>{{ $attendee->last_name }}</td>
                                     <td>{{ $attendee->email }}</td>
-                                    <td>{{ $attendee->intrested_in }}</td>
-                                    <td>{{ $attendee->gender }}</td>
-                                    <td>{{ $attendee->career }}</td>
-                                    <td>{{ $attendee->location }}</td>
+                                    <td>{{ $attendee->phone }}</td>
+                                    
                                 </tr>
                             @endforeach
                             @if(count($attendees) === 0)

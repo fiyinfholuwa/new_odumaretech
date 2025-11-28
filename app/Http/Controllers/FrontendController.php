@@ -578,11 +578,7 @@ try {
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|email|max:50',
-            'phone_number' => 'required|string|max:50',
-            'interested_skill' => 'required|string|max:50',
-            'gender' => 'required|string|max:50',
-            'career_level' => 'required|string|max:50',
-            'location' => 'required|string|max:50',
+            'phone_number' => 'required|string|max:50'
         ]);
     
         // Check if user already exists
@@ -598,10 +594,7 @@ try {
                 'last_name'    => $request->last_name,
                 'email'        => $request->email,
                 'phone'        => $request->phone_number,
-                'intrested_in' => $request->interested_skill,
-                'gender'       => $request->gender,
-                'career'       => $request->career_level,
-                'location'     => $request->location,
+                
             ]);
     
             $masterclass_link = MasterClassLink::first();

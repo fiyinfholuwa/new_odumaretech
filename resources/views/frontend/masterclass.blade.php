@@ -106,7 +106,7 @@
                                         <input type="text" class="form-control" name="phone_number" placeholder="Phone Number">
                                     </div>
 
-                                    <div class="col-12">
+                                    <div  class="col-12 d-none">
                                         <select class="form-select" name="interested_skill">
                                             <option selected disabled>Interested Skill</option>
                                             <option value="web_development">Web Development</option>
@@ -116,7 +116,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 d-none">
                                         <select class="form-select" name="gender">
                                             <option selected disabled>Gender</option>
                                             <option value="male">Male</option>
@@ -125,7 +125,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 d-none">
                                         <select class="form-select" name="career_level">
                                             <option selected disabled>Level of Career</option>
                                             <option value="student">Student</option>
@@ -135,11 +135,11 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-12 d-none">
                                         <input type="text" class="form-control" name="location" placeholder="Location">
                                     </div>
 
-                                    <div class="col-12">
+                                    <div class="col-12 ">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="1" name="subscribe" id="subscribe">
                                             <label class="form-check-label" for="subscribe">
