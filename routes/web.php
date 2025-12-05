@@ -21,7 +21,6 @@ Route::get('external/instructor/dashboard', [AuthController::class, 'external_in
 Route::get('user/dashboard', [AuthController::class, 'user_dashboard'])->middleware(['auth', 'verified'])->name('user.dashboard');
 
 
-
 Route::post('/upload-to-drive', [GoogleDriveController::class, 'upload'])->name('drive.upload');
 Route::match(['get', 'post'], '/google-drive', [GoogleDriveController::class, 'index']);
 

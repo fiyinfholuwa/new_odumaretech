@@ -43,45 +43,8 @@
         <i class="bi bi-clock me-2"></i> {{ $master_class->time }}
     </div>
 </div>
-                <div class="row g-5 align-items-start">
-                    <!-- Left Side: Title + Image -->
-                    <div class="col-lg-5">
-                        <h2 class="mb-3">{{ $master_class->title }}</h2>
-                        <img src="{{ asset($master_class->masterclass_image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
-                    </div>
 
-                    <!-- Right Side: Text + Form -->
-                    <div class="col-lg-7">
-                        <div class="mb-4">
-                            <p class="text-muted" style="line-height: 1.7;">
-                                {!! $master_class->text_body !!}
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div style="margin-top:50px;" class="row g-5 align-items-start">
-                    <!-- Left Side: Title + Image -->
-                                            <h2 class="mb-3">About The Facilitator</h2>
-
-                    <div class="col-lg-7">
-                        <div class="mb-4">
-                            <p class="text-muted" style="line-height: 1.7;">
-                                {!! $master_class->text_body_2 !!}
-                            </p>
-                        </div>
-
-                    </div>
-                    <div class="col-lg-5">
-                        <img src="{{ asset($master_class->image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
-                    </div>
-
-                    <!-- Right Side: Text + Form -->
-                    
-                </div>
-
-                <div class="row">
+<div class="row">
                 
                 
                         <div class="col-12">
@@ -159,7 +122,46 @@
                         
                         </div>
                 </div>
-            @endif
+
+                <div class="row g-5 align-items-start">
+                    <!-- Left Side: Title + Image -->
+                    <div class="col-lg-5">
+                        <h2 class="mb-3">{{ $master_class->title }}</h2>
+                        <img src="{{ asset($master_class->masterclass_image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
+                    </div>
+
+                    <!-- Right Side: Text + Form -->
+                    <div class="col-lg-7">
+                        <div class="mb-4">
+                            <p class="text-muted" style="line-height: 1.7;">
+                                {!! $master_class->text_body !!}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div style="margin-top:50px;" class="row g-5 align-items-start">
+                    <!-- Left Side: Title + Image -->
+                                            <h2 class="mb-3">About The Facilitator</h2>
+
+                    <div class="col-lg-7">
+                        <div class="mb-4">
+                            <p class="text-muted" style="line-height: 1.7;">
+                                {!! $master_class->text_body_2 !!}
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-5">
+                        <img src="{{ asset($master_class->image) }}" class="img-fluid rounded shadow-sm mb-4" alt="Masterclass Image">
+                    </div>
+
+                    <!-- Right Side: Text + Form -->
+                    
+                </div>
+
+                            @endif
         </div>
 
     </section>
