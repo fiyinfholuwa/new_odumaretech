@@ -43,7 +43,6 @@
         <i class="bi bi-clock me-2"></i> {{ $master_class->time }}
     </div>
 </div>
-
 <div class="row">
                 
                 
@@ -123,7 +122,7 @@
                         </div>
                 </div>
 
-                <div class="row g-5 align-items-start">
+                <div  class="row g-5 align-items-start mt-2">
                     <!-- Left Side: Title + Image -->
                     <div class="col-lg-5">
                         <h2 class="mb-3">{{ $master_class->title }}</h2>
