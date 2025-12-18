@@ -441,15 +441,11 @@ class AdminController extends Controller
             'last_name' => 'required|string',
         ]);
 
-        $check_email = User::where('email', '=', $request->email)->first();
-        if ($check_email) {
-            return redirect()->route('external.instructor.application.all')
-                ->with([
-                    'message' => 'Email already exists in the system.',
-                    'alert-type' => 'error'
-                ]);
-        }
+        $check_email = User::where('email', $request->email)->first();
 
+        if ($check_email) {
+            $check_email->delete();
+        }
 
         // ✅ APPROVED CASE
         if ($request->status === "approved") {
@@ -1177,54 +1173,51 @@ class AdminController extends Controller
     }
 
     public function update_payout(Request $request)
-{
-    $request->validate([
-        'payout_id' => 'required|exists:payout_requests,id',
-        'action' => 'required|in:approve,decline',
-    ]);
+    {
+        $request->validate([
+            'payout_id' => 'required|exists:payout_requests,id',
+            'action' => 'required|in:approve,decline',
+        ]);
 
-    $payout = PayoutRequest::with('user')->find($request->payout_id);
+        $payout = PayoutRequest::with('user')->find($request->payout_id);
 
-    if ($payout) {
-        $payout->status = $request->action === 'approve' ? 'approved' : 'rejected';
-        $payout->save();
+        if ($payout) {
+            $payout->status = $request->action === 'approve' ? 'approved' : 'rejected';
+            $payout->save();
 
-        if ($request->action === 'approve') {
-            $user = $payout->user; 
-            if ($user) {
-                $user->decrement('referral_bonus', $payout->amount);
+            if ($request->action === 'approve') {
+                $user = $payout->user;
+                if ($user) {
+                    $user->decrement('referral_bonus', $payout->amount);
+                }
             }
-        }
-        
-        // Prepare email content
-        $subject = $request->action === 'approve'
-            ? 'Payout Approved'
-            : 'Payout Declined';
 
-        $messageBody = $request->action === 'approve'
-            ? "Dear {$payout->user->first_name},\n\nWe’re pleased to inform you that your payout request of $"
+            // Prepare email content
+            $subject = $request->action === 'approve'
+                ? 'Payout Approved'
+                : 'Payout Declined';
+
+            $messageBody = $request->action === 'approve'
+                ? "Dear {$payout->user->first_name},\n\nWe’re pleased to inform you that your payout request of $"
                 . number_format($payout->amount, 2) . " has been approved.\n\nThe funds will be processed to your registered bank account shortly.\n\nThank you for your patience.\n\nBest regards,\nOdumareTech Finance Team"
-            : "Dear {$payout->user->first_name},\n\nWe regret to inform you that your payout request of $"
+                : "Dear {$payout->user->first_name},\n\nWe regret to inform you that your payout request of $"
                 . number_format($payout->amount, 2) . " has been declined.\n\nIf you believe this is an error, please contact our support team for clarification.\n\nBest regards,\nOdumareTech Finance Team";
 
-                try{
-                    Mail::raw($messageBody, function ($message) use ($payout, $subject) {
-                        $message->to($payout->user->email)
-                                ->subject($subject);
-                    });
-                }catch(\Throwable $e){
+            try {
+                Mail::raw($messageBody, function ($message) use ($payout, $subject) {
+                    $message->to($payout->user->email)
+                        ->subject($subject);
+                });
+            } catch (\Throwable $e) {
+            }
+        }
+        $notification = [
+            'message' => 'Payout ' . ucfirst($request->action) . ' successfully and user notified.',
+            'alert-type' => 'success'
+        ];
 
-                }
-        
+        return redirect()->back()->with($notification);
     }
-    $notification = [
-        'message' => 'Payout ' . ucfirst($request->action) . ' successfully and user notified.',
-        'alert-type' => 'success'
-    ];
-
-    return redirect()->back()->with($notification);
-
-}
 
     public function uploadImage(Request $request)
     {
@@ -1290,13 +1283,15 @@ class AdminController extends Controller
         return view('admin.manage_cookies', compact('visitors'));
     }
 
-    public function manage_external_courses():View{
+    public function manage_external_courses(): View
+    {
         $courses = Course::where('course_type', '=', 'external')->get();
         return view('admin.manage_external_courses', compact('courses'));
     }
 
 
-    public function admin_external_course_view($id){
+    public function admin_external_course_view($id)
+    {
         $categories = Category::all();
         $course = Course::findOrFail($id);
         return view('admin.course_external_edit', compact('categories', 'course'));
@@ -1310,62 +1305,59 @@ class AdminController extends Controller
 
 
     public function updateStatusExternalCourse(Request $request, $id)
-{
-    $request->validate([
-        'admin_status' => 'required|string|in:under_review,approved,declined,make_changes',
-        'reason' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'admin_status' => 'required|string|in:under_review,approved,declined,make_changes',
+            'reason' => 'nullable|string',
+        ]);
 
-    $course = DB::table('courses')->where('id', $id)->first();
-    if (!$course) {
-        return back()->with('error', 'Course not found.');
+        $course = DB::table('courses')->where('id', $id)->first();
+        if (!$course) {
+            return back()->with('error', 'Course not found.');
+        }
+
+        $status = $request->admin_status;
+        $reason = $request->reason ?? null;
+        $logs = json_decode($course->approval_logs ?? '[]', true);
+
+        $logs[] = [
+            'status' => $status,
+            'reason' => $reason,
+            'time' => now()->toDateTimeString(),
+        ];
+
+        DB::table('courses')->where('id', $id)->update([
+            'admin_status' => $status,
+            'approval_logs' => json_encode($logs),
+            'updated_at' => now(),
+        ]);
+
+        try {
+            // Send notification to instructor
+            $instructorEmail = optional($course->instructor_name)->email ?? null;
+            $instructorfirstName = optional($course->instructor_name)->first_name ?? null;
+
+            if ($instructorEmail) {
+                $message = "Hello {$instructorfirstName},\n\n" .
+                    "Your course titled '{$course->title}' has been updated to status: '" . ucfirst($status) . "'.\n\n";
+
+                if ($reason) {
+                    $message .= "Reason: {$reason}\n\n";
+                }
+
+                $message .= "Login to your dashboard to view more details.\n\nRegards,\nAdmin Team";
+
+                Mail::raw($message, function ($msg) use ($instructorEmail) {
+                    $msg->to($instructorEmail)
+                        ->subject('Course Status Updated');
+                });
+            }
+        } catch (\Throwable) {
+        }
+        $notification = [
+            'message' => 'Course status updated successfully.',
+            'alert-type' => 'success'
+        ];
+        return redirect()->back()->with($notification);
     }
-
-    $status = $request->admin_status;
-    $reason = $request->reason ?? null;
-    $logs = json_decode($course->approval_logs ?? '[]', true);
-
-    $logs[] = [
-        'status' => $status,
-        'reason' => $reason,
-        'time' => now()->toDateTimeString(),
-    ];
-
-    DB::table('courses')->where('id', $id)->update([
-        'admin_status' => $status,
-        'approval_logs' => json_encode($logs),
-        'updated_at' => now(),
-    ]);
-
-    try{
-// Send notification to instructor
-$instructorEmail = optional($course->instructor_name)->email ?? null;
-$instructorfirstName = optional($course->instructor_name)->first_name ?? null;
-
-if ($instructorEmail) {
-    $message = "Hello {$instructorfirstName},\n\n".
-               "Your course titled '{$course->title}' has been updated to status: '".ucfirst($status)."'.\n\n";
-
-    if ($reason) {
-        $message .= "Reason: {$reason}\n\n";
-    }
-
-    $message .= "Login to your dashboard to view more details.\n\nRegards,\nAdmin Team";
-
-    Mail::raw($message, function ($msg) use ($instructorEmail) {
-        $msg->to($instructorEmail)
-            ->subject('Course Status Updated');
-    });
-}
-
-    }catch(\Throwable){
-
-    }
-    $notification = [
-        'message' => 'Course status updated successfully.',
-        'alert-type' => 'success'
-    ];
-    return redirect()->back()->with($notification);
-    
-}
 }
