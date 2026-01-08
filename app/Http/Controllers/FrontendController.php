@@ -127,7 +127,7 @@ class FrontendController extends Controller
     public function sell_a_course(): View
     {
 
-        $external_instructor = User::where('user_type', 'external_instructor')
+        $external_instructor = User::where('user_type', 'external_instructor')->where('student_count' , '>', 0)->where('cumulative_earning', '>' , 0 )
             ->orderBy('student_count', 'desc')
             ->limit(8)
             ->get();

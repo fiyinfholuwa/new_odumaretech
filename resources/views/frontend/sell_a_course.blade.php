@@ -105,7 +105,7 @@ we give you the tools, visibility, and support to monetize what you know and mak
                 @foreach($instructors as $instructor)
                     <div class="col-lg-3 col-md-6 mb-4">
                         <div class="card h-100 shadow-sm border-0" style="border-radius: 20px;">
-                            <img src="{{ asset($instructor['image']) }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ $instructor['name'] }}">
+                            <img src="{{ asset($instructor['image']) }}" class="card-img-top" style="height: 200px; object-fit: contain;" alt="{{ $instructor['name'] }}">
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <h5 class="fw-bold mb-1">{{ $instructor['name'] }}</h5>
                                 <p class="text-muted mb-2">{{ $instructor['title'] }}</p>
