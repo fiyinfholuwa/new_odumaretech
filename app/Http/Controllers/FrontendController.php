@@ -36,7 +36,7 @@ class FrontendController extends Controller
 {
     public function home(): View
     {
-        $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(3);
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->where('normal_display' , 'yes')->paginate(3);
         $testimonials = Testimonial::paginate(8);
         $innovations = Innovation::paginate(3);
         return view('frontend.home', ['popular_courses' => $popular_courses, 'testimonials' => $testimonials, 'innovations' => $innovations]);
@@ -44,7 +44,7 @@ class FrontendController extends Controller
 
     public function courses(): View
     {
-        $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(4);
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->where('normal_display' , 'yes')->paginate(4);
         $testimonials = Testimonial::paginate(8);
         return view('frontend.courses', ['courses' => $popular_courses, 'testimonials' => $testimonials]);
     }
@@ -75,7 +75,7 @@ class FrontendController extends Controller
     }
     public function recommender(): View
     {
-        $popular_courses = Course::with('cat')->where('course_type', 'internal')->get();
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->where('normal_display' , 'yes')->get();
 
         return view('auth.recommender', compact('popular_courses'));
     }
@@ -94,7 +94,7 @@ class FrontendController extends Controller
     }
     public function course_detail($name): View
     {
-        $popular_courses = Course::with('cat')->paginate(3);
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->where('normal_display' , 'yes')->paginate(3);
 
         $course = Course::with('cat')->where('course_url', $name)->first();
 
@@ -168,7 +168,7 @@ class FrontendController extends Controller
     }
     public function corporate_training(): View
     {
-        $popular_courses = Course::with('cat')->where('course_type', 'internal')->paginate(6);
+        $popular_courses = Course::with('cat')->where('course_type', 'internal')->where('corporate_display', 'yes')->paginate(6);
         return view('frontend.corporate_training', ['courses' => $popular_courses]);
     }
     public function marketplace(): View

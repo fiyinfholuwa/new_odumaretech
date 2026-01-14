@@ -283,7 +283,7 @@ $conversion = getUserLocalCurrencyConversion($course->price);
                             [
                                 'title' => 'Installment',
                                 'price' => $conversion['currency_symbol'] . number_format($installmentAmount),
-                                'description' => 'Pay ₦' . number_format($installmentAmount) . ' upfront, then weekly until the full ₦' . number_format($actualPrice) . ' is covered.',
+                                'description' => 'Pay '.$conversion['currency_symbol'] . number_format($installmentAmount) . ' upfront, then weekly until the full '.$conversion['currency_symbol'] . number_format($actualPrice) . ' is covered.',
                                 'popular' => false,
                                 'background' => '#FFF3CF',
                             ],
@@ -417,7 +417,7 @@ $conversion = getUserLocalCurrencyConversion($course->price);
                             [
                                 'title' => 'Installment',
                                 'price' => $conversion['currency_symbol'] . number_format($installmentAmount),
-                                'description' => 'Pay ₦' . number_format($installmentAmount) . ' upfront, then weekly until the full ₦' . number_format($actualPrice) . ' is covered.',
+                                'description' => 'Pay '.$conversion['currency_symbol'] . number_format($installmentAmount) . ' upfront, then weekly until the full '.$conversion['currency_symbol'] . number_format($actualPrice) . ' is covered.',
                                 'popular' => false,
                                 'background' => '#FFF3CF',
                             ],
