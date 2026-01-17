@@ -224,7 +224,7 @@ public function create_payment_flutterwave(
     string $tx_ref,
     string $customer_email
 ): string {
-    $flutterwaveSecretKey = 'FLWSECK_TEST-8b272f9980fbdb0c8432798843b07dfe-X';
+    $flutterwaveSecretKey = env('RAVE_SECRET_KEY');
 
     $response = Http::withToken($flutterwaveSecretKey)
         ->post('https://api.flutterwave.com/v3/payments', [
@@ -998,7 +998,7 @@ public function create_payment_flutterwave(
 
     private function verify_flutterwave($transaction_id)
 {
-    $secret_key = 'FLWSECK_TEST-8b272f9980fbdb0c8432798843b07dfe-X';
+    $secret_key = env('RAVE_SECRET_KEY');
 
     $url = "https://api.flutterwave.com/v3/transactions/{$transaction_id}/verify";
 
