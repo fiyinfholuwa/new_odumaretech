@@ -43,7 +43,10 @@
                                         <span class="badge bg-{{ $class }}">{{ $label }}</span>
                                     </td>
                                     <td>{!! Str::limit(strip_tags($course->description), 20, '...') !!}</td>
-                                    <td>{{ optional($course->instructor_name)->name ?? 'Not Set' }}</td>
+                                    <td>
+                                    {{ optional($course->instructor_name)->first_name ?? 'Not Set' }}
+                                    {{ optional($course->instructor_name)->last_name ?? 'Not Set' }}
+                                    </td>
 
                                     <td>
                                         <img src="{{ asset($course->image) }}" alt="Course Image" width="40" height="40" class="rounded-circle">
