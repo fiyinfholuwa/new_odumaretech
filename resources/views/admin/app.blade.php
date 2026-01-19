@@ -264,7 +264,7 @@ $permissions = getUserPermissions();
     </a>
     <ul class="pc-submenu">
         <li class="pc-item"><a class="pc-link" href="{{route('admin.user.view')}}">Add User</a></li> 
-         {{-- <li class="pc-item"><a class="pc-link" href="{{route('admin.user.all')}}">All Users</a></li> --}}
+         <li class="pc-item"><a class="pc-link" href="{{route('admin.user.all')}}">All Users</a></li>
         <li class="pc-item"><a class="pc-link" href="{{route('applied.view')}}">Manage Applied Students</a></li>
     </ul>
 </li>

@@ -70,6 +70,9 @@ $conversion = getUserLocalCurrencyConversion($course->price);
                 @endforeach
             </div>
         @endforeach
+
+<div style="text-center">                            <button style="background:gold; padding:10px 20px;font-weight:bold;" class="nav-link" id="enroll-tab" data-bs-toggle="modal" data-bs-target="#enrollModal" type="button" role="tab">Enroll Course</button>
+</div>
     </section>
 
     <section>

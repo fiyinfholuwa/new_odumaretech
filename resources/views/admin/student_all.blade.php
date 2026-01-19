@@ -1,44 +1,43 @@
 @extends('admin.app')
 
 @section('content')
-<div class="row m-3">
-    <div class="col-md-12">
-        <div class="card shadow-sm border-0">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="card-title mb-0">All Students</h4>
-
-                <!-- Export Form -->
-                <form method="POST" action="{{ route('users.export') }}" class="d-flex align-items-center gap-2">
-                    @csrf
-                    <div class="row g-2 align-items-center">
-                        <div class="col-lg-5 col-md-6">
-                            <input name="date_from" class="form-control form-control-sm" type="date" required>
-                        </div>
-
-                        <div class="col-lg-5 col-md-6">
-                            <input name="date_to" class="form-control form-control-sm" type="date" required>
-                        </div>
-
-                        <div class="col-lg-2 col-md-12">
-                            <button type="submit" class="btn btn-sm btn-secondary w-100">
-                                <i class="fa fa-download me-1"></i> Export CSV
-                            </button>
-                        </div>
+<div  class="row">
+    <div  class="col-md-12">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div style="padding:20px;"  class="card-header bgc-primary border-0">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <h4 class="card-title mb-0 fw-semibold bgc-primary-text">All Students</h4>
+                        <small class="text-muted">Total: {{ count($users) }} students</small>
                     </div>
-                </form>
+
+                    <!-- Tools -->
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <!-- Search -->
+                        
+                        <!-- Export Form -->
+                        <form method="POST" action="{{ route('users.export') }}" class="d-flex align-items-center gap-2">
+                            @csrf
+                            <input name="date_from" class="form-control form-control-sm" type="date" required>
+                            <input name="date_to" class="form-control form-control-sm" type="date" required>
+                            <button type="submit" class="btn btn-sm btn-secondary">
+                                <i class="fa fa-download me-1"></i> Export
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <div class="card-body bg-white">
+            <div class="card-body bg-white p-0">
                 <div class="table-responsive">
-                    <table id="basic-datatables" class="table table-striped table-hover align-middle">
+                    <table id="basic-datatables" class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>S/N</th>
+                                <th style="width:60px;">S/N</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
-                                <th>Student ID</th>
-                                <th class="text-center">Action</th>
+                                <th class="text-center" style="width:80px;">Action</th>
                             </tr>
                         </thead>
 
@@ -46,12 +45,13 @@
                             @foreach($users as $i => $user)
                             <tr>
                                 <td>{{ $i + 1 }}</td>
-                                <td>{{ $user->first_name }}</td>
+                                <td class="fw-medium">{{ $user->first_name }}</td>
                                 <td>{{ $user->last_name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->student_id }}</td>
+                                <td class="text-muted">{{ $user->email }}</td>
+                               
                                 <td class="text-center">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#student_{{ $user->id }}" class="text-danger" title="Delete Student">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#student_{{ $user->id }}"
+                                       class="text-danger" title="Delete Student">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </td>
@@ -65,4 +65,7 @@
         </div>
     </div>
 </div>
+
+{{-- Client-side search --}}
+
 @endsection

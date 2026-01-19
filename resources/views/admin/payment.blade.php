@@ -102,7 +102,41 @@
                                         <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#pay_resolve_{{$pay->id}}">
                                             <i class="fas fa-tools"></i> Fix
                                         </button>
-                                        @include('admin.modal.fix_payment', ['pay' => $pay])
+                                        <div class="modal fade" id="pay_resolve_{{$pay->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                     <div class="modal-dialog" role="document">
+                                         <form action="{{route('admin.fix.payment', $pay->id)}}" method="post">
+                                             @csrf
+                                             <div class="modal-content">
+                                                 <div class="modal-header">
+                                                     <h5 class="modal-title text-danger" id="exampleModalLabel">Fix Erroneous Payment</h5>
+
+                                                 </div>
+                                                 <div class="modal-body">
+                                                     <div class="form-group">
+                                                         <label>Amount</label>
+                                                         <input required name="amount" type="number" value="{{$pay->amount}}" placeholder="Amount" class="form-control"/>
+                                                     </div>
+                                                    <div class="form-group">
+                                                         <label>Payment Type</label>
+                                                         <select required class="form-control" name="payment_type">
+                                                             <option value="{{$pay->payment_type}}">{{$pay->payment_type}}</option>
+                                                             <option value="first installment">first installment</option>
+                                                             <option value="second installment">second installment</option>
+                                                             <option value="full">full</option>
+
+                                                         </select>
+                                                     </div>
+
+                                                 </div>
+                                                 <div class="modal-footer">
+                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                     <button type="submit"  class="btn btn-success btn-sm">Fix Payment</button>
+                                                 </div>
+                                             </div>
+                                         </form>
+                                     </div>
+                                 </div>
+
                                     @else
                                         <span class="badge bg-success">No Error</span>
                                     @endif
