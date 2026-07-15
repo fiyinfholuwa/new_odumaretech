@@ -16,7 +16,7 @@
                                 <th>Title</th>
                                 <th>Category</th>
                                 <th>Cohorts</th>
-                                <th>Slide</th>
+                                <th>Resource</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -39,7 +39,7 @@
                                     </td>
                                     <td>
                                         <a target="_blank" class="btn btn-sm btn-outline-info" href="{{ asset($slide->image) }}">
-                                            <i class="fa fa-file"></i> View Slide
+                                            <i class="fa fa-file"></i> View Resource
                                         </a>
                                     </td>
                                     <td>

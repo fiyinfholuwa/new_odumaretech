@@ -154,52 +154,51 @@ class ExternalController extends Controller
     }
 
     public function in_saveCurriculum(Request $request, $id)
-{
-    $course = $this->findManagedCourse($id);
+    {
+        $course = $this->findManagedCourse($id);
 
-    $validated = $request->validate([
-        'curriculum' => 'nullable|array', // allow empty array
-        'curriculum.*.title' => 'nullable|string',
-        'curriculum.*.points' => 'nullable|array',
-        'curriculum.*.points.*.text' => 'nullable|string',
-        'curriculum.*.points.*.url'  => 'nullable|url',
-    ]);
+        $validated = $request->validate([
+            'curriculum' => 'nullable|array',
+            'curriculum.*.title' => 'nullable|string',
+            'curriculum.*.points' => 'nullable|array',
+            'curriculum.*.points.*.text' => 'nullable|string',
+            'curriculum.*.points.*.url'  => 'nullable|url',
+        ]);
 
-    if (!$this->isAdmin()) {
-    try {
-        $admins = User::where('user_type', 'admin')->pluck('email');
+        if (!$this->isAdmin()) {
+            try {
+                $admins = User::where('user_type', 'admin')->pluck('email');
 
-        if ($admins->count() > 0) {
-            $instructor = Auth::user();
-            $instructorName = $instructor->first_name ?? 'Unknown User';
-            $instructorEmail = $instructor->email ?? 'No email provided';
+                if ($admins->count() > 0) {
+                    $instructor = Auth::user();
+                    $instructorName = $instructor->first_name ?? 'Unknown User';
+                    $instructorEmail = $instructor->email ?? 'No email provided';
 
-            foreach ($admins as $adminEmail) {
-                Mail::raw(
-                    "A new course titled '{$course->title}' has been submitted for review.\n\n" .
-                        "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
-                        "Login to the admin panel to review the Course curriculum.",
-                    function ($message) use ($adminEmail) {
-                        $message->to($adminEmail)
-                            ->subject('New Course Awaiting Review');
+                    foreach ($admins as $adminEmail) {
+                        Mail::raw(
+                            "A new course titled '{$course->title}' has been submitted for review.\n\n" .
+                                "Submitted by: {$instructorName} ({$instructorEmail})\n\n" .
+                                "Login to the admin panel to review the Course curriculum.",
+                            function ($message) use ($adminEmail) {
+                                $message->to($adminEmail)
+                                    ->subject('New Course Awaiting Review');
+                            }
+                        );
                     }
-                );
+                }
+            } catch (\Throwable $e) {
+                \Log::error("Error sending course submission emails: " . $e->getMessage());
             }
         }
-    } catch (\Throwable $e) {
-        \Log::error("Error sending course submission emails: " . $e->getMessage());
-    }
-    }
 
-    // Save curriculum — default to empty array if nothing submitted
-    $course->curriculum = json_encode($validated['curriculum'] ?? []);
-    $course->save();
+        $course->curriculum = json_encode($validated['curriculum'] ?? []);
+        $course->save();
 
-    return redirect()->route($this->isAdmin() ? 'manage.external.courses' : 'in.course.all')->with([
-        'message' => 'Curriculum updated successfully.',
-        'alert-type' => 'success'
-    ]);
-}
+        return redirect()->route($this->isAdmin() ? 'manage.external.courses' : 'in.course.all')->with([
+            'message' => 'Curriculum updated successfully.',
+            'alert-type' => 'success'
+        ]);
+    }
 
     private function isAdmin(): bool
     {

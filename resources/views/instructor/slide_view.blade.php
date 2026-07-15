@@ -62,8 +62,8 @@
 
                     <!-- Slide Title -->
                     <div class="form-group mb-4">
-                        <label class="fw-bold">Slide Title</label>
-                        <input type="text" class="form-control" name="title" placeholder="Enter Slide Title" required>
+                        <label class="fw-bold">Resource Title</label>
+                        <input type="text" class="form-control" name="title" placeholder="Enter Resource Title" required>
                         <small class="text-danger font-weight-bold">
                             @error('title') {{ $message }} @enderror
                         </small>
@@ -71,9 +71,9 @@
 
                     <!-- Slide Category -->
                     <div class="form-group mb-4">
-                        <label class="fw-bold">Slide Category</label>
+                        <label class="fw-bold">Course</label>
                         <select class="form-control" name="course_id" required>
-                            <option disabled selected>Select Slide Category</option>
+                            <option disabled selected>Select Course</option>
                             @foreach($courses as $course)
                                 <option value="{{ $course->id }}">{{ $course->title }}</option>
                             @endforeach
