@@ -1,11 +1,11 @@
-@extends('instructor.app')
+@extends($layout)
 
 @section('content')
 <div class="row my-4">
     <div class="col-md-12">
         <div class="card shadow-sm">
             <div class="card-header bgc-secondary text-white d-flex justify-content-between align-items-center">
-                <h4 class="card-title bgc-secondary-text mb-0">All Slides</h4>
+                <h4 class="card-title bgc-secondary-text mb-0">All Course Resources</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -50,7 +50,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('slide.edit', $slide->id) }}" class="text-primary me-2" title="Edit">
+                                        <a href="{{ route($resourceRoutes['edit'], $slide->id) }}" class="text-primary me-2" title="Edit">
                                             <i class="fa fa-edit fa-lg"></i>
                                         </a>
                                         <a href="#" data-toggle="modal" data-target="#slide_{{ $slide->id }}" title="Delete">

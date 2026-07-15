@@ -28,6 +28,8 @@ Route::match(['get', 'post'], '/google-drive', [GoogleDriveController::class, 'i
 Route::get('/google/drive/auth', [GoogleDriveController::class, 'redirectToGoogle'])->name('google.drive.auth');
 Route::get('/google/drive/callback', [GoogleDriveController::class, 'googleCallback'])->name('google.drive.callback');
 
-Route::post('/drive/upload', [GoogleDriveController::class, 'uploadFile'])->name('drive.uploadFile');
-Route::post('/drive/delete', [GoogleDriveController::class, 'deleteFile'])->name('drive.deleteFile');
-Route::post('/drive/replace', [GoogleDriveController::class, 'replaceFile'])->name('drive.replaceFile');
+Route::middleware('auth')->group(function () {
+    Route::post('/drive/upload', [GoogleDriveController::class, 'uploadFile'])->name('drive.uploadFile');
+    Route::post('/drive/delete', [GoogleDriveController::class, 'deleteFile'])->name('drive.deleteFile');
+    Route::post('/drive/replace', [GoogleDriveController::class, 'replaceFile'])->name('drive.replaceFile');
+});

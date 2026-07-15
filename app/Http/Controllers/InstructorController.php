@@ -24,23 +24,31 @@ use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rule;
 use Mail;
 
 class InstructorController extends Controller
 {
+    private const RESOURCE_EXTENSIONS = 'pdf,ppt,pptx,doc,docx,xls,xlsx,csv,ods,odt,odp,rtf,txt';
+
     public function slide_view(){
+        $this->authorizeResourceManager();
         $courses = $this->get_instructor_courses();
         $cohorts= Cohort::all();
-        return view('instructor.slide_view', compact('courses', 'cohorts'));
+        return view('instructor.slide_view', array_merge(
+            compact('courses', 'cohorts'),
+            $this->resourceViewData()
+        ));
     }
 
     public function slide_add(Request $request)
 {
     $request->validate([
         'title' => 'required|string|max:255',
-        'course_id' => 'required|exists:courses,id',
-        'image' => 'required|file|mimes:pdf,ppt,pptx,docx',
-        'cohort_id' => 'required|array',
+        'course_id' => ['required', Rule::in($this->allowedCourseIds())],
+        'image' => 'required|file|mimes:' . self::RESOURCE_EXTENSIONS . '|max:10240',
+        'cohort_id' => 'required|array|min:1',
+        'cohort_id.*' => 'required|integer|exists:cohorts,id',
     ]);
 
     $slide = new Slide;
@@ -68,23 +76,27 @@ class InstructorController extends Controller
     $slide->save();
 
     return redirect()->back()->with([
-        'message' => 'Slide saved to draft',
+        'message' => 'Resource saved to draft',
         'alert-type' => 'success'
     ]);
 }
 
     public function slide_all(){
-        $slides = Slide::all();
-        return view('instructor.slide_all', compact('slides'));
+        $this->authorizeResourceManager();
+        $slides = Slide::whereIn('course_id', $this->allowedCourseIds())->get();
+        return view('instructor.slide_all', array_merge(
+            compact('slides'),
+            $this->resourceViewData()
+        ));
     }
 
     public function slide_delete(Request $request, $id){
-        $slide =  Slide::findOrFail($id);
+        $slide = $this->findAuthorizedSlide($id);
         $filePath = $slide->image;
         File::delete(public_path($filePath));
         $slide->delete();
          $notification = array(
-             'message' => 'Slide Successfully Deleted',
+             'message' => 'Resource successfully deleted',
              'alert-type' => 'success'
          );
          return redirect()->back()->with($notification);
@@ -93,13 +105,25 @@ class InstructorController extends Controller
     public function slide_edit($id){
         $courses = $this->get_instructor_courses();
         $cohorts= Cohort::all();
-        $slide = Slide::findOrFail($id);
-        return view('instructor.slide_edit', compact('slide', 'courses', 'cohorts'));
+        $slide = $this->findAuthorizedSlide($id);
+        return view('instructor.slide_edit', array_merge(
+            compact('slide', 'courses', 'cohorts'),
+            $this->resourceViewData()
+        ));
     }
 
     public function slide_update(Request $request, $id)
 {
-    $slide_update = Slide::findOrFail($id);
+    $slide_update = $this->findAuthorizedSlide($id);
+
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'course_id' => ['required', Rule::in($this->allowedCourseIds())],
+        'status' => ['required', Rule::in(['pending', 'active'])],
+        'cohort_id' => 'required|array|min:1',
+        'cohort_id.*' => 'required|integer|exists:cohorts,id',
+        'image' => 'nullable|file|mimes:' . self::RESOURCE_EXTENSIONS . '|max:10240',
+    ]);
 
     if ($request->hasFile('image')) {
         $image = $request->file('image');
@@ -108,13 +132,17 @@ class InstructorController extends Controller
         $filename = $file_unique_name . "_odumaretech." . $extension;
 
         // Make directory if not exists
-        $folder = public_path('storage/slide');
-        if (File::exists($folder)) {
+        $folder = public_path('slide');
+        if (!File::exists($folder)) {
             File::makeDirectory($folder, 0755, true);
         }
 
         $image->move($folder, $filename);
-        $path = "storage/slide/" . $filename;
+        $path = "slide/" . $filename;
+
+        if ($slide_update->image && File::exists(public_path($slide_update->image))) {
+            File::delete(public_path($slide_update->image));
+        }
     } else {
         $path = $slide_update->image;
     }
@@ -123,15 +151,15 @@ class InstructorController extends Controller
     $slide_update->title = $request->title;
     $slide_update->status = $request->status;
     $slide_update->image = $path;
-    $slide_update->cohort_id = $request->cohort_id;
+    $slide_update->cohort_id = json_encode($request->cohort_id);
     $slide_update->save();
 
     $notification = [
-        'message' => 'Slide Successfully updated',
+        'message' => 'Resource successfully updated',
         'alert-type' => 'success'
     ];
 
-    return redirect()->route('slide.all')->with($notification);
+    return redirect()->route($this->isAdmin() ? 'admin.resource.all' : 'slide.all')->with($notification);
 }
 
 
@@ -482,8 +510,12 @@ public function view_submitted_project($id){
 
 
     public function get_instructor_courses(){
+        if ($this->isAdmin()) {
+            return Course::select('id', 'title')->orderBy('title')->get();
+        }
+
         $fetch_instructor_detail = ApprovedInstructor::where('user_id', '=', Auth::user()->id)->first();
-        $course_ids = json_decode($fetch_instructor_detail->course_ids,true);
+        $course_ids = json_decode(optional($fetch_instructor_detail)->course_ids ?? '[]', true) ?: [];
         $courses = Course::whereIn('id', array_map('intval', $course_ids))
         ->select('id', 'title')
         ->get();
@@ -491,12 +523,61 @@ public function view_submitted_project($id){
     }
 
     public function get_instructor_courses_id(){
+        if ($this->isAdmin()) {
+            return Course::select('id')->get();
+        }
+
         $fetch_instructor_detail = ApprovedInstructor::where('user_id', '=', Auth::user()->id)->first();
-        $course_ids = json_decode($fetch_instructor_detail->course_ids,true);
+        $course_ids = json_decode(optional($fetch_instructor_detail)->course_ids ?? '[]', true) ?: [];
         $courses = Course::whereIn('id', array_map('intval', $course_ids))
         ->select('id')
         ->get();
         return $courses;
+    }
+
+    private function isAdmin(): bool
+    {
+        return in_array(optional(Auth::user())->user_type, ['admin', 'admin_manager'], true);
+    }
+
+    private function authorizeResourceManager(): void
+    {
+        abort_unless(
+            $this->isAdmin() || optional(Auth::user())->user_type === 'instructor',
+            403,
+            'Unauthorized'
+        );
+    }
+
+    private function allowedCourseIds(): array
+    {
+        $this->authorizeResourceManager();
+
+        return $this->get_instructor_courses()
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    private function findAuthorizedSlide($id): Slide
+    {
+        return Slide::whereIn('course_id', $this->allowedCourseIds())->findOrFail($id);
+    }
+
+    private function resourceViewData(): array
+    {
+        $isAdmin = $this->isAdmin();
+
+        return [
+            'layout' => $isAdmin ? 'admin.app' : 'instructor.app',
+            'resourceRoutes' => [
+                'add' => $isAdmin ? 'admin.resource.add' : 'slide.add',
+                'all' => $isAdmin ? 'admin.resource.all' : 'slide.all',
+                'edit' => $isAdmin ? 'admin.resource.edit' : 'slide.edit',
+                'update' => $isAdmin ? 'admin.resource.update' : 'slide.update',
+                'delete' => $isAdmin ? 'admin.resource.delete' : 'slide.delete',
+            ],
+        ];
     }
 
     public function instructor_chat_view(){

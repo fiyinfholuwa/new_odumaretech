@@ -142,13 +142,20 @@ class ExternalController extends Controller
 
     public function in_curriculum($id)
     {
-        $course = Course::findOrFail($id);
-        return view('external_instructor.curriculum', compact('course'));
+        $course = $this->findManagedCourse($id);
+        $isAdmin = $this->isAdmin();
+
+        return view('external_instructor.curriculum', [
+            'course' => $course,
+            'layout' => $isAdmin ? 'admin.app' : 'external_instructor.app',
+            'saveRoute' => $isAdmin ? 'admin.external.curriculum.update' : 'in.course.saveCurriculum',
+            'backRoute' => $isAdmin ? 'manage.external.courses' : 'in.course.all',
+        ]);
     }
 
     public function in_saveCurriculum(Request $request, $id)
 {
-    $course = Course::findOrFail($id);
+    $course = $this->findManagedCourse($id);
 
     $validated = $request->validate([
         'curriculum' => 'nullable|array', // allow empty array
@@ -158,6 +165,7 @@ class ExternalController extends Controller
         'curriculum.*.points.*.url'  => 'nullable|url',
     ]);
 
+    if (!$this->isAdmin()) {
     try {
         $admins = User::where('user_type', 'admin')->pluck('email');
 
@@ -181,16 +189,34 @@ class ExternalController extends Controller
     } catch (\Throwable $e) {
         \Log::error("Error sending course submission emails: " . $e->getMessage());
     }
+    }
 
     // Save curriculum — default to empty array if nothing submitted
     $course->curriculum = json_encode($validated['curriculum'] ?? []);
     $course->save();
 
-    return redirect()->route('in.course.all')->with([
+    return redirect()->route($this->isAdmin() ? 'manage.external.courses' : 'in.course.all')->with([
         'message' => 'Curriculum updated successfully.',
         'alert-type' => 'success'
     ]);
 }
+
+    private function isAdmin(): bool
+    {
+        return in_array(optional(Auth::user())->user_type, ['admin', 'admin_manager'], true);
+    }
+
+    private function findManagedCourse($id): Course
+    {
+        $query = Course::where('course_type', 'external');
+
+        if (!$this->isAdmin()) {
+            abort_unless(optional(Auth::user())->user_type === 'external_instructor', 403, 'Unauthorized');
+            $query->where('instructor', Auth::id());
+        }
+
+        return $query->findOrFail($id);
+    }
 
     public function in_course_delete($id)
     {

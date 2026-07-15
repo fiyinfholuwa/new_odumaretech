@@ -1,4 +1,4 @@
-@extends('instructor.app')
+@extends($layout)
 
 @section('content')
 <style>
@@ -54,10 +54,10 @@
     <div class="col-md-10">
         <div class="card ">
             <div class="card-header bgc-primary ">
-                <h4 class="mb-0 bgc-primary-text">Add Slide</h4>
+                <h4 class="mb-0 bgc-primary-text">Add Course Resource</h4>
             </div>
             <div class="card-body p-4">
-                <form action="{{ route('slide.add') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route($resourceRoutes['add']) }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Slide Title -->
@@ -98,8 +98,10 @@
 
                     <!-- Slide Attachment -->
                     <div class="form-group mb-4">
-                        <label class="fw-bold">Slide Attachment</label>
-                        <input type="file" class="form-control" name="image" required>
+                        <label class="fw-bold">Resource Attachment</label>
+                        <input type="file" class="form-control" name="image"
+                            accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" required>
+                        <small class="text-muted d-block mt-1">PDF, Word, PowerPoint, Excel, CSV, OpenDocument, RTF or text. Maximum 10 MB.</small>
                         <small class="text-danger font-weight-bold">
                             @error('image') {{ $message }} @enderror
                         </small>
@@ -107,7 +109,7 @@
 
                     <!-- Submit Button -->
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary px-4">Add Slide</button>
+                        <button type="submit" class="btn btn-primary px-4">Add Resource</button>
                     </div>
                 </form>
             </div>

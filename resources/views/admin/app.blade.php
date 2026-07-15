@@ -171,6 +171,8 @@ $permissions = getUserPermissions();
                         <li class="pc-item"><a class="pc-link" href="{{route('category.view')}}">Manage Course Category</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{route('course.view')}}">Add Course</a></li>
                         <li class="pc-item"><a class="pc-link" href="{{route('course.all')}}">All Course</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('admin.resource.view') }}">Add Course Resource</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('admin.resource.all') }}">All Course Resources</a></li>
                     </ul>
                 </li>
 

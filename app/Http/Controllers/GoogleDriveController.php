@@ -14,6 +14,7 @@ class GoogleDriveController extends Controller
 {
     const MAX_FILE_SIZE_MB = 20;
     const MAX_FILE_SIZE_BYTES = 20971520; // 20MB in bytes
+    const ALLOWED_FILE_EXTENSIONS = 'mp4,mov,avi,mkv,webm,pdf,ppt,pptx,doc,docx,xls,xlsx,csv,ods,odt,odp,rtf,txt';
     
     protected function googleClient()
     {
@@ -87,9 +88,11 @@ class GoogleDriveController extends Controller
 
     public function uploadFile(Request $request)
     {
+        $this->authorizeUploader();
+
         try {
             $request->validate([
-                'file' => 'required|file|max:40960' // 20MB
+                'file' => 'required|file|mimes:' . self::ALLOWED_FILE_EXTENSIONS . '|max:20480'
             ]);
 
             $file = $request->file('file');
@@ -97,7 +100,7 @@ class GoogleDriveController extends Controller
             if ($file->getSize() > self::MAX_FILE_SIZE_BYTES) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'File size exceeds ' . self::MAX_FILE_SIZE_MB . 'MB limit. Please compress your video first.',
+                    'message' => 'File size exceeds the ' . self::MAX_FILE_SIZE_MB . 'MB limit.',
                     'fileSize' => round($file->getSize() / 1048576, 2) . 'MB',
                     'maxSize' => self::MAX_FILE_SIZE_MB . 'MB'
                 ], 422);
@@ -202,6 +205,8 @@ class GoogleDriveController extends Controller
 
     public function deleteFile(Request $request)
     {
+        $this->authorizeUploader();
+
         try {
             $request->validate([
                 'fileId' => 'required|string'
@@ -236,10 +241,12 @@ class GoogleDriveController extends Controller
 
     public function replaceFile(Request $request)
     {
+        $this->authorizeUploader();
+
         try {
             $request->validate([
                 'fileId' => 'required|string',
-                'file' => 'required|file|max:40960' // 20MB
+                'file' => 'required|file|mimes:' . self::ALLOWED_FILE_EXTENSIONS . '|max:20480'
             ]);
 
             $file = $request->file('file');
@@ -332,5 +339,14 @@ class GoogleDriveController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function authorizeUploader(): void
+    {
+        abort_unless(
+            Auth::check() && in_array(Auth::user()->user_type, ['external_instructor', 'admin', 'admin_manager'], true),
+            403,
+            'Unauthorized'
+        );
     }
 }

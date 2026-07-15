@@ -4,8 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ExternalController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\InnovationController;
+use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\MasterClassController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
@@ -157,6 +159,22 @@ Route::middleware(['auth', 'is_admin'])->controller(CourseController::class)->gr
     Route::get('/admin/coupon/edit/{id}', 'coupon_edit')->name('coupon.edit');
     Route::post('/admin/coupon/update/{id}', 'coupon_update')->name('coupon.update');
     Route::post('/coupon/validate', 'coupon_validate')->name('coupon.validate');
+});
+
+Route::middleware(['auth', 'is_admin'])->controller(InstructorController::class)->group(function () {
+    Route::get('/admin/resources/add', 'slide_view')->name('admin.resource.view');
+    Route::post('/admin/resources', 'slide_add')->name('admin.resource.add');
+    Route::get('/admin/resources', 'slide_all')->name('admin.resource.all');
+    Route::get('/admin/resources/{id}/edit', 'slide_edit')->name('admin.resource.edit');
+    Route::post('/admin/resources/{id}', 'slide_update')->name('admin.resource.update');
+    Route::post('/admin/resources/{id}/delete', 'slide_delete')->name('admin.resource.delete');
+});
+
+Route::middleware(['auth', 'is_admin'])->controller(ExternalController::class)->group(function () {
+    Route::get('/admin/external/course/{id}/curriculum/edit', 'in_curriculum')
+        ->name('admin.external.curriculum.edit');
+    Route::post('/admin/external/course/{id}/curriculum', 'in_saveCurriculum')
+        ->name('admin.external.curriculum.update');
 });
 
 

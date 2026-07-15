@@ -152,12 +152,12 @@
 <li class="pc-item pc-hasmenu">
     <a href="#!" class="pc-link">
         <span class="pc-micon"><i class="fa fa-window-restore"></i></span>
-        <span class="pc-mtext">Manage Slides</span>
+        <span class="pc-mtext">Manage Resources</span>
         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
     </a>
     <ul class="pc-submenu">
-        <li class="pc-item"><a class="pc-link" href="{{ route('slide.view') }}">Add Slides</a></li>
-        <li class="pc-item"><a class="pc-link" href="{{ route('slide.all') }}">All Slides</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('slide.view') }}">Add Resource</a></li>
+        <li class="pc-item"><a class="pc-link" href="{{ route('slide.all') }}">All Resources</a></li>
     </ul>
 </li>
 

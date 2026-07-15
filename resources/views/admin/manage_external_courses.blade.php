@@ -56,6 +56,12 @@
                                            <i class="fa fa-book me-1"></i> Curriculum
                                         </a>
 
+                                        <a href="{{ route('admin.external.curriculum.edit', $course->id) }}"
+                                           class="badge bg-success text-light d-inline-flex align-items-center"
+                                           title="Edit Curriculum">
+                                           <i class="fa fa-upload me-1"></i> Edit / Upload Curriculum
+                                        </a>
+
                                         <a href="{{ route('admin.external.course.view', $course->id) }}"
                                            class="badge bg-primary text-light d-inline-flex align-items-center"
                                            title="View">

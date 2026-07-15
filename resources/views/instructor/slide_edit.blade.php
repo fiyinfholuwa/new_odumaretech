@@ -1,4 +1,4 @@
-@extends('instructor.app')
+@extends($layout)
 
 @section('content')
 <style>
@@ -56,7 +56,7 @@
                 <h4 class="mb-0 bgc-primary-text">Edit Slide</h4>
             </div>
             <div class="card-body p-4">
-                <form action="{{ route('slide.update', $slide->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route($resourceRoutes['update'], $slide->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Slide Title -->
@@ -109,8 +109,10 @@
 
                     <!-- Slide Attachment -->
                     <div class="form-group mb-4">
-                        <label class="fw-bold">Slide Attachment</label>
-                        <input type="file" class="form-control" name="image">
+                        <label class="fw-bold">Resource Attachment</label>
+                        <input type="file" class="form-control" name="image"
+                            accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt">
+                        <small class="text-muted d-block mt-1">PDF, Word, PowerPoint, Excel, CSV, OpenDocument, RTF or text. Maximum 10 MB.</small>
                         <a target="_blank" rel="noopener noreferrer" class="btn btn-outline-info mt-2" href="{{ asset($slide->image) }}">
                             <i class="fa fa-eye"></i> View Current Slide
                         </a>

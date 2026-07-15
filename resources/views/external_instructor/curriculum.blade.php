@@ -2,7 +2,7 @@
 
 
 
-@extends('external_instructor.app')
+@extends($layout)
 
 @section('content')
 <div class="row" style="margin:10px">
@@ -17,8 +17,8 @@
 <div style="background: #fff3f3; border-left: 4px solid red; padding: 12px; margin-top: 10px; border-radius: 5px;">
     <strong style="color: red;">Important:</strong>
     <p style="margin: 5px 0; font-size: 14px;">
+        Upload videos, PDF, Word, PowerPoint, Excel, CSV, OpenDocument, RTF or text files.
         The maximum upload size for each file is <strong>20MB</strong>.
-        If your video is larger than 20MB, please compress it before uploading.
     </p>
 
     <p style="margin: 5px 0; font-size: 14px;">
@@ -44,7 +44,7 @@
                     $existing = json_decode($course->curriculum, true) ?? [];
                 @endphp
 
-                <form action="{{ route('in.course.saveCurriculum', $course->id) }}" method="post">
+                <form action="{{ route($saveRoute, $course->id) }}" method="post">
                     @csrf
 
                     <div id="curriculum-wrapper">
@@ -82,7 +82,7 @@
                                                         <button type="button" class="btn btn-sm btn-primary btn-upload">
                                                             <i class="fa fa-upload"></i> Upload File
                                                         </button>
-                                                        <input type="file" class="file-input" style="display:none;">
+                                                        <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
                                                         <span class="status-text ms-2"></span>
                                                     </div>
                                                 @endif
@@ -102,7 +102,7 @@
                     <button type="button" class="btn btn-outline-primary my-3" id="add-outline">+ Add Outline Section</button>
 
                     <div class="card-action">
-                        <a href="{{ route('in.course.all') }}" class="btn btn-danger">Go Back</a>
+                        <a href="{{ route($backRoute) }}" class="btn btn-danger">Go Back</a>
                         <button type="submit" class="btn btn-primary">Save Curriculum</button>
                     </div>
                 </form>
@@ -149,7 +149,7 @@ document.getElementById('add-outline').addEventListener('click', function () {
                         <button type="button" class="btn btn-sm btn-primary btn-upload">
                             <i class="fa fa-upload"></i> Upload File
                         </button>
-                        <input type="file" class="file-input" style="display:none;">
+                        <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
                         <span class="status-text ms-2"></span>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ document.addEventListener('click', function (e) {
                     <button type="button" class="btn btn-sm btn-primary btn-upload">
                         <i class="fa fa-upload"></i> Upload File
                     </button>
-                    <input type="file" class="file-input" style="display:none;">
+                    <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
                     <span class="status-text ms-2"></span>
                 </div>
             </div>
@@ -303,7 +303,7 @@ function uploadFile(file, pointGroup, oldFileId = null) {
                     </button>
                     <span class="text-success ms-2"><i class="fa fa-check"></i> ${data.fileName}</span>
                 </div>
-                <input type="file" class="file-input" style="display:none;">
+                <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
             `;
         } else {
             fileControl.innerHTML = `
@@ -311,7 +311,7 @@ function uploadFile(file, pointGroup, oldFileId = null) {
                     <button type="button" class="btn btn-sm btn-primary btn-upload">
                         <i class="fa fa-upload"></i> Upload File
                     </button>
-                    <input type="file" class="file-input" style="display:none;">
+                    <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
                     <span class="status-text error ms-2"><i class="fa fa-times"></i> Failed: ${data.message}</span>
                 </div>
             `;
@@ -323,7 +323,7 @@ function uploadFile(file, pointGroup, oldFileId = null) {
                 <button type="button" class="btn btn-sm btn-primary btn-upload">
                     <i class="fa fa-upload"></i> Upload File
                 </button>
-                <input type="file" class="file-input" style="display:none;">
+                <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
                 <span class="status-text error ms-2"><i class="fa fa-times"></i> Error: ${error.message}</span>
             </div>
         `;
@@ -363,7 +363,7 @@ function deleteFile(fileId, pointGroup) {
                     <button type="button" class="btn btn-sm btn-primary btn-upload">
                         <i class="fa fa-upload"></i> Upload File
                     </button>
-                    <input type="file" class="file-input" style="display:none;">
+                    <input type="file" class="file-input" accept=".mp4,.mov,.avi,.mkv,.webm,.pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.csv,.ods,.odt,.odp,.rtf,.txt" style="display:none;">
                     <span class="status-text success ms-2"><i class="fa fa-check"></i> Deleted</span>
                 </div>
             `;
