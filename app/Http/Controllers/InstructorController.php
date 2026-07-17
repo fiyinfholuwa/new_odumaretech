@@ -176,7 +176,7 @@ class InstructorController extends Controller
         'course_id' => 'required|exists:courses,id',
         'description' => 'nullable|string',
         'cohort_id' => 'required|array',
-        'image' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,jpg,jpeg,png|max:5120',
+        'image' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,csv,jpg,jpeg,png|max:10240',
     ]);
 
     $path = null;
@@ -240,6 +240,15 @@ class InstructorController extends Controller
 
     public function assignment_update(Request $request, $id)
     {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'course_id' => 'required|exists:courses,id',
+            'description' => 'nullable|string',
+            'cohort_id' => 'required|array',
+            'status' => 'required|in:pending,active',
+            'image' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,csv,jpg,jpeg,png|max:10240',
+        ]);
+
         $ass_update = Assignment::findOrFail($id);
     
         // Handle image upload

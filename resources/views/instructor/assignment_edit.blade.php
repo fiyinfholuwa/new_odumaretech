@@ -91,7 +91,9 @@
                     <!-- Attachment -->
                     <div class="form-group mb-4">
                         <label>Assignment Attachment</label>
-                        <input type="file" class="form-control" name="image">
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image"
+                               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.jpg,.jpeg,.png">
+                        <small class="text-muted d-block mt-1">PDF, Word, PowerPoint, Excel, CSV, or image. Maximum 10 MB.</small>
                         @if(!is_null($assignment->image))
                             <a href="{{ asset($assignment->image) }}" class="btn btn-outline-info mt-2" target="_blank" rel="noopener noreferrer">
                                 View Attachment

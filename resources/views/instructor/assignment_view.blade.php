@@ -75,7 +75,9 @@
                     {{-- Assignment Attachment --}}
                     <div class="form-group mb-4">
                         <label for="image">Assignment Attachment</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image">
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" id="image"
+                               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.jpg,.jpeg,.png">
+                        <small class="text-muted d-block mt-1">PDF, Word, PowerPoint, Excel, CSV, or image. Maximum 10 MB.</small>
                         @error('image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
