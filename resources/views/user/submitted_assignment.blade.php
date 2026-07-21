@@ -60,8 +60,8 @@
                             @foreach($assignments as $index => $assignment)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $assignment->course_name->title }}</td>
-                                <td>{{ $assignment->assignment_name->title }}</td>
+                                <td>{{ $assignment->course_name?->title ?? 'Course unavailable' }}</td>
+                                <td>{{ $assignment->assignment_name?->title ?? 'Assignment unavailable' }}</td>
 
                                 <td>
                                     @if($assignment->status == "pending")

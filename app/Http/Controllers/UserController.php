@@ -282,7 +282,9 @@ class UserController extends Controller
 
 
     public function assignment_submitted(){
-        $assignments = SubmitAssignment::where('user_id', '=', Auth::user()->id)->get();
+        $assignments = SubmitAssignment::with(['course_name', 'assignment_name'])
+            ->where('user_id', Auth::id())
+            ->get();
         return view('user.submitted_assignment', compact('assignments'));
     }
 

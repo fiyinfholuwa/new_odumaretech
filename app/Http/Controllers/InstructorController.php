@@ -495,7 +495,9 @@ public function notification_all()
 
     public function assess_submitted_assignment(){
             $courseIds = $this->get_instructor_courses_id();
-            $assignments = SubmitAssignment::whereIn('course_id', $courseIds)->get();
+            $assignments = SubmitAssignment::with(['course_name', 'assignment_name'])
+                ->whereIn('course_id', $courseIds)
+                ->get();
             return view('instructor.submitted_assignment', compact('assignments'));
     }
 

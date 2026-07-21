@@ -13,7 +13,7 @@
                                @csrf
                            <div class="form-group">
                                 <label for="email2">Assignment Title</label>
-                                <input type="text" class="form-control" id="email2" value="{{$assignment->assignment_name->title}}" readonly required name="title" placeholder="Enter  Assignment Title">
+                                <input type="text" class="form-control" id="email2" value="{{ $assignment->assignment_name?->title ?? 'Assignment unavailable' }}" readonly required name="title" placeholder="Enter Assignment Title">
                             </div>
 
 
