@@ -23,7 +23,9 @@ use App\Models\UserChat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use PDF; // 👈 this is what you meant by use PDF;
 
 class UserController extends Controller
@@ -205,7 +207,12 @@ class UserController extends Controller
 
     public function assignment_submit_user(Request $request, $id){
 
-        $check_assignment = Assignment::where('id', '=', $id)->first();
+        $request->validate([
+            'image' => 'nullable|file|max:20480',
+            'link' => 'nullable|url|max:2048',
+        ]);
+
+        $check_assignment = Assignment::findOrFail($id);
         $course_id = $check_assignment->course_id;
         $assignment_id = $check_assignment->id;
         $check_assignment_submitted = SubmitAssignment::where('course_id', '=', $course_id)->where('assessment_id', '=', $assignment_id)
@@ -221,62 +228,42 @@ class UserController extends Controller
             return redirect()->route('assignment.submitted.user')->with($notification);
         }
 
-        if(!$check_assignment_submitted){
-            $submit = new SubmitAssignment;
-            if($request->hasfile('image')){
-                $image = $request->file('image');
-                $extension = $image->getClientOriginalName();
-                $filename = $extension;
-                $file_unique_name = uniqid();
-                $image->storeAs( '/assignment' , "/" . $file_unique_name . "_odumaretech" . "." .$filename, 'public');
-                $path = "storage/assignment/" . $file_unique_name . "_odumaretech" . "." .$filename;
-            }else{
-                $path = NULL;
+        $submit = $check_assignment_submitted ?: new SubmitAssignment;
+        $oldPath = $submit->image;
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $filename = Str::uuid() . ($extension ? '.' . $extension : '');
+            $directory = public_path('storage/assignment');
+
+            File::ensureDirectoryExists($directory, 0755, true);
+            $file->move($directory, $filename);
+            $submit->image = 'storage/assignment/' . $filename;
+
+            // Only remove a previous file after its replacement uploaded.
+            if ($oldPath) {
+                $oldRelativePath = ltrim(preg_replace('#^/?storage/#', '', $oldPath), '/');
+                if (str_starts_with($oldRelativePath, 'assignment/') && !str_contains($oldRelativePath, '..')) {
+                    File::delete(public_path('storage/' . $oldRelativePath));
+                }
             }
-            $submit->course_id = $request->course_id;
-            $submit->assessment_id = $request->assignment_id;
-            $submit->image = $path;
-            $submit->link = $request->link;
-            $submit->status = "pending";
-            $submit->status_in = 0;
-            $submit->review = "Not Available";
-            $submit->user_id = Auth::user()->id;
-            $submit->save();
-            $notification = array(
-                'message' => 'Assignment Submitted successfully',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('assignment.submitted.user')->with($notification);
-
-        }else{
-
-            $check_assignment_submitted->delete();
-            $submit = new SubmitAssignment;
-            if($request->hasfile('image')){
-                $image = $request->file('image');
-                $extension = $image->getClientOriginalName();
-                $filename = $extension;
-                $file_unique_name = uniqid();
-                $image->storeAs( '/assignment' , "/" . $file_unique_name . "_odumaretech" . "." .$filename, 'public');
-                $path = "storage/assignment/" . $file_unique_name . "_odumaretech" . "." .$filename;
-            }else{
-                $path = NULL;
-            }
-            $submit->course_id = $request->course_id;
-            $submit->assessment_id = $request->assignment_id;
-            $submit->image = $path;
-            $submit->link = $request->link;
-            $submit->status = "pending";
-            $submit->status_in = 0;
-            $submit->user_id = Auth::user()->id;
-            $submit->save();
-            $notification = array(
-                'message' => 'Assignment Submitted successfully',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('assignment.submitted.user')->with($notification);
-
         }
+
+        $submit->course_id = $course_id;
+        $submit->assessment_id = $assignment_id;
+        $submit->link = $request->link;
+        $submit->status = "pending";
+        $submit->status_in = 0;
+        $submit->review = "Not Available";
+        $submit->user_id = Auth::id();
+        $submit->save();
+
+        $notification = array(
+            'message' => 'Assignment Submitted successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('assignment.submitted.user')->with($notification);
 
     }
 

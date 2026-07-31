@@ -514,8 +514,35 @@ public function view_submitted_project($id){
 }
 
     public function view_submitted_assignment($id){
-        $assignment = SubmitAssignment::findOrFail($id);
+        $assignment = SubmitAssignment::whereIn('course_id', $this->allowedCourseIds())
+            ->findOrFail($id);
         return view('instructor.assignment_review', compact('assignment'));
+    }
+
+    public function download_submitted_assignment_attachment($id)
+    {
+        $assignment = SubmitAssignment::whereIn('course_id', $this->allowedCourseIds())
+            ->findOrFail($id);
+
+        abort_if(empty($assignment->image), 404, 'This submission has no attachment.');
+
+        // Older submissions store the browser-facing `storage/` prefix. The
+        // public disk expects a path relative to storage/app/public instead.
+        $path = ltrim((string) $assignment->image, '/');
+        if (str_starts_with($path, 'storage/')) {
+            $path = substr($path, strlen('storage/'));
+        }
+
+        abort_unless(
+            str_starts_with($path, 'assignment/') && !str_contains($path, '..'),
+            404,
+            'The attachment path is invalid.'
+        );
+
+        $attachmentPath = public_path('storage/' . $path);
+        abort_unless(is_file($attachmentPath), 404, 'The attachment could not be found.');
+
+        return response()->download($attachmentPath, basename($attachmentPath));
     }
 
 

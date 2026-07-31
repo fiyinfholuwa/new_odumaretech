@@ -20,7 +20,7 @@
                             @if($assignment->image != null)
                             <div class="form-group">
                                 <label for="email2">Assignment Attachement</label>
-                                <a target="_blank" class="btn btn-info" href="{{asset($assignment->image)}}">View Assignment Attachment</a>
+                                <a class="btn btn-info" href="{{ route('assignment.submitted.attachment', $assignment->id) }}">Download Assignment Attachment</a>
                             </div>
                             @endif
                             @if($assignment->link != null)

@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/instructor/notification/update/{id}', 'notification_update')->name('notification.update');
         Route::get('/instructor/assignment/submitted', 'assess_submitted_assignment')->name('assignment.submitted.review');
         Route::get('/instructor/assignment/review/{id}', 'view_submitted_assignment')->name('assignment.submitted.to');
+        Route::get('/instructor/assignment/review/{id}/attachment', 'download_submitted_assignment_attachment')->name('assignment.submitted.attachment');
         Route::post('/instructor/assignment/graded/{id}', 'assignment_instructor_grade')->name('assignment.review.instructor');
         Route::get('/instructor/chat/view', 'instructor_chat_view')->name('instructor.chat.view');
         Route::post('/instructor/chat/add', 'instructor_chat_add')->name('instructor.chat.add');
@@ -65,5 +66,4 @@ Route::middleware('auth')->group(function () {
         Route::post('/instructor/project/graded/{id}', 'project_instructor_grade')->name('project.review.instructor');
     });
 });    
-
 
