@@ -191,7 +191,9 @@
     <div class="container-fluid">
         <!-- Welcome Section -->
         <div style="margin-bottom:30px;">
-            <h2 class="mb-0">Welcome Abayomi Bello 👋</h2>
+            <h2 class="mb-0">
+                Welcome {{ trim(Auth::user()->first_name . ' ' . Auth::user()->last_name) ?: Auth::user()->name }} 👋
+            </h2>
         </div>
         
         <div class="row">
