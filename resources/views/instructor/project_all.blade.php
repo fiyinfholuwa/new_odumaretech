@@ -33,7 +33,14 @@
                                     
                                     <td>
                                         @php
-                                            $cohortIds = json_decode($project->cohort_id, true) ?? [];
+                                            $decodedCohortIds = is_string($project->cohort_id)
+                                                ? json_decode($project->cohort_id, true)
+                                                : $project->cohort_id;
+
+                                            // Support both the current JSON array format and older scalar values.
+                                            $cohortIds = is_array($decodedCohortIds)
+                                                ? $decodedCohortIds
+                                                : (filled($decodedCohortIds) ? [$decodedCohortIds] : []);
                                         @endphp
                                         @if(!empty($cohortIds))
                                             @foreach($cohortIds as $id)
