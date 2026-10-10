@@ -28,7 +28,7 @@
                                            
 											<tr>
 												<td>{{$i++;}}</td>
-                                                <td>{{$assignment->course_name->title}}</td>
+                                                <td>{{ $assignment->course_name?->title ?? 'Course unavailable' }}</td>
                                         
                                                 <td>@if($assignment->status == "pending")
 													<span class="btn btn-warning btn-sm">under review<span>

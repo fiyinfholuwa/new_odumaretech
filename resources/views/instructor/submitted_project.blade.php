@@ -25,7 +25,7 @@
                             @foreach($assignments as $assignment)
                                 <tr>
                                     <td>{{ $i++ }}</td>
-                                    <td>{{ $assignment->course_name->title ?? 'N/A' }}</td>
+                                <td>{{ $assignment->course_name?->title ?? 'Course unavailable' }}</td>
 
                                     <td>
                                         @if($assignment->status == 'pending')

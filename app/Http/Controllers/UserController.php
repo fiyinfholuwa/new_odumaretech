@@ -177,7 +177,9 @@ class UserController extends Controller
 
 
     public function project_submitted(){
-        $assignments = SubmitProject::where('user_id', '=', Auth::user()->id)->get();
+        $assignments = SubmitProject::with('course_name')
+            ->where('user_id', '=', Auth::user()->id)
+            ->get();
         return view('user.submitted_project', compact('assignments'));
     }
 
