@@ -20,6 +20,7 @@ use App\Models\User;
 // use Illuminate\Support\Facades\Auth;
 use App\Models\UserAchievement;
 use App\Models\UserChat;
+use App\Services\CourseCompletionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -468,6 +469,13 @@ public function user_badge()
         return view('user.leaderboard');
     }
     public function user_certificates(){
+
+        // Reconcile courses completed before the completion check was fixed.
+        AppliedCourse::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->get()
+            ->each(fn (AppliedCourse $application) => app(CourseCompletionService::class)
+                ->sync($application->user_id, $application->course_id));
 
         $certificates = DB::table('applied_courses')
     ->join('courses', 'courses.id', '=', 'applied_courses.course_id')

@@ -19,6 +19,7 @@ use App\Models\Slide;
 use App\Models\SubmitAssignment;
 use App\Models\SubmitProject;
 use App\Models\User;
+use App\Services\CourseCompletionService;
 use App\Models\UserChat;
 use Hash;
 use Illuminate\Http\Request;
@@ -453,10 +454,21 @@ public function notification_all()
 
     public function assignment_instructor_grade(Request $request, $id){
         $assignment = SubmitAssignment::findOrFail($id);
+        $wasPending = AppliedCourse::where('user_id', $assignment->user_id)
+            ->where('course_id', $assignment->course_id)
+            ->where('status', 'pending')
+            ->exists();
+
         $assignment->status_in = $request->score;
         $assignment->review = $request->review;
         $assignment->status = "graded";
         $assignment->save();
+
+        $completed = app(CourseCompletionService::class)->sync($assignment->user_id, $assignment->course_id);
+        if ($completed && $wasPending) {
+            $this->sendCourseCompletionMail($assignment->user_id, $assignment->course_id);
+        }
+
         $notification = array(
             'message' => 'Assignment Successfully graded',
             'alert-type' => 'success'
@@ -467,29 +479,40 @@ public function notification_all()
 
     public function project_instructor_grade(Request $request, $id){
         $assignment = SubmitProject::findOrFail($id);
+        $wasPending = AppliedCourse::where('user_id', $assignment->user_id)
+            ->where('course_id', $assignment->course_id)
+            ->where('status', 'pending')
+            ->exists();
+
         $assignment->status_in = $request->score;
         $assignment->status = "graded";
         $assignment->save();
 
-        $course_detail = Course::where('id', '=', $assignment->course_id)->first();
-        $course_name = $course_detail->title;
-        $user_detail = User::where('id', '=', $assignment->user_id)->first();
-        $user_name = $user_detail->first_name;
-        $user_email = $user_detail->email;
-        $update_user =  AppliedCourse::where('user_id', '=', $assignment->user_id)->where('course_id','=', $assignment->course_id)->first();
+        $completed = app(CourseCompletionService::class)->sync($assignment->user_id, $assignment->course_id);
+        if ($completed && $wasPending) {
+            $this->sendCourseCompletionMail($assignment->user_id, $assignment->course_id);
+        }
 
-        $update_user->update(['status' => "completed"]);
-
-        $mailData = [
-            'name' => $user_name,
-            'course' => $course_name,
-        ];
-        Mail::to($user_email)->send(new CourseCompletionMail($mailData));
         $notification = array(
             'message' => 'Project Successfully graded',
             'alert-type' => 'success'
         );
         return redirect()->route('project.submitted.review')->with($notification);
+    }
+
+    private function sendCourseCompletionMail(int|string $userId, int|string $courseId): void
+    {
+        $course = Course::find($courseId);
+        $user = User::find($userId);
+
+        if (!$course || !$user) {
+            return;
+        }
+
+        Mail::to($user->email)->send(new CourseCompletionMail([
+            'name' => $user->first_name,
+            'course' => $course->title,
+        ]));
     }
 
 
