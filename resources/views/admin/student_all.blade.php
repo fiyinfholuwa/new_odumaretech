@@ -13,6 +13,14 @@
 
                     <!-- Tools -->
                     <div class="d-flex flex-wrap align-items-center gap-2">
+                        <form method="POST" action="{{ route('admin.user.impersonate') }}" class="d-flex align-items-center gap-2">
+                            @csrf
+                            <input name="email" class="form-control form-control-sm" type="email" placeholder="Student email" required>
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                <i class="fa fa-sign-in-alt me-1"></i> Access Account
+                            </button>
+                        </form>
+
                         <!-- Search -->
                         
                         <!-- Export Form -->
@@ -50,6 +58,15 @@
                                 <td class="text-muted">{{ $user->email }}</td>
                                
                                 <td class="text-center">
+                                    @if(!in_array((string) $user->user_type, ['admin', 'admin_manager', 'instructor', 'external_instructor', '1', '2'], true))
+                                        <form method="POST" action="{{ route('admin.user.impersonate') }}" class="d-inline">
+                                            @csrf
+                                            <input type="hidden" name="email" value="{{ $user->email }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary" title="Access student account">
+                                                <i class="fa fa-sign-in-alt"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#student_{{ $user->id }}"
                                        class="text-danger" title="Delete Student">
                                         <i class="fa fa-trash"></i>

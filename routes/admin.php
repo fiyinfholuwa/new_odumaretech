@@ -73,6 +73,7 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     Route::get('/admin/applied/user/view', 'applied_view')->name('applied.view');
 
     Route::post('/admin/user/add', 'admin_user_add')->name('admin.user.add');
+    Route::post('/admin/user/impersonate', 'impersonate_student')->name('admin.user.impersonate');
     Route::post('/admin/applied/user/update/{id}', 'applied_users_update')->name('applied.user.update');
     Route::post('/admin/dollar/save/', 'dollar_save')->name('dollar.save');
 
@@ -111,6 +112,11 @@ Route::middleware(['auth', 'is_admin'])->controller(AdminController::class)->gro
     ->name('admin.external.course.updateStatus');
 
 });
+
+Route::middleware('auth')->post(
+    '/admin/impersonation/stop',
+    [AdminController::class, 'stop_impersonating']
+)->name('admin.impersonation.stop');
 
 
 

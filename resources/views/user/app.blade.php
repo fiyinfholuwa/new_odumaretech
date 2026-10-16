@@ -440,6 +440,19 @@
 <!-- [ Main Content ] start -->
 <div class="pc-container">
     <div class="pc-content">
+        @if(session()->has('impersonator_id'))
+            <div class="alert alert-warning d-flex align-items-center justify-content-between gap-3" role="alert">
+                <div>
+                    <strong>Support mode is active.</strong>
+                    You are viewing this student account as {{ session('impersonator_name') }}.
+                </div>
+                <form method="POST" action="{{ session()->has('support_impersonated_student_id') ? route('support.impersonation.stop') : route('admin.impersonation.stop') }}" class="mb-0">
+                    @csrf
+                    <button type="submit" class="btn btn-dark btn-sm">Return to Admin</button>
+                </form>
+            </div>
+        @endif
+
         <!-- [ breadcrumb ] start -->
         <div class="page-header">
             <div class="page-block">

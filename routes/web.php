@@ -7,6 +7,7 @@ use App\Http\Controllers\GoogleDriveController;
 
 
 require __DIR__.'/auth.php';
+require __DIR__.'/support.php';
 require __DIR__.'/frontend.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/user.php';

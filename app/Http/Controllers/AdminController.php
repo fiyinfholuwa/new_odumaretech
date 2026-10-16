@@ -33,6 +33,8 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -952,6 +954,72 @@ class AdminController extends Controller
     {
         $users = User::all();
         return view('admin.student_all', compact('users'));
+    }
+
+    /**
+     * Start a support session as a student without changing their password.
+     * The original administrator is stored in the session so it can be
+     * restored with the stop-impersonation action.
+     */
+    public function impersonate_student(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        $student = User::where('email', $request->email)->firstOrFail();
+        $privilegedTypes = ['admin', 'admin_manager', 'instructor', 'external_instructor', '1', '2'];
+
+        abort_if(in_array((string) $student->user_type, $privilegedTypes, true), 403, 'Only student accounts can be accessed through support mode.');
+        abort_if($request->session()->has('impersonator_id'), 409, 'An impersonation session is already active.');
+
+        $admin = Auth::user();
+        $request->session()->put([
+            'impersonator_id' => $admin->id,
+            'impersonator_name' => trim($admin->first_name . ' ' . $admin->last_name) ?: $admin->email,
+            'impersonated_student_id' => $student->id,
+            'impersonation_started_at' => now()->toIso8601String(),
+        ]);
+        $request->session()->regenerate();
+        Auth::login($student);
+
+        Log::info('Admin started student impersonation', [
+            'admin_id' => $admin->id,
+            'student_id' => $student->id,
+            'student_email' => $student->email,
+        ]);
+
+        return redirect()->route('user.dashboard');
+    }
+
+    /**
+     * End support mode and restore the original administrator session.
+     */
+    public function stop_impersonating(Request $request): RedirectResponse
+    {
+        $adminId = $request->session()->get('impersonator_id');
+        $studentId = $request->session()->get('impersonated_student_id');
+
+        abort_unless($adminId, 403, 'No impersonation session is active.');
+
+        $admin = User::whereIn('user_type', ['admin', 'admin_manager'])
+            ->findOrFail($adminId);
+
+        Log::info('Admin ended student impersonation', [
+            'admin_id' => $adminId,
+            'student_id' => $studentId,
+        ]);
+
+        $request->session()->forget([
+            'impersonator_id',
+            'impersonator_name',
+            'impersonated_student_id',
+            'impersonation_started_at',
+        ]);
+        Auth::login($admin);
+        $request->session()->regenerate();
+
+        return redirect()->route('admin.dashboard');
     }
 
     public function role_add(Request $request): RedirectResponse
