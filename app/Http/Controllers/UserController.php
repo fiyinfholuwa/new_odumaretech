@@ -131,7 +131,9 @@ class UserController extends Controller
                 $path = NULL;
             }
             $submit->course_id = $request->course_id;
-            $submit->assessment_id = $request->asessement_id;
+            // The route identifies the final project, so keep that ID as the
+            // assessment ID regardless of the submitted form field name.
+            $submit->assessment_id = $assignment_id;
             $submit->image = $path;
             $submit->link = $request->link;
             $submit->status = "pending";
@@ -159,7 +161,9 @@ class UserController extends Controller
                 $path = NULL;
             }
             $submit->course_id = $request->course_id;
-            $submit->assessment_id = $request->assignment_id;
+            // Preserve the project ID when a student resubmits a pending
+            // project. A missing ID prevents course completion from syncing.
+            $submit->assessment_id = $assignment_id;
             $submit->image = $path;
             $submit->link = $request->link;
             $submit->status = "pending";

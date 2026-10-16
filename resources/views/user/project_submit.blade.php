@@ -90,7 +90,7 @@
                     </div>
 
                     <!-- Hidden Fields -->
-                    <input type="hidden" name="asessement_id" value="{{ $project->id }}">
+                    <input type="hidden" name="assessment_id" value="{{ $project->id }}">
                     <input type="hidden" name="course_id" value="{{ $project->course_id }}">
                 </div>
 

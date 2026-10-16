@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class CourseCompletionService
 {
     /**
-     * Mark all pending enrollments complete when every required assessment is graded.
+     * Mark a pending enrollment complete when the final project is graded.
      *
      * Returns true when the course is complete after reconciliation.
      */
@@ -42,6 +42,17 @@ class CourseCompletionService
         $submittedProjects = SubmitProject::where('user_id', $userId)
             ->where('course_id', $courseId)
             ->get();
+
+        // A graded final project is the completion trigger. This also repairs
+        // older submissions when the student opens the certificates page.
+        if ($submittedProjects->contains(fn (SubmitProject $project) => $project->status === 'graded')) {
+            AppliedCourse::where('user_id', $userId)
+                ->where('course_id', $courseId)
+                ->where('status', 'pending')
+                ->update(['status' => 'completed']);
+
+            return true;
+        }
 
         [$hasAssignmentRequirements, $assignmentsComplete] = $this->assessmentsComplete($assignments, $submittedAssignments);
         [$hasProjectRequirements, $projectsComplete] = $this->assessmentsComplete($projects, $submittedProjects);
