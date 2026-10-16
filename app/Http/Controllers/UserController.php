@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use PDF; // 👈 this is what you meant by use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UserController extends Controller
 {
@@ -391,7 +391,7 @@ public function download_certificate($id){
             'score'=> $submit_project_detail->status_in,
             'time' => $formattedDate
     ];
-    $pdf = PDF::loadView('user.certificate', $data);
+    $pdf = Pdf::loadView('user.certificate', $data);
     return $pdf->download('certificate_'.$student_id.'.pdf');
 }
 
