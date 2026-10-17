@@ -16,7 +16,7 @@
         <p style="margin-top:25px">Who has successfully completed <span style="font-weight:600;">{{$course}}</span> course</p>
         <p><span style="position: relative; left: -100px; top: 15px;">{{$time}}</span>    <span style="position: relative; top: 6px; left: 36px; font-size: 10px;"> :{{$validation_number}}</span></p>
     </div>
-    <img height="400px" width="600px" src="https://odumaretech.com/cert.jpg"/>
+    <img height="400px" width="600px" src="{{ public_path('cert.jpg') }}"/>
 </div>
 
 </body>
