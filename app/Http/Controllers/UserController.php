@@ -389,11 +389,13 @@ public function download_certificate($id){
     $dateTime = new \DateTime($time);
     $formattedDate = $dateTime->format('jS F, Y');
     $student_id = Auth::user()->student_id;
+    $validation_number = $student_id;
 
     $data = ['name' => $name,
             'course' => $course_details->title,
             'score'=> $submit_project_detail->status_in,
-            'time' => $formattedDate
+            'time' => $formattedDate,
+            'validation_number' => $validation_number,
     ];
     $pdf = Pdf::loadView('user.certificate', $data);
     return $pdf->download('certificate_'.$student_id.'.pdf');
